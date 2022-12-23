@@ -4,6 +4,7 @@ export interface ItemDTO {
   new: boolean;
   uri: string;
   user?: string;
+  id: string;
 }
 
 export interface ItemCardDTO {

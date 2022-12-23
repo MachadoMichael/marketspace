@@ -1,8 +1,8 @@
 import { SignIn } from "../screens/SignIn";
 import {
-  createNativeStackNavigator,
-  NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
+  createBottomTabNavigator,
+  BottomTabNavigationProp,
+} from "@react-navigation/bottom-tabs";
 import { SignUp } from "../screens/SignUp";
 import { Home } from "../screens/Home";
 
@@ -11,9 +11,9 @@ type AppRoutes = {
   signUp: undefined;
 };
 
-export type AppNavigatorRouteProps = NativeStackNavigationProp<AppRoutes>;
+export type AppNavigatorRouteProps = BottomTabNavigationProp<AppRoutes>;
 
-const { Screen, Navigator } = createNativeStackNavigator<AppRoutes>();
+const { Screen, Navigator } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
   return (

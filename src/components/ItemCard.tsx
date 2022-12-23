@@ -4,7 +4,7 @@ import { ItemCardDTO } from "../dtos/ItemDTO";
 
 export function ItemCard({ item }: ItemCardDTO) {
   return (
-    <View h={144} w={150} bgColor="gray.600" rounded={4} shadow={3}>
+    <View h={144} w={150} bgColor="gray.600" rounded={4} shadow={3} mb={4}>
       <Box
         position="absolute"
         right={0}

@@ -1,10 +1,11 @@
-import { Center, ScrollView, Text, View, VStack } from "native-base";
+import { Box, Center, ScrollView, Text, View, VStack } from "native-base";
 
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import SvgLogo from "../components/SvgLogo";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 export function SignUp() {
   return (
@@ -51,11 +52,26 @@ export function SignUp() {
           <Input placeholder="Nome" />
           <Input placeholder="E-mail" />
           <Input placeholder="Telefone" />
-          <Input placeholder="Senha" icon secureTextEntry />
-          <Input placeholder="Confirmar senha" icon secureTextEntry />
+          <Input
+            placeholder="Senha"
+            icon={
+              <Box w={10}>
+                <AntDesign name="eyeo" size={24} color="gray" />
+              </Box>
+            }
+            secureTextEntry
+          />
+          <Input
+            placeholder="Confirmar senha"
+            icon={
+              <Box w={10}>
+                <AntDesign name="eyeo" size={24} color="gray" />
+              </Box>
+            }
+            secureTextEntry
+          />
           <Button title="Criar" isBig bgColor={"gray.200"} />
         </Center>
-        
       </Center>
 
       <Center>
