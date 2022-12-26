@@ -26,9 +26,11 @@ export function Button({
       fontFamily="heading"
       {...rest}
     >
-      <HStack justifyContent="space-between">
+      <HStack justifyContent="space-between" alignItems="center">
         {icon}
-        <Text color={textColor}> {title}</Text>
+        <Text color={textColor} fontFamily="heading" ml={2}>
+          {title}
+        </Text>
       </HStack>
     </NativeBaseButton>
   );

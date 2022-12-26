@@ -5,112 +5,91 @@ import {
   HStack,
   ScrollView,
   Text,
+  View,
   VStack,
 } from "native-base";
 import { ItemCard } from "../components/ItemCard";
-import { useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { ItemDTO } from "../dtos/ItemDTO";
-import { SafeAreaView } from "react-native";
+import { Dimensions, SafeAreaView } from "react-native";
 import { HomeHeader } from "../components/HomeHeader";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
 import { Input } from "../components/Input";
+import { Filter } from "../components/Filter";
+import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRouteProps } from "../routes/app.routes";
+import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 
 export function Home() {
-  const [items, setItems] = useState<ItemDTO[]>([
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "KASKASD",
-    },
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "2",
-    },
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "KASKAS44D",
-    },
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "113",
-    },
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "44",
-    },
-    {
-      name: "Tênis",
-      value: "59,90",
-      new: true,
-      uri: "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
-      user: "CarlosAfafa",
-      id: "232",
-    },
-  ]);
+  const { height } = Dimensions.get("window");
+  const bottomSheetRef = useRef<BottomSheet>(null);
+  const { navigate } = useNavigation<AppNavigatorRouteProps>();
+
+  const [items, setItems] = useState<ItemDTO[]>(itemsForTest);
+
+  function handleHideModal() {
+    bottomSheetRef.current?.close();
+  }
+
+  function handleGoToUserAdverts() {
+    navigate("useradverts");
+  }
+
   return (
-    <SafeAreaView>
+    <View>
       <Center justifyContent={"space-between"}>
         <FlatList
           data={items}
-          keyExtractor={(item) => item.id}
+
           renderItem={({ item }) => <ItemCard item={item} />}
           horizontal={false}
           numColumns={2}
+          bounces={false}
+          showsVerticalScrollIndicator={false}
           columnWrapperStyle={{ justifyContent: "space-between" }}
           ListHeaderComponent={
-            <ScrollView mt={4}>
+            <ScrollView mt={8}>
               <HomeHeader />
 
               <VStack mt={4} justifyContent="center">
                 <Text mb={2} color="gray.300">
                   Seus produtos anunciados para venda
                 </Text>
-                <HStack
-                  w={327}
-                  h={66}
-                  rounded={6}
-                  bgColor="gray.500"
-                  alignItems="center"
-                  justifyContent="space-evenly"
-                >
-                  <HStack alignItems="center">
-                    <AntDesign name="tago" size={24} color="black" />
-                    <VStack ml={2}>
-                      <Text fontSize="lg" fontFamily="heading">
-                        4
-                      </Text>
-                      <Text fontSize="xs">anúncios ativos</Text>
-                    </VStack>
-                  </HStack>
 
-                  <HStack>
-                    <Text fontSize="xs" fontFamily="heading" color="blue.basic">
-                      Meus anúncios
-                    </Text>
-                    <AntDesign name="arrowright" size={18} color="black" />
+                <TouchableOpacity onPress={handleGoToUserAdverts}>
+                  <HStack
+                    w={327}
+                    h={66}
+                    rounded={6}
+                    bgColor="gray.500"
+                    alignItems="center"
+                    justifyContent="space-evenly"
+                  >
+                    <HStack alignItems="center">
+                      <AntDesign name="tago" size={24} color="black" />
+                      <VStack ml={2}>
+                        <Text fontSize="lg" fontFamily="heading">
+                          4
+                        </Text>
+                        <Text fontSize="xs">anúncios ativos</Text>
+                      </VStack>
+                    </HStack>
+
+                    <HStack>
+                      <Text
+                        fontSize="xs"
+                        fontFamily="heading"
+                        color="blue.basic"
+                      >
+                        Meus anúncios
+                      </Text>
+                      <AntDesign name="arrowright" size={18} color="black" />
+                    </HStack>
                   </HStack>
-                </HStack>
+                </TouchableOpacity>
               </VStack>
 
               <VStack w={327} mt={8} mb={4}>
@@ -125,7 +104,11 @@ export function Home() {
                       <Text ml={2} mr={2}>
                         |
                       </Text>
-                      <Octicons name="filter" size={24} color="black" />
+                      <TouchableOpacity
+                        onPress={() => bottomSheetRef.current?.expand()}
+                      >
+                        <Octicons name="filter" size={24} color="black" />
+                      </TouchableOpacity>
                     </HStack>
                   }
                 />
@@ -134,6 +117,17 @@ export function Home() {
           }
         />
       </Center>
-    </SafeAreaView>
+
+      <BottomSheet
+        ref={bottomSheetRef}
+        index={0}
+        snapPoints={[1, height - 260]}
+        backgroundStyle={{
+          backgroundColor: "white",
+        }}
+      >
+        <Filter closeBottomSheet={handleHideModal} />
+      </BottomSheet>
+    </View>
   );
 }

@@ -6,7 +6,3 @@ export interface ItemDTO {
   user?: string;
   id: string;
 }
-
-export interface ItemCardDTO {
-  item: ItemDTO;
-}

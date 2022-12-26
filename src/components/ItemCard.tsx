@@ -1,18 +1,35 @@
-import { Box, Image, Text, View, VStack } from "native-base";
+import { Box, Image, Pressable, Text, View, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { ItemCardDTO } from "../dtos/ItemDTO";
+import { ItemDTO } from "../dtos/ItemDTO";
+import { useNavigation } from "@react-navigation/native";
+import { AppNavigatorRouteProps } from "../routes/app.routes";
 
-export function ItemCard({ item }: ItemCardDTO) {
+interface ItemCardProps {
+  item: ItemDTO;
+}
+
+export function ItemCard({ item }: ItemCardProps) {
+  const { navigate } = useNavigation<AppNavigatorRouteProps>();
+
+  function moveForProductDetails(itemID: string) {
+    navigate("productdetails");
+  }
+
   return (
-    <View h={144} w={150} bgColor="gray.600" rounded={4} shadow={3} mb={4}>
+    <Pressable
+      h={144}
+      w={150}
+      rounded={4}
+      mb={4}
+      onPress={() => moveForProductDetails(item.id)}
+    >
       <Box
         position="absolute"
         right={0}
         m={1}
         w={50}
         h={17}
-        zIndex={1}
-        bgColor={item.new ? "blue.basic" : "gray.300"}
+        bgColor={item.new ? "blue.light" : "gray.300"}
         justifyContent="center"
         alignItems="center"
         rounded={9999}
@@ -27,7 +44,6 @@ export function ItemCard({ item }: ItemCardDTO) {
         m={1}
         w={8}
         h={8}
-        zIndex={1}
         bgColor="gray.100"
         borderColor={"gray.300"}
         borderWidth={1}
@@ -55,6 +71,7 @@ export function ItemCard({ item }: ItemCardDTO) {
         p={4}
         w={150}
         h={100}
+        zIndex={-1}
         resizeMode="cover"
         rounded={4}
         source={{
@@ -71,6 +88,6 @@ export function ItemCard({ item }: ItemCardDTO) {
           R$ {item.value}
         </Text>
       </VStack>
-    </View>
+    </Pressable>
   );
 }

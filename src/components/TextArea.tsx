@@ -1,25 +1,28 @@
 import {
-  Input as NativeBaseInput,
-  IInputProps,
+  Box,
+  TextArea as NativeTextArea,
+  ITextAreaProps,
   FormControl,
+  View,
 } from "native-base";
 
-type InputProps = IInputProps & {
+type TextAreaProps = ITextAreaProps & {
   errorMessage?: string | null;
 };
 
-export function Input({
+export function TextArea({
   errorMessage = null,
   isInvalid,
   ...rest
-}: InputProps) {
+}: TextAreaProps) {
   const invalid = !!errorMessage || isInvalid;
-
   return (
     <FormControl isInvalid={invalid} mb={4}>
-      <NativeBaseInput
-        w={279}
-        h={45}
+      <NativeTextArea
+        autoCompleteType={View}
+        w={327}
+        h={160}
+        placeholder="Text Area Placeholder"
         bgColor="gray.700"
         rounded={6}
         placeholderTextColor="gray.400"
@@ -36,7 +39,7 @@ export function Input({
           borderColor: "red.500",
         }}
         {...rest}
-      ></NativeBaseInput>
+      />
       <FormControl.ErrorMessage _text={{ color: "red.500" }}>
         {errorMessage}
       </FormControl.ErrorMessage>

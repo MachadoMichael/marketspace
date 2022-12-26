@@ -8,6 +8,7 @@ import {
 } from "@expo-google-fonts/karla";
 import { Routes } from "./src/routes";
 import { Platform } from "react-native";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold });
