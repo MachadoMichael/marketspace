@@ -13,20 +13,13 @@ import {
 import { Tag } from "./Tag";
 import { useState } from "react";
 import { Button } from "./Button";
+import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 
 interface FilterProps {
   closeBottomSheet: () => void;
 }
 
 export function Filter({ closeBottomSheet }: FilterProps) {
-  const [checkboxGroup] = useState([
-    "Boleto",
-    "Pix",
-    "Dinheiro",
-    "Cartão de crédito",
-    "Depósito bancário",
-  ]);
-
   return (
     <ScrollView>
       <VStack
@@ -50,22 +43,30 @@ export function Filter({ closeBottomSheet }: FilterProps) {
             </TouchableOpacity>
           </HStack>
 
-          <Text fontFamily="heading">Condição</Text>
-          <HStack mb={4}>
+          <Text fontFamily="heading" mb={2}>
+            Condição
+          </Text>
+          <HStack w="2/4" mb={4} justifyContent="space-between">
             <Tag text="NOVO" isSelect />
             <Tag text="USADO" isSelect={false} />
           </HStack>
 
-          <Text fontFamily="heading">Aceita troca?</Text>
+          <Text fontFamily="heading" mb={2}>
+            Aceita troca?
+          </Text>
           <Switch onTrackColor="blue.light" mb={4} />
 
           <Text fontFamily="heading">Meios de pagamento aceitos</Text>
 
-          {checkboxGroup.map((component) => (
-            <Checkbox value={component} colorScheme="purple">
-              {component}
-            </Checkbox>
-          ))}
+          <PaymentMethodCheckbox
+            methodsCheckbox={[
+              "Boleto",
+              "Dinheiro",
+              "Pix",
+              "Cartão de crédito",
+              "Depósito bancário",
+            ]}
+          />
         </VStack>
         <HStack justifyContent="space-between" mt={12} mb={4}>
           <Button title="Resetar filtros" bgColor="gray.600" />

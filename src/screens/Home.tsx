@@ -20,13 +20,13 @@ import { Input } from "../components/Input";
 import { Filter } from "../components/Filter";
 import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
-import { AppNavigatorRouteProps } from "../routes/app.routes";
+import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { navigate } = useNavigation<AppNavigatorRouteProps>();
+  const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
 
   const [items, setItems] = useState<ItemDTO[]>(itemsForTest);
 
@@ -43,7 +43,7 @@ export function Home() {
       <Center justifyContent={"space-between"}>
         <FlatList
           data={items}
-
+          keyExtractor={(item) => item.id + item.name}
           renderItem={({ item }) => <ItemCard item={item} />}
           horizontal={false}
           numColumns={2}

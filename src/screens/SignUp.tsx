@@ -6,8 +6,16 @@ import SvgLogo from "../components/SvgLogo";
 import { Entypo } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 
 export function SignUp() {
+  const { goBack } = useNavigation<AuthNavigatorRouteProps>();
+
+  function handleBackToSignIn() {
+    goBack();
+  }
+
   return (
     <ScrollView flex={1} bgColor="gray.600">
       <Center m={10}>
@@ -54,7 +62,7 @@ export function SignUp() {
           <Input placeholder="Telefone" />
           <Input
             placeholder="Senha"
-            icon={
+            rightElement={
               <Box w={10}>
                 <AntDesign name="eyeo" size={24} color="gray" />
               </Box>
@@ -63,14 +71,14 @@ export function SignUp() {
           />
           <Input
             placeholder="Confirmar senha"
-            icon={
+            rightElement={
               <Box w={10}>
                 <AntDesign name="eyeo" size={24} color="gray" />
               </Box>
             }
             secureTextEntry
           />
-          <Button title="Criar" isBig bgColor={"gray.200"} />
+          <Button title="Criar" isBig bgColor={"gray.200"} textColor="white" />
         </Center>
       </Center>
 
@@ -82,8 +90,8 @@ export function SignUp() {
           title="Ir para o login"
           isBig
           bgColor="gray.500"
-          _text={{ color: "gray.100" }}
           mb={12}
+          onPress={handleBackToSignIn}
         />
       </Center>
     </ScrollView>

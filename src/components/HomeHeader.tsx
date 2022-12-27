@@ -1,8 +1,15 @@
 import { Box, HStack, Image, Text, View, VStack } from "native-base";
 import { Button } from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import { AppStackNavigatorRouteProps, AppTabNavigatorRouteProps } from "../routes/app.routes";
 
 export function HomeHeader() {
+  const {navigate} = useNavigation<AppStackNavigatorRouteProps>()
+  
+  function handleGoToCreateAdvert(){
+    navigate('createnewadvert')
+  }
   return (
     <HStack w={327} justifyContent="space-between" mt={4}>
       <HStack>
@@ -35,9 +42,10 @@ export function HomeHeader() {
 
       <Button
         title="Criar anúncio"
-        bgColor="gray.100"
-        textColor="gray.500"
-        icon={<Ionicons name="add" size={24} color="gray" />}
+        bgColor="gray.200"
+        textColor="white"
+        icon={<Ionicons name="add" size={24} color="white" />}
+        onPress={handleGoToCreateAdvert}
       />
     </HStack>
   );

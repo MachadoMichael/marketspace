@@ -8,11 +8,7 @@ type InputProps = IInputProps & {
   errorMessage?: string | null;
 };
 
-export function Input({
-  errorMessage = null,
-  isInvalid,
-  ...rest
-}: InputProps) {
+export function Input({ errorMessage = null, isInvalid, ...rest }: InputProps) {
   const invalid = !!errorMessage || isInvalid;
 
   return (

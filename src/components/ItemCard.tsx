@@ -2,17 +2,17 @@ import { Box, Image, Pressable, Text, View, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
 import { ItemDTO } from "../dtos/ItemDTO";
 import { useNavigation } from "@react-navigation/native";
-import { AppNavigatorRouteProps } from "../routes/app.routes";
+import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 interface ItemCardProps {
   item: ItemDTO;
 }
 
 export function ItemCard({ item }: ItemCardProps) {
-  const { navigate } = useNavigation<AppNavigatorRouteProps>();
+  const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   function moveForProductDetails(itemID: string) {
-    navigate("productdetails");
+    navigate("productinfo");
   }
 
   return (

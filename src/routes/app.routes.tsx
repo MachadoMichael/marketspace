@@ -2,45 +2,70 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
-import { SignUp } from "../screens/SignUp";
 import { Home } from "../screens/Home";
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
-import { ProductDetails } from "../screens/ProductDetails";
+import { ProductInfo } from "../screens/ProductInfo";
 import { UserAdverts } from "../screens/UserAdvets";
 import { CreateNewAdvert } from "../screens/CreateNewAdvert";
+import {
+  createNativeStackNavigator,
+  NativeStackNavigationProp,
+} from "@react-navigation/native-stack";
+import { AdvertPreview } from "../screens/AdvertPreview";
+import { ViewUserAdvert } from "../screens/ViewUserAdvert";
 
-type AppRoutes = {
+type AppTabRoutes = {
   home: undefined;
-  signUp: undefined;
-  productdetails: undefined;
   useradverts: undefined;
+};
+export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
+const Tab = createBottomTabNavigator<AppTabRoutes>();
+
+type AppStackRoutes = {
+  productinfo: undefined;
   createnewadvert: undefined;
+  tabroutes: undefined;
+  advertpreview: undefined;
+  viewuseradvert: undefined;
 };
 
-export type AppNavigatorRouteProps = BottomTabNavigationProp<AppRoutes>;
+export type AppStackNavigatorRouteProps =
+  NativeStackNavigationProp<AppStackRoutes>;
+const Stack = createNativeStackNavigator<AppStackRoutes>();
 
-const { Screen, Navigator } = createBottomTabNavigator<AppRoutes>();
-
-export function AppRoutes() {
+function TabRoutes() {
   return (
-    <Navigator
+    <Tab.Navigator
       screenOptions={{
         headerShown: false,
+        tabBarShowLabel: false,
       }}
     >
-      <Screen
+      <Tab.Screen
         name="home"
         component={gestureHandlerRootHOC(Home)}
         options={{
           tabBarHideOnKeyboard: true,
-
-          tabBarStyle: {},
         }}
       />
-      <Screen name="signUp" component={SignUp} />
-      <Screen name="productdetails" component={ProductDetails} />
-      <Screen name="useradverts" component={UserAdverts} />
-      <Screen name="createnewadvert" component={CreateNewAdvert} />
-    </Navigator>
+
+      <Tab.Screen name="useradverts" component={UserAdverts} />
+    </Tab.Navigator>
+  );
+}
+
+export function AppRoutes() {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerShown: false,
+      }}
+    >
+      <Stack.Screen name="tabroutes" component={TabRoutes} />
+      <Stack.Screen name="createnewadvert" component={CreateNewAdvert} />
+      <Stack.Screen name="advertpreview" component={AdvertPreview} />
+      <Stack.Screen name="productinfo" component={ProductInfo} />
+      <Stack.Screen name="viewuseradvert" component={ViewUserAdvert} />
+    </Stack.Navigator>
   );
 }
