@@ -14,15 +14,15 @@ import { ImagesCarousel } from "../components/ImagesCarousel";
 import { ProductDetails } from "../components/ProductDetails";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
-export function AdvertPreview() {
+export function AdPreview() {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   function handleGoBack() {
     goBack();
   }
 
-  function handleGoToViewUserAdvert(){
-    navigate('viewuseradvert')
+  function handleGoToUserAdDetails(){
+    navigate('useraddetails')
   }
   
   return (
@@ -58,7 +58,7 @@ export function AdvertPreview() {
           title="Avançar"
           bgColor="gray.100"
           textColor="white"
-          onPress={handleGoToViewUserAdvert}
+          onPress={handleGoToUserAdDetails}
         />
       </BottomSection>
     </View>

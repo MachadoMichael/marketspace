@@ -4,29 +4,30 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens/Home";
 import { gestureHandlerRootHOC } from "react-native-gesture-handler";
-import { ProductInfo } from "../screens/ProductInfo";
-import { UserAdverts } from "../screens/UserAdvets";
-import { CreateNewAdvert } from "../screens/CreateNewAdvert";
+import { AdDetails } from "../screens/AdDetails";
+import { UserAdsList } from "../screens/UserAdsList";
+import { AdForm } from "../screens/AdForm";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { AdvertPreview } from "../screens/AdvertPreview";
-import { ViewUserAdvert } from "../screens/ViewUserAdvert";
+import { AdPreview } from "../screens/AdPreview";
+import { UserAdDetails } from "../screens/UserAdDetails";
+import { ItemDTO } from "../dtos/ItemDTO";
 
 type AppTabRoutes = {
   home: undefined;
-  useradverts: undefined;
+  useradslist: undefined;
 };
 export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
 const Tab = createBottomTabNavigator<AppTabRoutes>();
 
 type AppStackRoutes = {
-  productinfo: undefined;
-  createnewadvert: undefined;
+  addetails: { itemID: string };
+  adform: { itemID: string | null };
   tabroutes: undefined;
-  advertpreview: undefined;
-  viewuseradvert: undefined;
+  adpreview: undefined;
+  useraddetails: undefined;
 };
 
 export type AppStackNavigatorRouteProps =
@@ -49,7 +50,7 @@ function TabRoutes() {
         }}
       />
 
-      <Tab.Screen name="useradverts" component={UserAdverts} />
+      <Tab.Screen name="useradslist" component={UserAdsList} />
     </Tab.Navigator>
   );
 }
@@ -62,10 +63,10 @@ export function AppRoutes() {
       }}
     >
       <Stack.Screen name="tabroutes" component={TabRoutes} />
-      <Stack.Screen name="createnewadvert" component={CreateNewAdvert} />
-      <Stack.Screen name="advertpreview" component={AdvertPreview} />
-      <Stack.Screen name="productinfo" component={ProductInfo} />
-      <Stack.Screen name="viewuseradvert" component={ViewUserAdvert} />
+      <Stack.Screen name="adform" component={AdForm} />
+      <Stack.Screen name="adpreview" component={AdPreview} />
+      <Stack.Screen name="addetails" component={AdDetails} />
+      <Stack.Screen name="useraddetails" component={UserAdDetails} />
     </Stack.Navigator>
   );
 }

@@ -35,7 +35,7 @@ export function Home() {
   }
 
   function handleGoToUserAdverts() {
-    navigate("useradverts");
+    navigate("useradslist");
   }
 
   return (

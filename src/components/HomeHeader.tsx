@@ -2,13 +2,18 @@ import { Box, HStack, Image, Text, View, VStack } from "native-base";
 import { Button } from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AppStackNavigatorRouteProps, AppTabNavigatorRouteProps } from "../routes/app.routes";
+import { AppStackNavigatorRouteProps } from "../routes/app.routes";
+import { ItemDTO } from "../dtos/ItemDTO";
+import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
+
+
+
 
 export function HomeHeader() {
   const {navigate} = useNavigation<AppStackNavigatorRouteProps>()
   
-  function handleGoToCreateAdvert(){
-    navigate('createnewadvert')
+  function handleGoAdvertForm(){
+    navigate('adform', {itemID: null})
   }
   return (
     <HStack w={327} justifyContent="space-between" mt={4}>
@@ -45,7 +50,7 @@ export function HomeHeader() {
         bgColor="gray.200"
         textColor="white"
         icon={<Ionicons name="add" size={24} color="white" />}
-        onPress={handleGoToCreateAdvert}
+        onPress={handleGoAdvertForm}
       />
     </HStack>
   );

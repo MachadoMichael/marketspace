@@ -4,12 +4,14 @@ interface PaymentMethodsProps {
   methodsCheckbox: string[];
 }
 
-export function PaymentMethodCheckbox({ methodsCheckbox }: PaymentMethodsProps) {
+export function PaymentMethodCheckbox({
+  methodsCheckbox,
+}: PaymentMethodsProps) {
   return (
     <VStack mt={2}>
-      {methodsCheckbox.map((method) => {
+      {methodsCheckbox.map((method, index) => {
         return (
-          <Checkbox value={method} colorScheme="purple">
+          <Checkbox value={method} colorScheme="purple" key={index}>
             {method}
           </Checkbox>
         );

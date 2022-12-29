@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
   Center,
@@ -20,40 +20,45 @@ import { Button } from "../components/Button";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 import { BottomSection } from "../components/BottomSection";
 import { TopSection } from "../components/TopSection";
+import { ItemDTO } from "../dtos/ItemDTO";
 
-export function CreateNewAdvert() {
+interface RouteParamsProps {
+  itemID: string | null;
+}
+
+export function AdForm() {
   const [radioSelected, setRadioSelected] = useState("");
   const [canExchange, setCanExchange] = useState(false);
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
+  const route = useRoute();
+  const { itemID } = route.params as RouteParamsProps;
 
   const { height } = Dimensions.get("window");
 
-  function handleGoBackUserAdverts() {
+  function handleGoBackUserAd() {
     goBack();
   }
 
-  function handleGoToAdvertPreview() {
-    navigate("advertpreview");
+  function handleGoToAdPreview() {
+    navigate("adpreview");
   }
 
   return (
     <SafeAreaView>
       <Box position="fixed" height={height - 100}>
         <ScrollView>
-  
-              <TopSection
-                leftElement={
-                  <TouchableOpacity onPress={handleGoBackUserAdverts}>
-                    <AntDesign name="arrowleft" size={24} color="black" />
-                  </TouchableOpacity>
-                }
-                centerElement={
-                  <Text fontFamily="heading" fontSize="xl" textAlign="center">
-                    Criar anúncio
-                  </Text>
-                }
-              />
-
+          <TopSection
+            leftElement={
+              <TouchableOpacity onPress={handleGoBackUserAd}>
+                <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            }
+            centerElement={
+              <Text fontFamily="heading" fontSize="xl" textAlign="center">
+                {itemID !== null ? "Editar anúncio" : "Criar anúncio"}
+              </Text>
+            }
+          />
 
           <VStack ml={6} mr={6} mb={6}>
             <Text fontFamily="heading" fontSize="md">
@@ -143,7 +148,7 @@ export function CreateNewAdvert() {
           title="Avançar"
           bgColor="gray.100"
           textColor="white"
-          onPress={handleGoToAdvertPreview}
+          onPress={handleGoToAdPreview}
         />
       </BottomSection>
     </SafeAreaView>

@@ -14,23 +14,24 @@ import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { ItemCard } from "../components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AppNavigatorRouteProps } from "../routes/app.routes";
+import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
-export function UserAdverts() {
-  const [userAdverts, setUserAdverts] = useState(itemsForTest);
+export function UserAdsList() {
+  const [userAds, setUserAds] = useState(itemsForTest);
   const [service, setService] = useState("Todos");
-  const { navigate } = useNavigation<AppNavigatorRouteProps>();
+  const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
-  function handleCreateNewAdvert() {
-    navigate("createnewadvert");
+  function handleToAdForm() {
+    navigate("adform", { itemID: null });
   }
+
   return (
     <SafeAreaView>
       <View justifyContent="space-between" p={8}>
         <FlatList
-          data={userAdverts}
+          data={userAds}
           keyExtractor={(item) => item.id}
-          renderItem={({ item }) => <ItemCard item={item} />}
+          renderItem={({ item }) => <ItemCard item={item} isUserAd />}
           horizontal={false}
           numColumns={2}
           bounces={false}
@@ -44,7 +45,7 @@ export function UserAdverts() {
                     Meus anúncios
                   </Text>
                   <View position="absolute" right={-70}>
-                    <TouchableOpacity onPress={handleCreateNewAdvert}>
+                    <TouchableOpacity onPress={handleToAdForm}>
                       <AntDesign name="plus" size={24} color="black" />
                     </TouchableOpacity>
                   </View>
@@ -52,7 +53,7 @@ export function UserAdverts() {
               </Center>
 
               <HStack alignItems="center" justifyContent="space-between" mb={6}>
-                <Text>{userAdverts.length} anúncios</Text>
+                <Text>{userAds.length} anúncios</Text>
 
                 <Select
                   selectedValue={service}

@@ -6,13 +6,14 @@ import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 interface ItemCardProps {
   item: ItemDTO;
+  isUserAd?: boolean;
 }
 
-export function ItemCard({ item }: ItemCardProps) {
+export function ItemCard({ item, isUserAd = false }: ItemCardProps) {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
-  function moveForProductDetails(itemID: string) {
-    navigate("productinfo");
+  function handleGoToAdvertDetails(itemID: string) {
+    navigate("addetails", { itemID });
   }
 
   return (
@@ -21,7 +22,7 @@ export function ItemCard({ item }: ItemCardProps) {
       w={150}
       rounded={4}
       mb={4}
-      onPress={() => moveForProductDetails(item.id)}
+      onPress={() => handleGoToAdvertDetails(item.id)}
     >
       <Box
         position="absolute"

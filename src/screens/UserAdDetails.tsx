@@ -15,7 +15,7 @@ import { ImagesCarousel } from "../components/ImagesCarousel";
 import { ProductDetails } from "../components/ProductDetails";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
-export function ViewUserAdvert() {
+export function UserAdDetails() {
   const { goBack } = useNavigation<AppStackNavigatorRouteProps>();
   function handleGoBack() {
     goBack();
