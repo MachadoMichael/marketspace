@@ -3,7 +3,7 @@ import {
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens/Home";
-import { gestureHandlerRootHOC } from "react-native-gesture-handler";
+// import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 import { AdDetails } from "../screens/AdDetails";
 import { UserAdsList } from "../screens/UserAdsList";
 import { AdForm } from "../screens/AdForm";
@@ -44,7 +44,7 @@ function TabRoutes() {
     >
       <Tab.Screen
         name="home"
-        component={gestureHandlerRootHOC(Home)}
+        component={Home}
         options={{
           tabBarHideOnKeyboard: true,
         }}

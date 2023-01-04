@@ -8,9 +8,12 @@ import {
 
 type TextAreaProps = ITextAreaProps & {
   errorMessage?: string | null;
+  setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export function TextArea({
+  value,
+  setValue,
   errorMessage = null,
   isInvalid,
   ...rest
@@ -19,6 +22,8 @@ export function TextArea({
   return (
     <FormControl isInvalid={invalid} mb={4}>
       <NativeTextArea
+        value={value}
+        onChangeText={setValue}
         autoCompleteType={View}
         w={327}
         h={160}

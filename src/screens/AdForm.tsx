@@ -26,14 +26,30 @@ interface RouteParamsProps {
   itemID: string | null;
 }
 
+interface FormDataProps {
+  title: string;
+  description: string;
+  isNew: boolean;
+  price: string;
+  acceptExchange: boolean;
+  paymentMethods: string[];
+}
+
 export function AdForm() {
-  const [radioSelected, setRadioSelected] = useState("");
-  const [canExchange, setCanExchange] = useState(false);
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
+  const { height } = Dimensions.get("window");
+
   const route = useRoute();
   const { itemID } = route.params as RouteParamsProps;
 
-  const { height } = Dimensions.get("window");
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [isNew, setIsNew] = useState("true");
+  const [price, setPrice] = useState("");
+  const [canExchange, setCanExchange] = useState(false);
+  const [acceptedMethods, setAcceptedMethods] = useState([] as Array<string>);
+
+
 
   function handleGoBackUserAd() {
     goBack();
@@ -86,14 +102,20 @@ export function AdForm() {
               Sobre o produto
             </Text>
 
-            <Input w={327} placeholder="Título do anúncio" />
-            <TextArea />
+            <Input
+              w={327}
+              placeholder="Título do anúncio"
+              value={title}
+              onChangeText={setTitle}
+            />
+
+            <TextArea value={description} setValue={setDescription} />
 
             <Radio.Group
               name="newOrOld"
               accessibilityLabel="new or old item?"
-              value={radioSelected}
-              onChange={setRadioSelected}
+              value={isNew}
+              onChange={setIsNew}
             >
               <HStack
                 justifyContent="space-between"
@@ -101,10 +123,10 @@ export function AdForm() {
                 w={327}
                 alignItems="center"
               >
-                <Radio value={"true"} mb={2}>
+                <Radio value="true" mb={2}>
                   Produto Novo
                 </Radio>
-                <Radio value={"false"} mb={2}>
+                <Radio value="false" mb={2}>
                   Produto usado
                 </Radio>
               </HStack>
@@ -114,7 +136,12 @@ export function AdForm() {
               Venda
             </Text>
 
-            <Input w={327} placeholder="R$" />
+            <Input
+              w={327}
+              placeholder="R$"
+              value={price}
+              onChangeText={setPrice}
+            />
 
             <Text fontFamily="heading" fontSize="md" mb={4}>
               Aceita troca?
@@ -122,8 +149,8 @@ export function AdForm() {
 
             <Switch
               size="md"
-              onChange={() => setCanExchange(!canExchange)}
-              defaultIsChecked={false}
+              onToggle={() => setCanExchange(!canExchange)}
+              isChecked={canExchange}
             />
 
             <Text fontFamily="heading" mt={4} fontSize="md">
@@ -131,13 +158,8 @@ export function AdForm() {
             </Text>
 
             <PaymentMethodCheckbox
-              methodsCheckbox={[
-                "Boleto",
-                "Dinheiro",
-                "Pix",
-                "Cartão de crédito",
-                "Depósito bancário",
-              ]}
+              acceptedMethods={acceptedMethods}
+              setAcceptedMethods={setAcceptedMethods}
             />
           </VStack>
         </ScrollView>

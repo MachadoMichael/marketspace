@@ -51,6 +51,7 @@ export function AdDetails() {
               bgColor="gray.200"
               textColor="white"
               onPress={null}
+              mb={4}
             />
 
             <Button

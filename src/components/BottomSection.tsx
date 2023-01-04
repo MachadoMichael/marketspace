@@ -10,9 +10,10 @@ export function BottomSection({ children }: BottomSectionProps) {
     <HStack
       justifyContent="space-evenly"
       alignItems="center"
-      h={20}
+      borderWidth={1}
+      borderColor="yellow.100"
+      minH={20}
       bgColor="white"
-      position="fixed"
       bottom={0}
     >
       {children}
