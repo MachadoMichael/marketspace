@@ -12,9 +12,10 @@ export function BottomSection({ children }: BottomSectionProps) {
       alignItems="center"
       borderWidth={1}
       borderColor="yellow.100"
+      p={4}
       minH={20}
       bgColor="white"
-      bottom={0}
+      bottom={12}
     >
       {children}
     </HStack>

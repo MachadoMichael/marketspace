@@ -1,20 +1,21 @@
-import { Text, View } from "native-base";
+import { Pressable, Text, View } from "native-base";
 
 interface TagProps {
   text: string;
   isSelect: boolean;
+  handleFunction: () => void;
 }
 
-export function Tag({ text, isSelect, ...rest }: TagProps) {
+export function Tag({ text, isSelect, handleFunction }: TagProps) {
   return (
-    <View
+    <Pressable
       w={66}
       h={28}
       justifyContent="center"
       alignItems="center"
       rounded={9999}
       bgColor={isSelect ? "blue.light" : "gray.500"}
-      {...rest}
+      onPress={handleFunction}
     >
       <Text
         color={isSelect ? "white" : "gray.200"}
@@ -23,6 +24,6 @@ export function Tag({ text, isSelect, ...rest }: TagProps) {
       >
         {text}
       </Text>
-    </View>
+    </Pressable>
   );
 }

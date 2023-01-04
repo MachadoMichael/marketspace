@@ -31,6 +31,10 @@ export function ImagesCarousel({ data }: CarouselProps) {
             <Image
               w={375}
               h={280}
+              bgColor="black"
+              resizeMode="contain"
+              alignItems="center"
+              justifyContent="center"
               source={{
                 uri: data[index],
               }}

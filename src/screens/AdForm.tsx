@@ -21,18 +21,10 @@ import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 import { BottomSection } from "../components/BottomSection";
 import { TopSection } from "../components/TopSection";
 import { ItemDTO } from "../dtos/ItemDTO";
+import { PaymentMethodDTO } from "../dtos/methodDTO";
 
 interface RouteParamsProps {
   itemID: string | null;
-}
-
-interface FormDataProps {
-  title: string;
-  description: string;
-  isNew: boolean;
-  price: string;
-  acceptExchange: boolean;
-  paymentMethods: string[];
 }
 
 export function AdForm() {
@@ -47,9 +39,32 @@ export function AdForm() {
   const [isNew, setIsNew] = useState("true");
   const [price, setPrice] = useState("");
   const [canExchange, setCanExchange] = useState(false);
-  const [acceptedMethods, setAcceptedMethods] = useState([] as Array<string>);
+  const [methods, setMethods] = useState<PaymentMethodDTO[]>([
+    {
+      name: "Boleto",
+      isAccepted: false,
+    },
+    {
+      name: "Dinheiro",
+      isAccepted: false,
+    },
+    {
+      name: "Pix",
+      isAccepted: false,
+    },
+    {
+      name: "Cartão de crédito",
+      isAccepted: false,
+    },
+    {
+      name: "Depósito bancário",
+      isAccepted: false,
+    },
+  ]);
 
-
+  function handleCreateNewAd() {
+    handleGoToAdPreview();
+  }
 
   function handleGoBackUserAd() {
     goBack();
@@ -157,10 +172,7 @@ export function AdForm() {
               Meios de pagamento:
             </Text>
 
-            <PaymentMethodCheckbox
-              acceptedMethods={acceptedMethods}
-              setAcceptedMethods={setAcceptedMethods}
-            />
+            <PaymentMethodCheckbox methods={methods} setMethods={setMethods} />
           </VStack>
         </ScrollView>
       </Box>
@@ -170,7 +182,7 @@ export function AdForm() {
           title="Avançar"
           bgColor="gray.100"
           textColor="white"
-          onPress={handleGoToAdPreview}
+          onPress={handleCreateNewAd}
         />
       </BottomSection>
     </SafeAreaView>

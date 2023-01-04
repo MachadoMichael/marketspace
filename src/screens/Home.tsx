@@ -8,9 +8,9 @@ import {
   VStack,
 } from "native-base";
 import { ItemCard } from "../components/ItemCard";
-import { useCallback, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { ItemDTO } from "../dtos/ItemDTO";
-import { Dimensions, SafeAreaView } from "react-native";
+import { Dimensions } from "react-native";
 import { HomeHeader } from "../components/HomeHeader";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
@@ -22,12 +22,12 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 
+
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-
-  const [items, setItems] = useState<ItemDTO[]>(itemsForTest);
+  const [itemList, setItemList] = useState<ItemDTO[]>(itemsForTest);
 
   function handleHideModal() {
     bottomSheetRef.current?.close();
@@ -37,11 +37,14 @@ export function Home() {
     navigate("useradslist");
   }
 
+  console.log(itemList, "<== olha esta merda");
+
   return (
     <View>
       <Center justifyContent={"space-between"}>
         <FlatList
-          data={items}
+          minH={height}
+          data={itemList}
           keyExtractor={(item) => item.id + item.name}
           renderItem={({ item }) => <ItemCard item={item} />}
           horizontal={false}
@@ -125,7 +128,11 @@ export function Home() {
           backgroundColor: "white",
         }}
       >
-        <Filter closeBottomSheet={handleHideModal} />
+        <Filter
+          closeBottomSheet={handleHideModal}
+          itemList={itemList}
+          setItemList={setItemList}
+        />
       </BottomSheet>
     </View>
   );

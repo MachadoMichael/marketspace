@@ -73,10 +73,10 @@ export function ItemCard({ item, isUserAd = false }: ItemCardProps) {
         w={150}
         h={100}
         zIndex={-1}
-        resizeMode="cover"
+        resizeMode="contain"
         rounded={4}
         source={{
-          uri: item.uri,
+          uri: item.uri[0],
         }}
         alt="imagem do produto"
       />

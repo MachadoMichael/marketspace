@@ -11,6 +11,7 @@ import { Box, ScrollView } from "native-base";
 import { Dimensions } from "react-native";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { useState } from "react";
+import { ImagesCarousel } from "../components/ImagesCarousel";
 
 type RouteParamsProps = {
   itemID: string;
@@ -20,6 +21,8 @@ export function AdDetails() {
   const route = useRoute();
   const { goBack } = useNavigation();
   const { height } = Dimensions.get("window");
+
+  // pegar o item pelo ID
   const { itemID } = route.params as RouteParamsProps;
   const [item, setItem] = useState(itemsForTest[2]);
   const [userLogged, setUserLogged] = useState(itemsForTest[2].user);
@@ -38,7 +41,7 @@ export function AdDetails() {
             </TouchableOpacity>
           }
         />
-
+        <ImagesCarousel data={item.uri} />
         <ProductDetails />
       </ScrollView>
 
