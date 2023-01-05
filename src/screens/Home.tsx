@@ -22,7 +22,6 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 
-
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
@@ -33,11 +32,17 @@ export function Home() {
     bottomSheetRef.current?.close();
   }
 
+  function handleShowModal() {
+    bottomSheetRef.current?.expand();
+  }
+
   function handleGoToUserAdverts() {
     navigate("useradslist");
   }
 
-  console.log(itemList, "<== olha esta merda");
+  const snapPoints = [1, height - 200];
+
+  // console.log(itemList, "<== olha esta merda");
 
   return (
     <View>
@@ -106,9 +111,7 @@ export function Home() {
                       <Text ml={2} mr={2}>
                         |
                       </Text>
-                      <TouchableOpacity
-                        onPress={() => bottomSheetRef.current?.expand()}
-                      >
+                      <TouchableOpacity onPress={handleShowModal}>
                         <Octicons name="filter" size={24} color="black" />
                       </TouchableOpacity>
                     </HStack>
@@ -122,8 +125,9 @@ export function Home() {
 
       <BottomSheet
         ref={bottomSheetRef}
-        index={0}
-        snapPoints={[1, height - 260]}
+        enablePanDownToClose
+        index={1}
+        snapPoints={snapPoints}
         backgroundStyle={{
           backgroundColor: "white",
         }}

@@ -64,6 +64,7 @@ export function AdForm() {
 
   function handleCreateNewAd() {
     handleGoToAdPreview();
+    //gerar produto e enviar iD
   }
 
   function handleGoBackUserAd() {
@@ -176,7 +177,16 @@ export function AdForm() {
           </VStack>
         </ScrollView>
       </Box>
-      <BottomSection>
+      <HStack
+        justifyContent="space-evenly"
+        alignItems="center"
+        borderWidth={1}
+        borderColor="yellow.100"
+        p={4}
+        minH={20}
+        bgColor="white"
+        bottom={0}
+      >
         <Button title="Cancelar" bgColor="gray.500" textColor="gray.100" />
         <Button
           title="Avançar"
@@ -184,7 +194,7 @@ export function AdForm() {
           textColor="white"
           onPress={handleCreateNewAd}
         />
-      </BottomSection>
+      </HStack>
     </SafeAreaView>
   );
 }

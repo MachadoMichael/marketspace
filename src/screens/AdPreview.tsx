@@ -21,10 +21,10 @@ export function AdPreview() {
     goBack();
   }
 
-  function handleGoToUserAdDetails(){
-    navigate('useraddetails')
+  function handleGoToUserAdDetails() {
+    navigate("useraddetails");
   }
-  
+
   return (
     <View flex={1}>
       <Center h={100} bgColor="blue.light">
@@ -47,7 +47,16 @@ export function AdPreview() {
         <ProductDetails />
       </ScrollView>
 
-      <BottomSection>
+      <HStack
+        justifyContent="space-evenly"
+        alignItems="center"
+        borderWidth={1}
+        borderColor="yellow.100"
+        p={4}
+        minH={20}
+        bgColor="white"
+        bottom={0}
+      >
         <Button
           title="Cancelar"
           bgColor="gray.500"
@@ -60,7 +69,7 @@ export function AdPreview() {
           textColor="white"
           onPress={handleGoToUserAdDetails}
         />
-      </BottomSection>
+      </HStack>
     </View>
   );
 }

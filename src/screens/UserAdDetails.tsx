@@ -36,11 +36,13 @@ export function UserAdDetails() {
           <ProductDetails />
 
           <VStack
-            w="full"
-            h={130}
-            p={4}
-            justifyContent="space-around"
+            justifyContent="space-evenly"
             alignItems="center"
+            borderWidth={1}
+            borderColor="yellow.100"
+            p={4}
+            bgColor="red"
+            bottom={0}
           >
             <Button
               isBig

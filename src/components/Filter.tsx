@@ -56,12 +56,12 @@ export function Filter({
   function filteringItemList() {
     const itemListCopy = [...itemList];
     let filteredItemList = itemListCopy.filter((item) => item.isNew === isNew);
-    console.log(filteredItemList, "<- FILTRO ISNEW");
+    // console.log(filteredItemList, "<- FILTRO ISNEW");
 
     filteredItemList = filteredItemList.filter(
       (item) => item.canExchange === canExchange
     );
-    console.log(filteredItemList, "<- FILTRO CANEXCHANGE");
+    // console.log(filteredItemList, "<- FILTRO CANEXCHANGE");
 
     setItemList(filteredItemList);
   }
@@ -132,7 +132,14 @@ export function Filter({
             setMethods={setPaymentMethods}
           />
         </VStack>
-        <HStack justifyContent="space-between" mt={12} mb={10}>
+        <HStack
+          justifyContent="space-between"
+          w={10}
+          mt={12}
+          mb={10}
+          bottom={0}
+          position="fixed"
+        >
           <Button
             title="Resetar filtros"
             bgColor="gray.600"

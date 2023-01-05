@@ -7,7 +7,7 @@ import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { TopSection } from "../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { Box, ScrollView } from "native-base";
+import { Box, HStack, ScrollView, VStack } from "native-base";
 import { Dimensions } from "react-native";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { useState } from "react";
@@ -45,9 +45,17 @@ export function AdDetails() {
         <ProductDetails />
       </ScrollView>
 
-      <BottomSection>
+      <VStack
+        justifyContent="space-evenly"
+        alignItems="center"
+        borderWidth={1}
+        borderColor="yellow.100"
+        p={4}
+        bgColor="white"
+        bottom={12}
+      >
         {item.user === userLogged ? (
-          <Box>
+          <>
             <Button
               isBig
               title="Desativar anúncio"
@@ -64,7 +72,7 @@ export function AdDetails() {
               textColor="gray.100"
               onPress={handleGoBack}
             />
-          </Box>
+          </>
         ) : (
           <Button
             isBig
@@ -74,7 +82,7 @@ export function AdDetails() {
             icon={<FontAwesome name="whatsapp" size={24} color="white" />}
           />
         )}
-      </BottomSection>
+      </VStack>
     </SafeAreaView>
   );
 }

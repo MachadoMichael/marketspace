@@ -3,7 +3,6 @@ import {
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens/Home";
-// import { gestureHandlerRootHOC } from "react-native-gesture-handler";
 import { AdDetails } from "../screens/AdDetails";
 import { UserAdsList } from "../screens/UserAdsList";
 import { AdForm } from "../screens/AdForm";
@@ -13,7 +12,6 @@ import {
 } from "@react-navigation/native-stack";
 import { AdPreview } from "../screens/AdPreview";
 import { UserAdDetails } from "../screens/UserAdDetails";
-import { ItemDTO } from "../dtos/ItemDTO";
 
 type AppTabRoutes = {
   home: undefined;
@@ -47,6 +45,9 @@ function TabRoutes() {
         component={Home}
         options={{
           tabBarHideOnKeyboard: true,
+          tabBarStyle: {
+            zIndex: -1,
+          },
         }}
       />
 
