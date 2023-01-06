@@ -8,7 +8,7 @@ import {
   VStack,
 } from "native-base";
 import { ItemCard } from "../components/ItemCard";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ItemDTO } from "../dtos/ItemDTO";
 import { Dimensions } from "react-native";
 import { HomeHeader } from "../components/HomeHeader";
@@ -26,7 +26,16 @@ export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
+  const [initialItemList, setInitialItemList] =
+    useState<ItemDTO[]>(itemsForTest);
   const [itemList, setItemList] = useState<ItemDTO[]>(itemsForTest);
+  const [inputFilter, setInputFilter] = useState("");
+  const snapPoints = [1, height - 110];
+
+  useEffect(() => {
+    setItemList(itemsForTest);
+    setInitialItemList(itemsForTest);
+  }, []);
 
   function handleHideModal() {
     bottomSheetRef.current?.close();
@@ -40,9 +49,16 @@ export function Home() {
     navigate("useradslist");
   }
 
-  const snapPoints = [1, height - 200];
-
-  // console.log(itemList, "<== olha esta merda");
+  function handleTitleFilter() {
+    if (inputFilter === "") {
+      setItemList(initialItemList);
+    } else {
+      const filteredList = initialItemList.filter((item) =>
+        item.name.includes(inputFilter)
+      );
+      setItemList(filteredList);
+    }
+  }
 
   return (
     <View>
@@ -107,7 +123,9 @@ export function Home() {
                   w={327}
                   InputRightElement={
                     <HStack w={20}>
-                      <Feather name="search" size={24} color="black" />
+                      <TouchableOpacity onPress={handleTitleFilter}>
+                        <Feather name="search" size={24} color="black" />
+                      </TouchableOpacity>
                       <Text ml={2} mr={2}>
                         |
                       </Text>
@@ -116,6 +134,8 @@ export function Home() {
                       </TouchableOpacity>
                     </HStack>
                   }
+                  value={inputFilter}
+                  onChangeText={setInputFilter}
                 />
               </VStack>
             </ScrollView>
@@ -126,7 +146,6 @@ export function Home() {
       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
-        index={1}
         snapPoints={snapPoints}
         backgroundStyle={{
           backgroundColor: "white",

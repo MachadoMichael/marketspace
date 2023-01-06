@@ -11,7 +11,7 @@ import {
   VStack,
 } from "native-base";
 import { Tag } from "./Tag";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 import { PaymentMethodDTO } from "../dtos/methodDTO";
@@ -30,7 +30,9 @@ export function Filter({
 }: FilterProps) {
   const [isNew, setIsNew] = useState(true);
   const [canExchange, setCanExchange] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState<PaymentMethodDTO[]>([
+  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<
+    PaymentMethodDTO[]
+  >([
     {
       name: "Boleto",
       isAccepted: false,
@@ -53,26 +55,65 @@ export function Filter({
     },
   ]);
 
-  function filteringItemList() {
-    const itemListCopy = [...itemList];
-    let filteredItemList = itemListCopy.filter((item) => item.isNew === isNew);
-    // console.log(filteredItemList, "<- FILTRO ISNEW");
+  const [initialItemList, setInitialItemList] = useState<ItemDTO[]>(itemList);
 
-    filteredItemList = filteredItemList.filter(
+  useEffect(() => {
+    setInitialItemList(itemList);
+  }, []);
+
+  function handleFilter() {
+    const itemListCopy = [...initialItemList];
+
+    const listAfterIsNewFilter = isNewFilter(itemListCopy);
+    const listAfterCanExchangeFilter = canExchangeFilter(listAfterIsNewFilter);
+    const listAfterMethodFilter = methodsFilter(listAfterCanExchangeFilter);
+    setItemList(listAfterMethodFilter);
+    closeBottomSheet();
+  }
+
+  function isNewFilter(itemList: ItemDTO[]) {
+    const filteredItemList = itemList.filter((item) => item.isNew === isNew);
+    return filteredItemList;
+  }
+
+  function canExchangeFilter(itemList: ItemDTO[]) {
+    const filteredItemList = itemList.filter(
       (item) => item.canExchange === canExchange
     );
-    // console.log(filteredItemList, "<- FILTRO CANEXCHANGE");
+    return filteredItemList;
+  }
 
-    setItemList(filteredItemList);
+  function methodsFilter(itemList: ItemDTO[]) {
+    console.log(itemList, "<-- pré filtro metodos");
+    console.log(selectedPaymentMethods, "<-- selectedPaymentMethods");
+    const filteredItemList = itemList.filter((item) => {
+      if (
+        item.paymentMethods[0].isAccepted ===
+          selectedPaymentMethods[0].isAccepted &&
+        item.paymentMethods[1].isAccepted ===
+          selectedPaymentMethods[1].isAccepted &&
+        item.paymentMethods[2].isAccepted ===
+          selectedPaymentMethods[2].isAccepted &&
+        item.paymentMethods[3].isAccepted ===
+          selectedPaymentMethods[3].isAccepted &&
+        item.paymentMethods[4].isAccepted ===
+          selectedPaymentMethods[4].isAccepted
+      ) {
+        console.log("BARIO");
+        return item;
+      }
+    });
+    return filteredItemList;
   }
 
   function resetFilters() {
     setIsNew(false);
     setCanExchange(false);
 
-    const AllFalseMethods = [...paymentMethods];
+    const AllFalseMethods = [...selectedPaymentMethods];
     AllFalseMethods.forEach((method) => (method.isAccepted = false));
-    setPaymentMethods(AllFalseMethods);
+    setSelectedPaymentMethods(AllFalseMethods);
+    setItemList(initialItemList);
   }
 
   return (
@@ -128,13 +169,12 @@ export function Filter({
           <Text fontFamily="heading">Meios de pagamento aceitos</Text>
 
           <PaymentMethodCheckbox
-            methods={paymentMethods}
-            setMethods={setPaymentMethods}
+            methods={selectedPaymentMethods}
+            setMethods={setSelectedPaymentMethods}
           />
         </VStack>
         <HStack
           justifyContent="space-between"
-          w={10}
           mt={12}
           mb={10}
           bottom={0}
@@ -149,7 +189,7 @@ export function Filter({
             title="Aplicar filtros"
             bgColor="gray.200"
             textColor="white"
-            onPress={filteringItemList}
+            onPress={handleFilter}
           />
         </HStack>
       </VStack>
