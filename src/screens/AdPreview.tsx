@@ -1,4 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
   Center,
@@ -8,21 +8,26 @@ import {
   View,
   VStack,
 } from "native-base";
-import { BottomSection } from "../components/BottomSection";
+
 import { Button } from "../components/Button";
 import { ImagesCarousel } from "../components/ImagesCarousel";
 import { ProductDetails } from "../components/ProductDetails";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
+interface RouteParamsProps {
+  itemID: string;
+}
+
 export function AdPreview() {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
-
+  const route = useRoute();
+  const { itemID } = route.params as RouteParamsProps;
   function handleGoBack() {
     goBack();
   }
 
   function handleGoToUserAdDetails() {
-    navigate("useraddetails");
+    navigate("addetails", { itemID });
   }
 
   return (

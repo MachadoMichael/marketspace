@@ -24,8 +24,7 @@ type AppStackRoutes = {
   addetails: { itemID: string };
   adform: { itemID: string | null };
   tabroutes: undefined;
-  adpreview: undefined;
-  useraddetails: undefined;
+  adpreview: { itemID: string };
 };
 
 export type AppStackNavigatorRouteProps =
@@ -67,7 +66,6 @@ export function AppRoutes() {
       <Stack.Screen name="adform" component={AdForm} />
       <Stack.Screen name="adpreview" component={AdPreview} />
       <Stack.Screen name="addetails" component={AdDetails} />
-      <Stack.Screen name="useraddetails" component={UserAdDetails} />
     </Stack.Navigator>
   );
 }

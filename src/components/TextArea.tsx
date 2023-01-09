@@ -27,7 +27,7 @@ export function TextArea({
         autoCompleteType={View}
         w={327}
         h={160}
-        placeholder="Text Area Placeholder"
+        placeholder="Descrição"
         bgColor="gray.700"
         rounded={6}
         placeholderTextColor="gray.400"

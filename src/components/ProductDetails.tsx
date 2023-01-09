@@ -41,8 +41,8 @@ export function ProductDetails() {
           </Box>
           <Text ml={12}>User Name</Text>
         </HStack>
-
-        <Tag text="NOVO" isSelect={true} />
+ 
+        <Tag  text="NOVO" isSelect={true} />
 
         <HStack justifyContent="space-between" mt={2} mb={2}>
           <Text fontFamily="heading" fontSize="xl">

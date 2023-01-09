@@ -3,7 +3,7 @@ import { Pressable, Text, View } from "native-base";
 interface TagProps {
   text: string;
   isSelect: boolean;
-  handleFunction: () => void;
+  handleFunction?: () => void;
 }
 
 export function Tag({ text, isSelect, handleFunction }: TagProps) {

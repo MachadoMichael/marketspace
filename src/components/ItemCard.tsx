@@ -30,13 +30,13 @@ export function ItemCard({ item, isUserAd = false }: ItemCardProps) {
         m={1}
         w={50}
         h={17}
-        bgColor={item.new ? "blue.light" : "gray.300"}
+        bgColor={item.isNew ? "blue.light" : "gray.300"}
         justifyContent="center"
         alignItems="center"
         rounded={9999}
       >
         <Text fontFamily="heading" color="white" fontSize="xs">
-          {item.new ? "NOVO" : "USADO"}
+          {item.isNew ? "NOVO" : "USADO"}
         </Text>
       </Box>
       <Box

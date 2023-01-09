@@ -3,6 +3,8 @@ import {
   Box,
   Center,
   HStack,
+  Image,
+  Pressable,
   Radio,
   ScrollView,
   Switch,
@@ -10,7 +12,12 @@ import {
   View,
   VStack,
 } from "native-base";
-import { SafeAreaView, TouchableOpacity, Dimensions } from "react-native";
+import {
+  SafeAreaView,
+  TouchableOpacity,
+  Dimensions,
+  Alert,
+} from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import { Input } from "../components/Input";
 import { TextArea } from "../components/TextArea";
@@ -18,10 +25,14 @@ import { useState } from "react";
 import { PaymentMethodCheckbox } from "../components/PaymentMethodCheckbox";
 import { Button } from "../components/Button";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
-import { BottomSection } from "../components/BottomSection";
+
 import { TopSection } from "../components/TopSection";
 import { ItemDTO } from "../dtos/ItemDTO";
 import { PaymentMethodDTO } from "../dtos/methodDTO";
+import { v4 as uuid } from "uuid";
+import * as ImagePicker from "expo-image-picker";
+import * as FileSystem from "expo-file-system";
+import { color } from "react-native-reanimated";
 
 interface RouteParamsProps {
   itemID: string | null;
@@ -31,6 +42,7 @@ export function AdForm() {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
 
+  const RandomID = uuid();
   const route = useRoute();
   const { itemID } = route.params as RouteParamsProps;
 
@@ -39,6 +51,7 @@ export function AdForm() {
   const [isNew, setIsNew] = useState("true");
   const [price, setPrice] = useState("");
   const [canExchange, setCanExchange] = useState(false);
+  const [adPhotos, setAdPhotos] = useState<string[]>([]);
   const [methods, setMethods] = useState<PaymentMethodDTO[]>([
     {
       name: "Boleto",
@@ -61,18 +74,84 @@ export function AdForm() {
       isAccepted: false,
     },
   ]);
+  const [newAd, setNewAd] = useState<ItemDTO>({
+    name: title,
+    canExchange: canExchange,
+    id: RandomID,
+    isNew: isNew == "true" ? true : false,
+    value: price,
+    uri: ["adsasd", "adssadas"],
+    paymentMethods: methods,
+  });
+
+  async function handleProductPhotoSelect() {
+    try {
+      const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        quality: 1,
+        aspect: [4, 4],
+        allowsEditing: true,
+      });
+
+      if (selectedPhoto.canceled) {
+        return;
+      }
+
+      const photoIsValidated = await checkingPhotoSize(
+        selectedPhoto.assets[0].uri
+      );
+
+      if (photoIsValidated) {
+        const newPhotoURI = selectedPhoto.assets[0].uri;
+        const prevStateAdPhotos = [...adPhotos];
+        prevStateAdPhotos.push(newPhotoURI);
+        setAdPhotos(prevStateAdPhotos);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async function checkingPhotoSize(selectedPhotoURI: string) {
+    const photoInfo = await FileSystem.getInfoAsync(selectedPhotoURI);
+    if (photoInfo.size) {
+      const photoSizeInMb = photoInfo.size / 1024 / 1024;
+
+      if (photoSizeInMb < 5) {
+        return true;
+      } else {
+        Alert.alert(
+          "A imagem selecionada é muito grande, por favor selecione uma imagem menor do que 5MB"
+        );
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
 
   function handleCreateNewAd() {
-    handleGoToAdPreview();
     //gerar produto e enviar iD
+    handleGoToAdPreview();
+  }
+
+  function handleGoToAdPreview() {
+    if (itemID !== null) {
+      navigate("adpreview", { itemID: itemID });
+    } else {
+      navigate("adpreview", { itemID: newAd.id });
+    }
+  }
+
+  function deletePhoto(photoIndex: number) {
+    const newAdPhotoList = [...adPhotos].filter(
+      (photoURI, index) => index !== photoIndex
+    );
+    setAdPhotos(newAdPhotoList);
   }
 
   function handleGoBackUserAd() {
     goBack();
-  }
-
-  function handleGoToAdPreview() {
-    navigate("adpreview");
   }
 
   return (
@@ -102,16 +181,52 @@ export function AdForm() {
             </Text>
 
             <HStack mt={4} mb={8}>
-              <View
-                w={100}
-                h={100}
-                bgColor="gray.500"
-                rounded={6}
-                justifyContent="center"
-                alignItems="center"
-              >
-                <AntDesign name="plus" size={24} color="gray" />
-              </View>
+              {adPhotos.map((photoUri, index) => (
+                <Box w={100} h={100} mr={4}>
+                  <Pressable
+                    position="absolute"
+                    zIndex={1}
+                    m={1}
+                    right={0}
+                    bgColor="gray.200"
+                    rounded={9999}
+                    w={4}
+                    h={4}
+                    justifyContent="center"
+                    alignItems="center"
+                    onPress={() => deletePhoto(index)}
+                  >
+                    <Text color="white" fontSize="xs">
+                      X
+                    </Text>
+                  </Pressable>
+                  <Image
+                    w="full"
+                    h="full"
+                    rounded={6}
+                    source={{
+                      uri: photoUri,
+                    }}
+                    alt={"adPhoto" + index}
+                  />
+                </Box>
+              ))}
+
+              {adPhotos.length < 3 ? (
+                <Pressable
+                  w={100}
+                  h={100}
+                  bgColor="gray.500"
+                  rounded={6}
+                  justifyContent="center"
+                  alignItems="center"
+                  onPress={handleProductPhotoSelect}
+                >
+                  <AntDesign name="plus" size={24} color="gray" />
+                </Pressable>
+              ) : (
+                false
+              )}
             </HStack>
 
             <Text fontFamily="heading" fontSize="md" mb={4}>
