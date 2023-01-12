@@ -28,7 +28,7 @@ import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 import { TopSection } from "../components/TopSection";
 import { ItemDTO } from "../dtos/ItemDTO";
-import { PaymentMethodDTO } from "../dtos/methodDTO";
+import { PaymentMethodDTO } from "../dtos/MethodDTO";
 import { v4 as uuid } from "uuid";
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";

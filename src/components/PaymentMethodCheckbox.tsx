@@ -1,6 +1,6 @@
 import { Checkbox, HStack, Text, VStack } from "native-base";
 import { useState, useEffect } from "react";
-import { PaymentMethodDTO } from "../dtos/methodDTO";
+import { PaymentMethodDTO } from "../dtos/MethodDTO";
 interface PaymentMethodsProps {
   methods: PaymentMethodDTO[];
   setMethods: React.Dispatch<React.SetStateAction<PaymentMethodDTO[]>>;

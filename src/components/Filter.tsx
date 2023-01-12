@@ -14,7 +14,7 @@ import { Tag } from "./Tag";
 import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
-import { PaymentMethodDTO } from "../dtos/methodDTO";
+import { PaymentMethodDTO } from "../dtos/MethodDTO";
 import { ItemDTO } from "../dtos/ItemDTO";
 
 interface FilterProps {

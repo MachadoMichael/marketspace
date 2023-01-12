@@ -9,6 +9,7 @@ import {
 import { Routes } from "./src/routes";
 import { Platform } from "react-native";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { AuthContextProvider } from "./src/contexts/AuthContext";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold });
@@ -17,7 +18,10 @@ export default function App() {
       <StatusBar
         barStyle={Platform.OS === "android" ? "light-content" : "dark-content"}
       />
-      {fontsLoaded ? <Routes /> : false}
+      <AuthContextProvider>
+
+        {fontsLoaded ? <Routes /> : false}
+      </AuthContextProvider>
     </NativeBaseProvider>
   );
 }

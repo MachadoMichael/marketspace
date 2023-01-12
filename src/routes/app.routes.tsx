@@ -11,11 +11,16 @@ import {
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { AdPreview } from "../screens/AdPreview";
-import { UserAdDetails } from "../screens/UserAdDetails";
+import { Feather } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
+import { useContext } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { Ionicons } from '@expo/vector-icons';
 
 type AppTabRoutes = {
   home: undefined;
   useradslist: undefined;
+  logout: undefined;
 };
 export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
 const Tab = createBottomTabNavigator<AppTabRoutes>();
@@ -32,6 +37,14 @@ export type AppStackNavigatorRouteProps =
 const Stack = createNativeStackNavigator<AppStackRoutes>();
 
 function TabRoutes() {
+  const { signOut } = useContext(AuthContext)
+
+
+  function HandleLogout() {
+    signOut()
+    return null
+  }
+
   return (
     <Tab.Navigator
       screenOptions={{
@@ -44,13 +57,17 @@ function TabRoutes() {
         component={Home}
         options={{
           tabBarHideOnKeyboard: true,
-          tabBarStyle: {
-            zIndex: -1,
-          },
+          tabBarIcon: ({ color , size}) => (<Feather name="home" size={size} color={color} />)
         }}
       />
 
-      <Tab.Screen name="useradslist" component={UserAdsList} />
+      <Tab.Screen name="useradslist" component={UserAdsList} options={{
+        tabBarIcon: ({ color, size }) => (<AntDesign name="tago" size={size} color={color} />)
+      }} />
+
+      <Tab.Screen name="logout" component={HandleLogout} options={{
+        tabBarIcon: ({ size }) => (<Ionicons name="exit-outline" size={size} color="red" />)
+      }} />
     </Tab.Navigator>
   );
 }

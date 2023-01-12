@@ -5,6 +5,7 @@ import { BottomSection } from "../components/BottomSection";
 import { Button } from "../components/Button";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { Feather } from '@expo/vector-icons';
 import { TopSection } from "../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { Box, HStack, ScrollView, VStack } from "native-base";
@@ -33,46 +34,43 @@ export function AdDetails() {
 
   return (
     <SafeAreaView>
-      <ScrollView h={height - 100}>
-        <TopSection
-          leftElement={
-            <TouchableOpacity onPress={handleGoBack}>
-              <AntDesign name="arrowleft" size={24} color="black" />
-            </TouchableOpacity>
-          }
-        />
-        <ImagesCarousel data={item.uri} />
-        <ProductDetails />
+      <ScrollView h={height - 100} bgColor="gray.600">
+        <VStack mb={12}>
+
+          <TopSection
+            leftElement={
+              <TouchableOpacity onPress={handleGoBack}>
+                <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            }
+          />
+          <ImagesCarousel imagesURI={item.uri} isActiveAd={item.isActive}/>
+          <ProductDetails />
+        </VStack>
       </ScrollView>
 
-      <VStack
-        justifyContent="space-evenly"
-        alignItems="center"
-        borderWidth={1}
-        borderColor="yellow.100"
-        p={4}
-        bgColor="white"
-        bottom={12}
-      >
+      
         {item.user === userLogged ? (
-          <>
+          <VStack bgColor="gray.600" w='full' h={32}  justifyContent="space-around" alignItems='center' bottom={12} p={4}>
             <Button
-              isBig
+              icon={<AntDesign name="poweroff" size={16} color="white" />}
               title="Desativar anúncio"
               bgColor="gray.200"
               textColor="white"
               onPress={null}
-              mb={4}
+              w={327}
             />
 
             <Button
-              isBig
+
+              icon={<Feather name="trash" size={16} color="black" />}
               title="Excluir anúncio"
               bgColor="gray.500"
               textColor="gray.100"
               onPress={handleGoBack}
+              w={327}
             />
-          </>
+          </VStack>
         ) : (
           <Button
             isBig
@@ -82,7 +80,7 @@ export function AdDetails() {
             icon={<FontAwesome name="whatsapp" size={24} color="white" />}
           />
         )}
-      </VStack>
+      
     </SafeAreaView>
   );
 }

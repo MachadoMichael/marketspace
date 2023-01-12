@@ -1,15 +1,17 @@
 import { Box } from "native-base";
 import { AuthRoutes } from "./auth.routes";
 import { NavigationContainer } from "@react-navigation/native";
-import { useState } from "react";
 import { AppRoutes } from "./app.routes";
 
+import { useAuth } from "../hooks/useAuth";
+
 export function Routes() {
-  const [isLogged, setIsLogged] = useState(true);
+  const { user } = useAuth();
+
   return (
     <Box flex={1} bg="blue.basic">
       <NavigationContainer>
-        {isLogged === true ? <AppRoutes /> : <AuthRoutes />}
+        {user.id ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   );

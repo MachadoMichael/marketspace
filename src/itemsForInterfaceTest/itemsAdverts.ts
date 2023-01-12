@@ -6,6 +6,7 @@ export const itemsForTest = [
     uri: [
       "https://static.dafiti.com.br/p/Evoltenn-T%C3%AAnis-Evoltenn-Easy-Style-Preto-Amarelo-1382-3414617-1-zoom.jpg",
     ],
+    isActive: true,
     user: "CarlosAfafa",
     id: "KASKASD",
     canExchange: false,
@@ -39,6 +40,7 @@ export const itemsForTest = [
     uri: [
       "https://a-static.mlcdn.com.br/800x560/bicicleta-aro-29-mountain-bike-colli-bike-ultimate-freio-a-disco-21-marchas/magazineluiza/219066900/137182c8596c29ae465381144f26dc2e.jpg",
     ],
+    isActive: true,
     user: "CarlosAfafa",
     id: "2",
     canExchange: true,
@@ -70,10 +72,11 @@ export const itemsForTest = [
     value: "2590,90",
     isNew: true,
     uri: [
-      "https://files.tecnoblog.net/wp-content/uploads/2019/12/lenovo-ideapad-s145-1.jpg",
+      "https://www.apple.com/newsroom/images/product/mac/standard/Apple_16-inch-MacBook-Pro_Retina-Display_111319_big.jpg.large.jpg",
     ],
+    isActive: true,
     user: "ASd",
-    id: "KASKAS44D",
+    id: "KASKA999S44D",
     canExchange: true,
     paymentMethods: [
       {
@@ -107,6 +110,7 @@ export const itemsForTest = [
       "https://http2.mlstatic.com/D_NQ_NP_653196-MLB52961941590_122022-O.webp",
       "https://http2.mlstatic.com/D_NQ_NP_861718-MLB52961795988_122022-O.webp",
     ],
+    isActive: true,
     user: "CarlosAfafa",
     id: "113",
     canExchange: true,
@@ -142,6 +146,7 @@ export const itemsForTest = [
       "https://samsungbr.vtexassets.com/arquivos/ids/339582-1200-auto?v=637953052923830000&width=1200&height=auto&aspect=true",
       "https://samsungbr.vtexassets.com/arquivos/ids/339583-1200-auto?v=637953053091970000&width=1200&height=auto&aspect=true",
     ],
+    isActive: true,
     user: "CarlosAfafa",
     id: "44",
     canExchange: true,
@@ -177,6 +182,7 @@ export const itemsForTest = [
       "https://m.media-amazon.com/images/I/51EMoxXrDEL._AC_SL1000_.jpg",
       "https://m.media-amazon.com/images/I/5177TEb8aXL._AC_SL1000_.jpg",
     ],
+    isActive: true,
     user: "Ulica",
     id: "232",
     canExchange: true,

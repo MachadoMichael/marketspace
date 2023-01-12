@@ -1,14 +1,13 @@
 import {
   Center,
   CheckIcon,
-  FlatList,
   HStack,
   Select,
   Text,
   View,
   VStack,
 } from "native-base";
-import { SafeAreaView, TouchableOpacity } from "react-native";
+import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { ItemCard } from "../components/ItemCard";
@@ -25,11 +24,15 @@ export function UserAdsList() {
     navigate("adform", { itemID: null });
   }
 
+  const userFilteredAdList =
+    service === 'enable' ? userAds.filter(ad => ad.isActive === true)
+      : service === 'disable' ? userAds.filter(ad => ad.isActive === false) : userAds;
+
   return (
     <SafeAreaView>
-      <View justifyContent="space-between" p={8}>
+      <View justifyContent="space-between" p={8} pb={0}>
         <FlatList
-          data={userAds}
+          data={userFilteredAdList}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <ItemCard item={item} isUserAd />}
           horizontal={false}

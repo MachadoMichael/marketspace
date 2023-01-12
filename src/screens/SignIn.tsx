@@ -5,10 +5,26 @@ import { Input } from "../components/Input";
 import SvgLogo from "../components/SvgLogo";
 import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 import { AntDesign } from "@expo/vector-icons";
+import { AuthContext } from "../contexts/AuthContext";
+import { useContext, useState } from "react";
+import { UserDTO } from "../dtos/UserDTO";
+
+interface FormData {
+  email: string;
+  password: string
+}
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRouteProps>();
-  function handleGoToCreateAccount() {
+  const { signIn } = useContext(AuthContext)
+  const [email, setEmail] = useState("")
+  const [password, setPassword] = useState("")
+
+  async function handleSignIn() {
+    await signIn(email, password)
+  }
+
+  function handleNewAccount() {
     navigate("signUp");
   }
 
@@ -27,9 +43,10 @@ export function SignIn() {
 
         <Text mb={4}>Acesse sua conta</Text>
         <Center>
-          <Input placeholder="user" />
+          <Input placeholder="E-mail" value={email} onChangeText={setEmail} />
           <Input
-            placeholder="password"
+            value={email} onChangeText={setEmail}
+            placeholder="Senha"
             rightElement={
               <Box w={10}>
                 <AntDesign name="eyeo" size={24} color="gray" />
@@ -37,7 +54,7 @@ export function SignIn() {
             }
             secureTextEntry
           />
-          <Button title="Enter" isBig bgColor="blue.light" />
+          <Button title="Enter" isBig bgColor="blue.light" onPress={handleSignIn} />
         </Center>
       </Center>
 
@@ -50,7 +67,7 @@ export function SignIn() {
           isBig
           bgColor="gray.500"
           color="gray.100"
-          onPress={handleGoToCreateAccount}
+          onPress={handleNewAccount}
         />
       </Center>
     </View>

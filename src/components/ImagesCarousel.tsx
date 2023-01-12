@@ -1,14 +1,15 @@
-import { Image } from "native-base";
+import { Box, Image, Text } from "native-base";
 import * as React from "react";
-import { Dimensions, Text } from "react-native";
+import { Dimensions } from "react-native";
 import { View } from "native-base";
 import Carousel from "react-native-reanimated-carousel";
 
 interface CarouselProps {
-  data: string[];
+  imagesURI: string[];
+  isActiveAd: boolean;
 }
 
-export function ImagesCarousel({ data }: CarouselProps) {
+export function ImagesCarousel({ imagesURI, isActiveAd }: CarouselProps) {
   const { width } = Dimensions.get("window");
   return (
     <View>
@@ -17,17 +18,29 @@ export function ImagesCarousel({ data }: CarouselProps) {
         width={width}
         height={width / 2}
         autoPlay
-        data={[...new Array(data.length).keys()]}
-        scrollAnimationDuration={data.length > 1 ? 5000 : 0}
-        onSnapToItem={(index) => console.log("current index:", index)}
+        data={[...new Array(imagesURI.length).keys()]}
+        scrollAnimationDuration={imagesURI.length > 1 ? 5000 : 0}
         renderItem={({ index }) => (
-          <View
-            style={{
-              flex: 1,
-              borderWidth: 1,
-              justifyContent: "center",
-            }}
-          >
+          <Box flex={1} justifyContent="center">
+            {!isActiveAd ? (
+              <Box
+                w="full"
+                h="full"
+                position="absolute"
+                bgColor="gray.100"
+                opacity={0.9}
+                zIndex={1}
+                justifyContent="center"
+                alignItems="center"
+              >
+                <Text color="gray.500" fontFamily="heading">
+                  ANÚNCIO DESATIVADO
+                </Text>
+              </Box>
+            ) : (
+              false
+            )}
+
             <Image
               w={375}
               h={280}
@@ -36,12 +49,12 @@ export function ImagesCarousel({ data }: CarouselProps) {
               alignItems="center"
               justifyContent="center"
               source={{
-                uri: data[index],
+                uri: imagesURI[index],
               }}
               alt="selected product details"
             />
             <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
-          </View>
+          </Box>
         )}
       />
     </View>
