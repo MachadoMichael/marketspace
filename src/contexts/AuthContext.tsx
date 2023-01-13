@@ -1,5 +1,6 @@
 import { createContext, ReactNode, useState } from "react";
 import { UserDTO } from "../dtos/UserDTO";
+import { api } from "../services/api";
 
 export interface AuthContextDataProps {
   user: UserDTO;
@@ -36,7 +37,6 @@ export function AuthContextProvider(props: AuthContextProviderProps) {
     } catch (error) {}
   }
 
-  console.log(user, "<-- USERXXXX");
   return (
     <AuthContext.Provider
       value={{

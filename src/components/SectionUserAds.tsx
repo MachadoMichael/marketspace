@@ -21,7 +21,7 @@ export function SectionUserAds(){
           w={327}
           h={66}
           rounded={6}
-          bgColor="gray.500"
+          bgColor={"blue.lowOpacity"}
           alignItems="center"
           justifyContent="space-evenly"
           flexDirection='row'

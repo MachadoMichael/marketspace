@@ -1,10 +1,7 @@
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import {
-  Center,
-  Checkbox,
   HStack,
   ScrollView,
-  Select,
   Switch,
   Text,
   View,
@@ -84,8 +81,6 @@ export function Filter({
   }
 
   function methodsFilter(itemList: ItemDTO[]) {
-    console.log(itemList, "<-- pré filtro metodos");
-    console.log(selectedPaymentMethods, "<-- selectedPaymentMethods");
     const filteredItemList = itemList.filter((item) => {
       if (
         item.paymentMethods[0].isAccepted ===
@@ -99,7 +94,6 @@ export function Filter({
         item.paymentMethods[4].isAccepted ===
           selectedPaymentMethods[4].isAccepted
       ) {
-        console.log("BARIO");
         return item;
       }
     });
@@ -110,9 +104,9 @@ export function Filter({
     setIsNew(false);
     setCanExchange(false);
 
-    const AllFalseMethods = [...selectedPaymentMethods];
-    AllFalseMethods.forEach((method) => (method.isAccepted = false));
-    setSelectedPaymentMethods(AllFalseMethods);
+    const AllMethodsAreFalse = [...selectedPaymentMethods];
+    AllMethodsAreFalse.forEach((method) => (method.isAccepted = false));
+    setSelectedPaymentMethods(AllMethodsAreFalse);
     setItemList(initialItemList);
   }
 

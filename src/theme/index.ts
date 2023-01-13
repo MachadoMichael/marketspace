@@ -5,6 +5,7 @@ export const theme = extendTheme({
     blue: {
       light: "#647AC7",
       basic: "#364D9D",
+      lowOpacity: "#647AC720",
     },
     red: {
       light: "#EE7979",

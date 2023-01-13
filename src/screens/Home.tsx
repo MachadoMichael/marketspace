@@ -6,7 +6,7 @@ import {
   Text,
   VStack,
 } from "native-base";
-import { FlatList } from 'react-native'
+import { FlatList } from "react-native";
 import { ItemCard } from "../components/ItemCard";
 import { useEffect, useRef, useState } from "react";
 import { ItemDTO } from "../dtos/ItemDTO";
@@ -22,6 +22,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { SectionUserAds } from "../components/SectionUserAds";
+import { getAllProducts } from "../storage/getAllProducts";
 
 export function Home() {
   const { height } = Dimensions.get("window");
@@ -36,6 +37,7 @@ export function Home() {
   useEffect(() => {
     setItemList(itemsForTest);
     setInitialItemList(itemsForTest);
+    getAllProducts()
   }, []);
 
   function handleHideModal() {
@@ -58,12 +60,11 @@ export function Home() {
   }
 
   return (
-
-    <Center justifyContent={"space-between"} >
+    <Center justifyContent={"space-between"}>
       <FlatList
         data={itemList}
-        keyExtractor={item => item.id}
-        renderItem={({ item }) => (<ItemCard item={item} />)}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => <ItemCard item={item} />}
         horizontal={false}
         numColumns={2}
         bounces={false}
@@ -73,8 +74,8 @@ export function Home() {
           <ScrollView mt={8}>
             <HomeHeader />
 
-            <VStack mt={4} justifyContent="center">
-              <Text mb={2} color="gray.300">
+            <VStack mt={4} justifyContent={"center"}>
+              <Text mb={2} color={"gray.300"}>
                 Seus produtos anunciados para venda
               </Text>
 
@@ -82,10 +83,12 @@ export function Home() {
             </VStack>
 
             <VStack w={327} mt={8} mb={4}>
-              <Text mb={2}>Compre produtos variados</Text>
+              <Text color={"gray.300"} mb={2}>
+                Compre produtos variados
+              </Text>
 
               <Input
-                placeholder="Buscar anúncio"
+                placeholder={"Buscar anúncio"}
                 w={327}
                 InputRightElement={
                   <HStack w={20}>
@@ -122,9 +125,6 @@ export function Home() {
           setItemList={setItemList}
         />
       </BottomSheet>
-
     </Center>
-
-
   );
 }
