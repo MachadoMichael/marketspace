@@ -1,6 +1,5 @@
 import {
   Center,
-  // FlatList,
   HStack,
   ScrollView,
   Text,

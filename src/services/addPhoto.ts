@@ -1,12 +1,23 @@
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
+import uuid from "react-native-uuid";
 import { Alert } from "react-native";
+import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
-export async function AddPhoto(
-  state: string[],
-  setState: React.Dispatch<React.SetStateAction<string[]>>,
-  avatar?: string
-) {
+interface AddPhotoProps {
+  userAvatar?: PhotoFileDTO;
+  setUserAvatar?: React.Dispatch<React.SetStateAction<PhotoFileDTO>>;
+  adPhotosURI?: string[];
+  setAdPhotosURI?: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+export async function AddPhoto({
+  userAvatar,
+  setUserAvatar,
+  adPhotosURI,
+  setAdPhotosURI,
+}: AddPhotoProps) {
+  const RandomID = uuid.v4();
   try {
     const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -18,21 +29,31 @@ export async function AddPhoto(
     if (selectedPhoto.canceled) {
       return;
     }
+    const photoIsValid = await checkingPhotoSize(selectedPhoto.assets[0].uri);
 
-    const photoIsValidated = await checkingPhotoSize(
-      selectedPhoto.assets[0].uri
-    );
-
-    if (photoIsValidated) {
+    if (photoIsValid) {
       const newPhotoURI = selectedPhoto.assets[0].uri;
-      console.log(selectedPhoto, "PHOTOSOX");
+      console.log(selectedPhoto);
 
-      if (avatar) {
-        setState([newPhotoURI]);
+      if (userAvatar && setUserAvatar) {
+        const fileExtension = selectedPhoto.assets[0].uri.split(".").pop();
+        const photoFile = {
+          name: `${RandomID}.${fileExtension}`,
+          uri: selectedPhoto.assets[0].uri,
+          type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
+        } as any;
+
+        setUserAvatar(photoFile);
       } else {
-        const prevState = [...state];
-        prevState.push(newPhotoURI);
-        setState(prevState);
+        if (adPhotosURI && setAdPhotosURI) {
+          const prevState = [...adPhotosURI];
+          prevState.push(newPhotoURI);
+          setAdPhotosURI(prevState);
+        } else {
+          console.log(
+            "avatar, setAvatar, adPhotosURI and setAdPhotosURI are undefined"
+          );
+        }
       }
 
       return true;

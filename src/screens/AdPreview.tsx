@@ -41,13 +41,14 @@ export function AdPreview() {
 
       <ScrollView>
         <ImagesCarousel
-          data={[
+          imagesURI={[
             "https://quatrorodas.abril.com.br/wp-content/uploads/2020/11/McLaren-620R-Media-Drives_174-V1-e1605830876110.jpg",
             "https://quatrorodas.abril.com.br/wp-content/uploads/2020/11/McLaren-620R-Media-Drives_106-V1.jpg?resize=1536,1024",
             "https://quatrorodas.abril.com.br/wp-content/uploads/2020/11/McLaren-620R-Media-Drives_170-e1605799605454.jpg?quality=70&strip=info",
             "https://quatrorodas.abril.com.br/wp-content/uploads/2020/11/McLaren-620R-Media-Drives_04.jpg?resize=1536,1024",
             "https://quatrorodas.abril.com.br/wp-content/uploads/2020/11/McLaren-620R-Media-Drives_03.jpg?quality=70&strip=info&w=650",
           ]}
+          isActiveAd
         />
         <ProductDetails />
       </ScrollView>

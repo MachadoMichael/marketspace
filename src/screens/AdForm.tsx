@@ -49,7 +49,7 @@ export function AdForm() {
   const [isNew, setIsNew] = useState("true");
   const [price, setPrice] = useState("");
   const [canExchange, setCanExchange] = useState(false);
-  const [adPhotos, setAdPhotos] = useState<string[]>([]);
+  const [adPhotosURI, setAdPhotosURI] = useState<string[]>([]);
   const [methods, setMethods] = useState<PaymentMethodDTO[]>([
     {
       name: "Boleto",
@@ -84,7 +84,7 @@ export function AdForm() {
   });
 
   async function handleProductPhotoSelect() {
-    await AddPhoto(adPhotos, setAdPhotos);
+    await AddPhoto({ adPhotosURI, setAdPhotosURI });
   }
 
   function handleCreateNewAd() {
@@ -101,10 +101,10 @@ export function AdForm() {
   }
 
   function deletePhoto(photoIndex: number) {
-    const newAdPhotoList = [...adPhotos].filter(
+    const newAdPhotoList = [...adPhotosURI].filter(
       (photoURI, index) => index !== photoIndex
     );
-    setAdPhotos(newAdPhotoList);
+    setAdPhotosURI(newAdPhotoList);
   }
 
   function handleGoBackUserAd() {
@@ -138,7 +138,7 @@ export function AdForm() {
             </Text>
 
             <HStack mt={4} mb={8}>
-              {adPhotos.map((photoData, index) => (
+              {adPhotosURI.map((uri, index) => (
                 <Box w={100} h={100} mr={4} key={index}>
                   <Pressable
                     position="absolute"
@@ -162,14 +162,14 @@ export function AdForm() {
                     h="full"
                     rounded={6}
                     source={{
-                      uri: photoData,
+                      uri: uri,
                     }}
                     alt={"adPhoto" + index}
                   />
                 </Box>
               ))}
 
-              {adPhotos.length < 3 ? (
+              {adPhotosURI.length < 3 ? (
                 <Pressable
                   w={100}
                   h={100}

@@ -21,61 +21,81 @@ import { useState } from "react";
 import { Alert } from "react-native";
 import { AddPhoto } from "../services/addPhoto";
 import { addNewUser } from "../storage/addNewUser";
+import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
+import * as Yup from "yup";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+interface FormDataProps {
+  name: string;
+  email: string;
+  tel: string;
+  password: string;
+  password_confirm: string;
+}
+
+const signUpSchema = Yup.object({
+  name: Yup.string().required("Informe o nome."),
+  email: Yup.string().required("Informe o email").email("Email inválido"),
+  tel: Yup.string().required("Informe o telefone"),
+  password: Yup.string()
+    .required("Informe o password")
+    .min(6, "A senha deve conter ao menos 6 dígitos"),
+  password_confirm: Yup.string()
+    .required("Confirme a senha")
+    .oneOf([Yup.ref("password"), null], "A confirmação de senha não confere"),
+});
 
 export function SignUp() {
   const { goBack } = useNavigation<AuthNavigatorRouteProps>();
-  const [avatar, setAvatar] = useState<string[]>([]);
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [userAvatar, setUserAvatar] = useState<PhotoFileDTO>(
+    {} as PhotoFileDTO
+  );
 
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    defaultValues: {
+      name: "",
+      email: "",
+      tel: "",
+      password: "",
+      password_confirm: "",
+    },
+    resolver: yupResolver(signUpSchema),
+  });
 
   function handleBackToSignIn() {
     goBack();
   }
 
   function addAvatar() {
-    AddPhoto(avatar, setAvatar, "userAvatar");
+    AddPhoto({ userAvatar, setUserAvatar });
   }
 
-  async function handleCreateNewUser() {
-    fieldsAreFilled() &&
-    samePasswords() &&
-    validEmail(email) &&
+  const handleCreateNewUser: SubmitHandler<FormDataProps> = async ({
+    name,
+    email,
+    tel,
+    password,
+  }) => {
     avatarIsSelected()
       ? await addNewUser({
-          avatar: avatar[0],
+          userAvatar,
           name,
           email,
-          tel: phone,
+          tel,
           password,
         })
       : Alert.alert("Por favor verifique os campos");
-  }
+  };
 
   function avatarIsSelected() {
-    if (avatar.length === 1) return true;
-    else return false;
-  }
-
-  function fieldsAreFilled() {
-    const fields = [name, email, phone, password, confirmPassword];
-    const emptyFields = fields.filter((field) => field === "");
-
-    if (emptyFields.length === 0) return true;
-    else return false;
-  }
-
-  function validEmail(email: string) {
-    return /^[\w+.]+@\w+\.\w{2,}(?:\.\w{2})?$/.test(email);
-  }
-
-  function samePasswords() {
-    if (password === confirmPassword) return true;
+    if (userAvatar) return true;
     else return false;
   }
 
@@ -102,13 +122,13 @@ export function SignUp() {
           borderColor="blue.light"
           mb={4}
         >
-          {avatar.length > 0 ? (
+          {userAvatar.uri ? (
             <Image
               w="full"
               h="full"
               rounded={9999}
               source={{
-                uri: avatar[0],
+                uri: userAvatar.uri,
               }}
               alt={"user photo"}
             />
@@ -133,40 +153,86 @@ export function SignUp() {
         </Center>
 
         <Center>
-          <Input placeholder="Nome" value={name} onChangeText={setName} />
-          <Input placeholder="E-mail" value={email} onChangeText={setEmail} />
-          <Input placeholder="Telefone" value={phone} onChangeText={setPhone} />
-          <Input
-            placeholder="Senha"
-            rightElement={
-              <Pressable w={10} onPress={() => setHidePassword(!hidePassword)}>
-                <AntDesign name="eyeo" size={24} color="gray" />
-              </Pressable>
-            }
-            secureTextEntry={hidePassword}
-            value={password}
-            onChangeText={setPassword}
+          <Controller
+            control={control}
+            name="name"
+            render={({ field: { onChange, value } }) => (
+              <Input placeholder="Nome" value={value} onChangeText={onChange} />
+            )}
           />
-          <Input
-            placeholder="Confirmar senha"
-            rightElement={
-              <Pressable
-                w={10}
-                onPress={() => setHideConfirmPassword(!hideConfirmPassword)}
-              >
-                <AntDesign name="eyeo" size={24} color="gray" />
-              </Pressable>
-            }
-            secureTextEntry={hideConfirmPassword}
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
+
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
           />
+
+          <Controller
+            control={control}
+            name="tel"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Telefone"
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Senha"
+                rightElement={
+                  <Pressable
+                    w={10}
+                    onPress={() => setHidePassword(!hidePassword)}
+                  >
+                    <AntDesign name="eyeo" size={24} color="gray" />
+                  </Pressable>
+                }
+                secureTextEntry={hidePassword}
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="password_confirm"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Confirmar senha"
+                rightElement={
+                  <Pressable
+                    w={10}
+                    onPress={() => setHideConfirmPassword(!hideConfirmPassword)}
+                  >
+                    <AntDesign name="eyeo" size={24} color="gray" />
+                  </Pressable>
+                }
+                secureTextEntry={hideConfirmPassword}
+                value={value}
+                onChangeText={onChange}
+              />
+            )}
+          />
+
           <Button
             title="Criar"
             isBig
             bgColor={"gray.200"}
             textColor="white"
-            onPress={handleCreateNewUser}
+            onPress={handleSubmit(handleCreateNewUser)}
           />
         </Center>
       </Center>
