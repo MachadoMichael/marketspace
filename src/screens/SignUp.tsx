@@ -1,13 +1,4 @@
-import {
-  Box,
-  Center,
-  Image,
-  Pressable,
-  ScrollView,
-  Text,
-  View,
-  VStack,
-} from "native-base";
+import { Center, Image, Pressable, ScrollView, Text } from "native-base";
 
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
@@ -20,11 +11,13 @@ import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 import { useState } from "react";
 import { Alert } from "react-native";
 import { AddPhoto } from "../services/addPhoto";
-import { addNewUser } from "../storage/addNewUser";
+import { addUser } from "../storage/addUser";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AppTabNavigatorRouteProps } from "../routes/app.routes";
+import { useAuth } from "../hooks/useAuth";
 interface FormDataProps {
   name: string;
   email: string;
@@ -53,6 +46,8 @@ export function SignUp() {
 
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
+  const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
+  const { signIn } = useAuth();
 
   const {
     control,
@@ -69,12 +64,15 @@ export function SignUp() {
     resolver: yupResolver(signUpSchema),
   });
 
+  const handleAddUserAvatar = async () => {
+    try {
+      const avatar = await AddPhoto();
+      if (avatar.uri) setUserAvatar(avatar);
+    } catch (error) {}
+  };
+
   function handleBackToSignIn() {
     goBack();
-  }
-
-  function addAvatar() {
-    AddPhoto({ userAvatar, setUserAvatar });
   }
 
   const handleCreateNewUser: SubmitHandler<FormDataProps> = async ({
@@ -83,21 +81,23 @@ export function SignUp() {
     tel,
     password,
   }) => {
-    avatarIsSelected()
-      ? await addNewUser({
-          userAvatar,
-          name,
-          email,
-          tel,
-          password,
-        })
-      : Alert.alert("Por favor verifique os campos");
+    if (userAvatar.uri) {
+      const newUserSaved = await addUser({
+        userAvatar,
+        name,
+        email,
+        password,
+        tel,
+      });
+      if (newUserSaved) {
+        await signIn(email, password);
+        navigate("home");
+      } else
+        Alert.alert(
+          "Não foi possível cadastrar o usuário, por favor tente mais tarde."
+        );
+    }
   };
-
-  function avatarIsSelected() {
-    if (userAvatar) return true;
-    else return false;
-  }
 
   return (
     <ScrollView flex={1} bgColor="gray.600">
@@ -144,7 +144,7 @@ export function SignUp() {
             top={12}
             bgColor="blue.light"
             rounded={"full"}
-            onPress={addAvatar}
+            onPress={handleAddUserAvatar}
           >
             <Center>
               <Feather name="edit-3" size={20} color="white" />

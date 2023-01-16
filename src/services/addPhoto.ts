@@ -1,23 +1,9 @@
 import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
-import uuid from "react-native-uuid";
 import { Alert } from "react-native";
-import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
+import uuid from "uuid";
 
-interface AddPhotoProps {
-  userAvatar?: PhotoFileDTO;
-  setUserAvatar?: React.Dispatch<React.SetStateAction<PhotoFileDTO>>;
-  adPhotosURI?: string[];
-  setAdPhotosURI?: React.Dispatch<React.SetStateAction<string[]>>;
-}
-
-export async function AddPhoto({
-  userAvatar,
-  setUserAvatar,
-  adPhotosURI,
-  setAdPhotosURI,
-}: AddPhotoProps) {
-  const RandomID = uuid.v4();
+export async function AddPhoto() {
   try {
     const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -32,35 +18,11 @@ export async function AddPhoto({
     const photoIsValid = await checkingPhotoSize(selectedPhoto.assets[0].uri);
 
     if (photoIsValid) {
-      const newPhotoURI = selectedPhoto.assets[0].uri;
-      console.log(selectedPhoto);
-
-      if (userAvatar && setUserAvatar) {
-        const fileExtension = selectedPhoto.assets[0].uri.split(".").pop();
-        const photoFile = {
-          name: `${RandomID}.${fileExtension}`,
-          uri: selectedPhoto.assets[0].uri,
-          type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
-        } as any;
-
-        setUserAvatar(photoFile);
-      } else {
-        if (adPhotosURI && setAdPhotosURI) {
-          const prevState = [...adPhotosURI];
-          prevState.push(newPhotoURI);
-          setAdPhotosURI(prevState);
-        } else {
-          console.log(
-            "avatar, setAvatar, adPhotosURI and setAdPhotosURI are undefined"
-          );
-        }
-      }
-
-      return true;
+      const photoFile = await photoFileConstructor(selectedPhoto);
+      return photoFile;
     }
   } catch (error) {
     console.log(error);
-    return false;
   }
 }
 
@@ -81,3 +43,25 @@ async function checkingPhotoSize(selectedPhotoURI: string) {
     return false;
   }
 }
+
+const photoFileConstructor = async (
+  selectedPhoto: ImagePicker.ImagePickerResult
+) => {
+  if (selectedPhoto.assets) {
+    const imageRandomName = uuid.v4();
+    const fileExtension = selectedPhoto.assets[0].uri.split(".").pop();
+    const photoFile = {
+      name: `${imageRandomName}.${fileExtension}`,
+      uri: selectedPhoto.assets[0].uri,
+      type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
+    } as any;
+
+    return photoFile;
+  } else {
+    return {
+      name: "",
+      uri: "",
+      type: "",
+    };
+  }
+};

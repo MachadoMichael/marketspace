@@ -40,7 +40,7 @@ function TabRoutes() {
   const { signOut } = useContext(AuthContext)
 
 
-  function HandleLogout() {
+  function handleLogout() {
     signOut()
     return null
   }
@@ -65,7 +65,7 @@ function TabRoutes() {
         tabBarIcon: ({ color, size }) => (<AntDesign name="tago" size={size} color={color} />)
       }} />
 
-      <Tab.Screen name="logout" component={HandleLogout} options={{
+      <Tab.Screen name="logout" component={handleLogout} options={{
         tabBarIcon: ({ size }) => (<Ionicons name="exit-outline" size={size} color="red" />)
       }} />
     </Tab.Navigator>

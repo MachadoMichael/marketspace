@@ -1,7 +1,11 @@
+import { PhotoFileDTO } from "./PhotoFileDTO";
+
 export interface UserDTO {
   name: string;
-  password: string;
   email: string;
-  phone: string;
+  tel: string;
   id: string;
+  avatar: PhotoFileDTO;
+  created_at: string;
+  updated_at: string;
 }

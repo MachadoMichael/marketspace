@@ -11,17 +11,17 @@ import { UserDTO } from "../dtos/UserDTO";
 
 interface FormData {
   email: string;
-  password: string
+  password: string;
 }
 
 export function SignIn() {
   const { navigate } = useNavigation<AuthNavigatorRouteProps>();
-  const { signIn } = useContext(AuthContext)
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
+  const { signIn } = useContext(AuthContext);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   async function handleSignIn() {
-    await signIn(email, password)
+    await signIn(email, password);
   }
 
   function handleNewAccount() {
@@ -43,9 +43,15 @@ export function SignIn() {
 
         <Text mb={4}>Acesse sua conta</Text>
         <Center>
-          <Input placeholder="E-mail" value={email} onChangeText={setEmail} />
           <Input
-            value={email} onChangeText={setEmail}
+            placeholder="E-mail"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+          />
+          <Input
+            value={password}
+            onChangeText={setPassword}
             placeholder="Senha"
             rightElement={
               <Box w={10}>
@@ -54,7 +60,12 @@ export function SignIn() {
             }
             secureTextEntry
           />
-          <Button title="Enter" isBig bgColor="blue.light" onPress={handleSignIn} />
+          <Button
+            title="Enter"
+            isBig
+            bgColor="blue.light"
+            onPress={handleSignIn}
+          />
         </Center>
       </Center>
 
