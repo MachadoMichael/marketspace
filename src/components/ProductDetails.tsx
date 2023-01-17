@@ -6,7 +6,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Tag } from "../components/Tag";
 
-export function ProductDetails() {
+export const ProductDetails = () => {
   return (
     <Box>
       <VStack m={6}>
@@ -41,8 +41,8 @@ export function ProductDetails() {
           </Box>
           <Text ml={12}>User Name</Text>
         </HStack>
- 
-        <Tag  text="NOVO" isSelect={true} />
+
+        <Tag text="NOVO" isSelect={true} />
 
         <HStack justifyContent="space-between" mt={2} mb={2}>
           <Text fontFamily="heading" fontSize="xl">
@@ -64,7 +64,7 @@ export function ProductDetails() {
         </Text>
 
         <Text fontFamily="heading" mt={4}>
-          Aceita troca? <Text fontFamily='body'>Sim</Text>
+          Aceita troca? <Text fontFamily="body">Sim</Text>
         </Text>
 
         <Text fontFamily="heading" mt={4}>
@@ -83,4 +83,4 @@ export function ProductDetails() {
       </VStack>
     </Box>
   );
-}
+};

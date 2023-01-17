@@ -26,9 +26,9 @@ interface FormDataProps {
   password_confirm: string;
 }
 
-const signUpSchema = Yup.object({
+const SignUpSchema = Yup.object({
   name: Yup.string().required("Informe o nome."),
-  email: Yup.string().required("Informe o email").email("Email inválido"),
+  email: Yup.string().required("Informe o email").email("E-mail inválido"),
   tel: Yup.string().required("Informe o telefone"),
   password: Yup.string()
     .required("Informe o password")
@@ -38,7 +38,7 @@ const signUpSchema = Yup.object({
     .oneOf([Yup.ref("password"), null], "A confirmação de senha não confere"),
 });
 
-export function SignUp() {
+export const SignUp = () => {
   const { goBack } = useNavigation<AuthNavigatorRouteProps>();
   const [userAvatar, setUserAvatar] = useState<PhotoFileDTO>(
     {} as PhotoFileDTO
@@ -47,7 +47,7 @@ export function SignUp() {
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-  const { signIn } = useAuth();
+  const {} = useAuth();
 
   const {
     control,
@@ -61,7 +61,7 @@ export function SignUp() {
       password: "",
       password_confirm: "",
     },
-    resolver: yupResolver(signUpSchema),
+    resolver: yupResolver(SignUpSchema),
   });
 
   const handleAddUserAvatar = async () => {
@@ -75,28 +75,21 @@ export function SignUp() {
     goBack();
   }
 
-  const handleCreateNewUser: SubmitHandler<FormDataProps> = async ({
+  const handleOnSubmit: SubmitHandler<FormDataProps> = async ({
     name,
     email,
     tel,
     password,
   }) => {
-    if (userAvatar.uri) {
-      const newUserSaved = await addUser({
-        userAvatar,
-        name,
-        email,
-        password,
-        tel,
-      });
-      if (newUserSaved) {
-        await signIn(email, password);
-        navigate("home");
-      } else
-        Alert.alert(
-          "Não foi possível cadastrar o usuário, por favor tente mais tarde."
-        );
-    }
+    userAvatar.uri !== ""
+      ? await addUser({
+          userAvatar,
+          name,
+          email,
+          password,
+          tel,
+        })
+      : Alert.alert("Por favor adcione uma imagem ao seu avatar.");
   };
 
   return (
@@ -157,7 +150,12 @@ export function SignUp() {
             control={control}
             name="name"
             render={({ field: { onChange, value } }) => (
-              <Input placeholder="Nome" value={value} onChangeText={onChange} />
+              <Input
+                placeholder="Nome"
+                value={value}
+                onChangeText={onChange}
+                errorMessage={errors.name?.message}
+              />
             )}
           />
 
@@ -169,6 +167,8 @@ export function SignUp() {
                 placeholder="E-mail"
                 value={value}
                 onChangeText={onChange}
+                keyboardType="email-address"
+                errorMessage={errors.email?.message}
               />
             )}
           />
@@ -179,8 +179,10 @@ export function SignUp() {
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="Telefone"
-                value={value}
+                value={value.toString()}
                 onChangeText={onChange}
+                keyboardType="number-pad"
+                errorMessage={errors.tel?.message}
               />
             )}
           />
@@ -202,6 +204,7 @@ export function SignUp() {
                 secureTextEntry={hidePassword}
                 value={value}
                 onChangeText={onChange}
+                errorMessage={errors.password?.message}
               />
             )}
           />
@@ -223,6 +226,7 @@ export function SignUp() {
                 secureTextEntry={hideConfirmPassword}
                 value={value}
                 onChangeText={onChange}
+                errorMessage={errors.password_confirm?.message}
               />
             )}
           />
@@ -232,7 +236,7 @@ export function SignUp() {
             isBig
             bgColor={"gray.200"}
             textColor="white"
-            onPress={handleSubmit(handleCreateNewUser)}
+            onPress={handleSubmit(handleOnSubmit)}
           />
         </Center>
       </Center>
@@ -251,4 +255,4 @@ export function SignUp() {
       </Center>
     </ScrollView>
   );
-}
+};

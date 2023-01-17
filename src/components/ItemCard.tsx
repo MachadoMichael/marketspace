@@ -1,6 +1,6 @@
 import { Box, Image, Pressable, Text, View, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { ItemDTO } from "../dtos/ItemDTO";
+import { ItemDTO } from "../dtos/ProductsDTO";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
@@ -9,7 +9,7 @@ interface ItemCardProps {
   isUserAd?: boolean;
 }
 
-export function ItemCard({ item, isUserAd = false }: ItemCardProps) {
+export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   function handleGoToAdvertDetails(itemID: string) {
@@ -91,4 +91,4 @@ export function ItemCard({ item, isUserAd = false }: ItemCardProps) {
       </VStack>
     </Pressable>
   );
-}
+};

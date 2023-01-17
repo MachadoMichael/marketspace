@@ -8,7 +8,7 @@ interface PaymentMethodsProps {
   methodsList: string[];
 }
 
-export function PaymentMethodsList({ methodsList }: PaymentMethodsProps) {
+export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
   function selectIcon(method: string) {
     switch (method) {
       case "Boleto":
@@ -39,4 +39,4 @@ export function PaymentMethodsList({ methodsList }: PaymentMethodsProps) {
       })}
     </VStack>
   );
-}
+};

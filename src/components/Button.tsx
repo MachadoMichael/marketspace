@@ -12,13 +12,13 @@ type ButtonProps = IButtonProps & {
   textColor?: string;
 };
 
-export function Button({
+export const Button = ({
   title,
   icon,
   isBig = false,
   textColor = "gray.100",
   ...rest
-}: ButtonProps) {
+}: ButtonProps) => {
   return (
     <NativeBaseButton
       w={isBig ? 279 : 140}
@@ -34,4 +34,4 @@ export function Button({
       </HStack>
     </NativeBaseButton>
   );
-}
+};

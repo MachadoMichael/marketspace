@@ -6,7 +6,7 @@ type Props = {
   height?: number;
 };
 
-function SvgLogo({ width = 96, height = 64, ...rest }: Props) {
+const SvgLogo = ({ width = 96, height = 64, ...rest }: Props) => {
   return (
     <Svg
       width={width}
@@ -46,6 +46,6 @@ function SvgLogo({ width = 96, height = 64, ...rest }: Props) {
       />
     </Svg>
   );
-}
+};
 
 export default SvgLogo;

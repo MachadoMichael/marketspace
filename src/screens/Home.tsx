@@ -1,14 +1,8 @@
-import {
-  Center,
-  HStack,
-  ScrollView,
-  Text,
-  VStack,
-} from "native-base";
+import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
 import { ItemCard } from "../components/ItemCard";
 import { useEffect, useRef, useState } from "react";
-import { ItemDTO } from "../dtos/ItemDTO";
+import { ProductDTO } from "../dtos/ProductsDTO";
 import { Dimensions } from "react-native";
 import { HomeHeader } from "../components/HomeHeader";
 
@@ -21,22 +15,23 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { SectionUserAds } from "../components/SectionUserAds";
-import { getAllProducts } from "../storage/getAllProducts";
+import { getProducts } from "../storage/getProducts";
 
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-  const [initialItemList, setInitialItemList] =
-    useState<ItemDTO[]>(itemsForTest);
-  const [itemList, setItemList] = useState<ItemDTO[]>(itemsForTest);
+  const [initialItemList, setInitialItemList] = useState<ProductDTO[]>(
+    [] as ProductDTO[]
+  );
+  const [itemList, setItemList] = useState<ProductDTO[]>([] as ProductDTO[]);
   const [inputFilter, setInputFilter] = useState("");
   const snapPoints = [1, height - 110];
 
   useEffect(() => {
-    setItemList(itemsForTest);
-    setInitialItemList(itemsForTest);
-    getAllProducts()
+    // setItemList(itemsForTest);
+    // setInitialItemList(itemsForTest);
+    getProducts();
   }, []);
 
   function handleHideModal() {

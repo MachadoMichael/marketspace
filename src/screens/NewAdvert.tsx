@@ -27,87 +27,108 @@ import { Button } from "../components/Button";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 import { TopSection } from "../components/TopSection";
-import { ItemDTO } from "../dtos/ItemDTO";
-import { PaymentMethodDTO } from "../dtos/MethodDTO";
+import { ProductDTO } from "../dtos/ProductsDTO";
+
 import { v4 as uuid } from "uuid";
 import { AddPhoto } from "../services/addPhoto";
+
+import * as Yup from "yup";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
+import { addProduct } from "../storage/addProduct";
+import { useAuth } from "../hooks/useAuth";
 
 interface RouteParamsProps {
   itemID: string | null;
 }
 
-export function AdForm() {
+interface FormDataProps {
+  title: string;
+  description: string;
+  price: string;
+}
+
+const NewAdvertSchema = Yup.object({
+  title: Yup.string().required("Informe o título"),
+  description: Yup.string()
+    .required("Informe a descrição do produto")
+    .max(200, "São aceitos no máximo 200 caracteres"),
+  price: Yup.string().required("Informe o valor do produto"),
+});
+
+export const NewAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
 
-  const RandomID = uuid();
   const route = useRoute();
   const { itemID } = route.params as RouteParamsProps;
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
-  const [isNew, setIsNew] = useState("true");
-  const [price, setPrice] = useState("");
-  const [canExchange, setCanExchange] = useState(false);
-  const [adPhotosURI, setAdPhotosURI] = useState<string[]>([]);
-  const [methods, setMethods] = useState<PaymentMethodDTO[]>([
-    {
-      name: "Boleto",
-      isAccepted: false,
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    defaultValues: {
+      title: "",
+      description: "",
+      price: "",
     },
-    {
-      name: "Dinheiro",
-      isAccepted: false,
-    },
-    {
-      name: "Pix",
-      isAccepted: false,
-    },
-    {
-      name: "Cartão de crédito",
-      isAccepted: false,
-    },
-    {
-      name: "Depósito bancário",
-      isAccepted: false,
-    },
-  ]);
-  const [newAd, setNewAd] = useState<ItemDTO>({
-    name: title,
-    canExchange: canExchange,
-    id: RandomID,
-    isNew: isNew == "true" ? true : false,
-    value: price,
-    uri: ["adsasd", "adssadas"],
-    paymentMethods: methods,
-    isActive: true,
+    resolver: yupResolver(NewAdvertSchema),
   });
 
-  async function handleProductPhotoSelect() {
-    await AddPhoto({ adPhotosURI, setAdPhotosURI });
-  }
+  const [isNew, setIsNew] = useState("true");
+  const [acceptTrade, setAccepetTrade] = useState<boolean | undefined>(
+    undefined
+  );
+  const [advertImages, setAdvertImages] = useState<PhotoFileDTO[]>(
+    [] as PhotoFileDTO[]
+  );
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
-  function handleCreateNewAd() {
+  const handleProductPhotoSelect = async () => {
+    const AdvertPhoto = await AddPhoto();
+    setAdvertImages([...advertImages, AdvertPhoto]);
+  };
+
+  const handleOnSubmit: SubmitHandler<FormDataProps> = async ({
+    title,
+    description,
+    price,
+  }) => {
+    try {
+      await addProduct({
+        name: title,
+        description,
+        is_new: isNew === "true" ? true : false,
+        accept_trade: acceptTrade ? acceptTrade : false,
+        price,
+        payment_methods: paymentMethods,
+        images: advertImages,
+      });
+    } catch (error) {
+      console.warn(error);
+    }
     //gerar produto e enviar iD
-    handleGoToAdPreview();
-  }
+    // handleGoToAdPreview();
+  };
 
   function handleGoToAdPreview() {
-    if (itemID !== null) {
-      navigate("adpreview", { itemID: itemID });
-    } else {
-      navigate("adpreview", { itemID: newAd.id });
-    }
+    // if (itemID !== null) {
+    //   navigate("adpreview", { itemID: itemID });
+    // } else {
+    // navigate("adpreview", { itemID: newAd.id });
+    // }
   }
 
   function deletePhoto(photoIndex: number) {
-    const newAdPhotoList = [...adPhotosURI].filter(
+    const newImageList = [...advertImages].filter(
       (photoURI, index) => index !== photoIndex
     );
-    setAdPhotosURI(newAdPhotoList);
+    setAdvertImages(newImageList);
   }
 
-  function handleGoBackUserAd() {
+  function handleGoBack() {
     goBack();
   }
 
@@ -117,7 +138,7 @@ export function AdForm() {
         <ScrollView>
           <TopSection
             leftElement={
-              <TouchableOpacity onPress={handleGoBackUserAd}>
+              <TouchableOpacity onPress={handleGoBack}>
                 <AntDesign name="arrowleft" size={24} color="black" />
               </TouchableOpacity>
             }
@@ -138,7 +159,7 @@ export function AdForm() {
             </Text>
 
             <HStack mt={4} mb={8}>
-              {adPhotosURI.map((uri, index) => (
+              {advertImages.map((photoFile, index) => (
                 <Box w={100} h={100} mr={4} key={index}>
                   <Pressable
                     position="absolute"
@@ -162,14 +183,14 @@ export function AdForm() {
                     h="full"
                     rounded={6}
                     source={{
-                      uri: uri,
+                      uri: photoFile.uri,
                     }}
-                    alt={"adPhoto" + index}
+                    alt={"product photo" + index}
                   />
                 </Box>
               ))}
 
-              {adPhotosURI.length < 3 ? (
+              {advertImages.length < 3 ? (
                 <Pressable
                   w={100}
                   h={100}
@@ -190,14 +211,30 @@ export function AdForm() {
               Sobre o produto
             </Text>
 
-            <Input
-              w={327}
-              placeholder="Título do anúncio"
-              value={title}
-              onChangeText={setTitle}
+            <Controller
+              name="title"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  w={327}
+                  placeholder="Título do anúncio"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
             />
 
-            <TextArea value={description} setValue={setDescription} />
+            <Controller
+              name="description"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <TextArea
+                  placeholder="Descrição do produto"
+                  value={value}
+                  onChangeText={onChange}
+                />
+              )}
+            />
 
             <Radio.Group
               name="newOrOld"
@@ -224,11 +261,18 @@ export function AdForm() {
               Venda
             </Text>
 
-            <Input
-              w={327}
-              placeholder="R$"
-              value={price}
-              onChangeText={setPrice}
+            <Controller
+              name="price"
+              control={control}
+              render={({ field: { onChange, value } }) => (
+                <Input
+                  w={327}
+                  placeholder="R$"
+                  value={value}
+                  onChangeText={onChange}
+                  keyboardType="decimal-pad"
+                />
+              )}
             />
 
             <Text fontFamily="heading" fontSize="md" mb={4}>
@@ -237,15 +281,18 @@ export function AdForm() {
 
             <Switch
               size="md"
-              onToggle={() => setCanExchange(!canExchange)}
-              isChecked={canExchange}
+              onToggle={() => setAccepetTrade((prev) => !prev)}
+              isChecked={acceptTrade}
             />
 
             <Text fontFamily="heading" mt={4} fontSize="md">
               Meios de pagamento:
             </Text>
 
-            <PaymentMethodCheckbox methods={methods} setMethods={setMethods} />
+            <PaymentMethodCheckbox
+              methods={paymentMethods}
+              setMethods={setPaymentMethods}
+            />
           </VStack>
         </ScrollView>
       </Box>
@@ -259,14 +306,14 @@ export function AdForm() {
         bgColor="white"
         bottom={0}
       >
-        <Button title="Cancelar" bgColor="gray.500" textColor="gray.100" />
+        <Button title="Cancelar" bgColor="gray.500" textColor="gray.100" onPress={handleGoBack}/>
         <Button
           title="Avançar"
           bgColor="gray.100"
           textColor="white"
-          onPress={handleCreateNewAd}
+          onPress={handleSubmit(handleOnSubmit)}
         />
       </HStack>
     </SafeAreaView>
   );
-}
+};

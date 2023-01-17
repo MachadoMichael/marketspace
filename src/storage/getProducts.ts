@@ -1,6 +1,6 @@
 import { api } from "../services/api";
 
-export async function getAllProducts() {
+export const getProducts = async () => {
   const id = "7f3227d7-be3f-47a6-81ab-ad742a546ade";
   try {
     const products = await api.get(`/products/${id}`);
@@ -8,4 +8,4 @@ export async function getAllProducts() {
   } catch (error) {
     console.log(error);
   }
-}
+};

@@ -1,6 +1,10 @@
 import { PhotoFileDTO } from "./PhotoFileDTO";
 
 export interface UserDTO {
+  token: string;
+  user: UserDataDTO;
+}
+export interface UserDataDTO {
   name: string;
   email: string;
   tel: string;

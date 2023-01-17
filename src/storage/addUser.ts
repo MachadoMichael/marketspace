@@ -9,13 +9,13 @@ interface UserData {
   password: string;
 }
 
-export async function addUser({
+export const addUser = async ({
   userAvatar,
   name,
   email,
   tel,
   password,
-}: UserData) {
+}: UserData) => {
   try {
     const userForm = new FormData();
     userForm.append("avatar", userAvatar);
@@ -24,16 +24,16 @@ export async function addUser({
     userForm.append("tel", tel);
     userForm.append("password", password);
 
-    const newUser = await api.post("/users/", userForm, {
+    await api.post("/users/", userForm, {
       headers: {
         "Content-Type": "multpart/form-data",
       },
     });
 
-    if (newUser) return true;
+    return true;
   } catch (error) {
     if (axios.isAxiosError(error)) console.log(error.response?.data);
     else console.log(error);
     return false;
   }
-}
+};

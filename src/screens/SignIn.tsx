@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Box, Center, Text, View } from "native-base";
+import { Box, Center, Text, View, Pressable } from "native-base";
 import { Button } from "../components/Button";
 import { Input } from "../components/Input";
 import SvgLogo from "../components/SvgLogo";
@@ -7,22 +7,47 @@ import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useState } from "react";
-import { UserDTO } from "../dtos/UserDTO";
+import { userLogin } from "../storage/userLogin";
+import * as Yup from "yup";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { background } from "native-base/lib/typescript/theme/styled-system";
 
-interface FormData {
+interface FormDataProps {
   email: string;
   password: string;
 }
 
-export function SignIn() {
-  const { navigate } = useNavigation<AuthNavigatorRouteProps>();
-  const { signIn } = useContext(AuthContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+const signInSchema = Yup.object({
+  email: Yup.string().required("Informe o email").email("E-mail inválido"),
+  password: Yup.string()
+    .required("Informe o password")
+    .min(6, "A senha deve conter no minimo 6 dígitos"),
+});
 
-  async function handleSignIn() {
-    await signIn(email, password);
-  }
+export const SignIn = () => {
+  const { navigate } = useNavigation<AuthNavigatorRouteProps>();
+  const { logIn } = useContext(AuthContext);
+  const [hidePassword, setHidePassword] = useState(true);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormDataProps>({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    resolver: yupResolver(signInSchema),
+  });
+
+  const handleSignIn: SubmitHandler<FormDataProps> = async ({
+    email,
+    password,
+  }) => {
+    await logIn(email, password);
+  };
 
   function handleNewAccount() {
     navigate("signUp");
@@ -43,28 +68,50 @@ export function SignIn() {
 
         <Text mb={4}>Acesse sua conta</Text>
         <Center>
-          <Input
-            placeholder="E-mail"
-            value={email}
-            onChangeText={setEmail}
-            keyboardType="email-address"
+          <Controller
+            control={control}
+            name="email"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                value={value}
+                onChangeText={onChange}
+                keyboardType="email-address"
+                errorMessage={errors.email?.message}
+              />
+            )}
           />
-          <Input
-            value={password}
-            onChangeText={setPassword}
-            placeholder="Senha"
-            rightElement={
-              <Box w={10}>
-                <AntDesign name="eyeo" size={24} color="gray" />
-              </Box>
-            }
-            secureTextEntry
+
+          <Controller
+            control={control}
+            name="password"
+            render={({ field: { onChange, value } }) => (
+              <Input
+                value={value}
+                onChangeText={onChange}
+                placeholder="Senha"
+                rightElement={
+                  <Pressable
+                    w={10}
+                    onPress={() => setHidePassword(!hidePassword)}
+                  >
+                    <AntDesign name="eyeo" size={24} color="gray" />
+                  </Pressable>
+                }
+                secureTextEntry={hidePassword}
+                errorMessage={errors.password?.message}
+              />
+            )}
           />
+
           <Button
             title="Enter"
             isBig
             bgColor="blue.light"
-            onPress={handleSignIn}
+            onPress={handleSubmit(handleSignIn)}
+            _pressed={{
+              backgroundColor: "blue",
+            }}
           />
         </Center>
       </Center>
@@ -83,4 +130,4 @@ export function SignIn() {
       </Center>
     </View>
   );
-}
+};

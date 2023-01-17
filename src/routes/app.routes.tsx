@@ -5,29 +5,30 @@ import {
 import { Home } from "../screens/Home";
 import { AdDetails } from "../screens/AdDetails";
 import { UserAdsList } from "../screens/UserAdsList";
-import { AdForm } from "../screens/AdForm";
+import { NewAdvert } from "../screens/NewAdvert";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
 import { AdPreview } from "../screens/AdPreview";
-import { Feather } from '@expo/vector-icons';
-import { AntDesign } from '@expo/vector-icons';
+import { Feather } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
+import { SignIn } from "../screens/SignIn";
 
 type AppTabRoutes = {
   home: undefined;
   useradslist: undefined;
-  logout: undefined;
+  signIn: undefined;
 };
 export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
 const Tab = createBottomTabNavigator<AppTabRoutes>();
 
 type AppStackRoutes = {
   addetails: { itemID: string };
-  adform: { itemID: string | null };
+  newadvert: { itemID: string | null };
   tabroutes: undefined;
   adpreview: { itemID: string };
 };
@@ -36,14 +37,8 @@ export type AppStackNavigatorRouteProps =
   NativeStackNavigationProp<AppStackRoutes>;
 const Stack = createNativeStackNavigator<AppStackRoutes>();
 
-function TabRoutes() {
-  const { signOut } = useContext(AuthContext)
-
-
-  function handleLogout() {
-    signOut()
-    return null
-  }
+const TabRoutes = () => {
+  const { logOut } = useContext(AuthContext);
 
   return (
     <Tab.Navigator
@@ -57,22 +52,42 @@ function TabRoutes() {
         component={Home}
         options={{
           tabBarHideOnKeyboard: true,
-          tabBarIcon: ({ color , size}) => (<Feather name="home" size={size} color={color} />)
+          tabBarIcon: ({ color, size }) => (
+            <Feather name="home" size={size} color={color} />
+          ),
         }}
       />
 
-      <Tab.Screen name="useradslist" component={UserAdsList} options={{
-        tabBarIcon: ({ color, size }) => (<AntDesign name="tago" size={size} color={color} />)
-      }} />
+      <Tab.Screen
+        name="useradslist"
+        component={UserAdsList}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <AntDesign name="tago" size={size} color={color} />
+          ),
+        }}
+      />
 
-      <Tab.Screen name="logout" component={handleLogout} options={{
-        tabBarIcon: ({ size }) => (<Ionicons name="exit-outline" size={size} color="red" />)
-      }} />
+      <Tab.Screen
+        name="signIn"
+        component={SignIn}
+        options={{
+          tabBarIcon: ({ size }) => (
+            <Ionicons name="exit-outline" size={size} color="red" />
+          ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            logOut();
+          },
+        }}
+      />
     </Tab.Navigator>
   );
-}
+};
 
-export function AppRoutes() {
+export const AppRoutes = () => {
   return (
     <Stack.Navigator
       screenOptions={{
@@ -80,9 +95,9 @@ export function AppRoutes() {
       }}
     >
       <Stack.Screen name="tabroutes" component={TabRoutes} />
-      <Stack.Screen name="adform" component={AdForm} />
+      <Stack.Screen name="newadvert" component={NewAdvert} />
       <Stack.Screen name="adpreview" component={AdPreview} />
       <Stack.Screen name="addetails" component={AdDetails} />
     </Stack.Navigator>
   );
-}
+};

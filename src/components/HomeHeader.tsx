@@ -3,17 +3,12 @@ import { Button } from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
-import { ItemDTO } from "../dtos/ItemDTO";
-import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 
+export const HomeHeader = () => {
+  const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
-
-
-export function HomeHeader() {
-  const {navigate} = useNavigation<AppStackNavigatorRouteProps>()
-  
-  function handleGoAdvertForm(){
-    navigate('adform', {itemID: null})
+  function handleGoAdvertForm() {
+    navigate("newadvert", { itemID: null });
   }
   return (
     <HStack w={327} justifyContent="space-between" mt={4}>
@@ -54,4 +49,4 @@ export function HomeHeader() {
       />
     </HStack>
   );
-}
+};

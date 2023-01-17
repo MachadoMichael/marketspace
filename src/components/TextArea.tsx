@@ -8,22 +8,17 @@ import {
 
 type TextAreaProps = ITextAreaProps & {
   errorMessage?: string | null;
-  setValue: React.Dispatch<React.SetStateAction<string>>;
 };
 
-export function TextArea({
-  value,
-  setValue,
+export const TextArea = ({
   errorMessage = null,
   isInvalid,
   ...rest
-}: TextAreaProps) {
+}: TextAreaProps) => {
   const invalid = !!errorMessage || isInvalid;
   return (
     <FormControl isInvalid={invalid} mb={4}>
       <NativeTextArea
-        value={value}
-        onChangeText={setValue}
         autoCompleteType={View}
         w={327}
         h={160}
@@ -50,4 +45,4 @@ export function TextArea({
       </FormControl.ErrorMessage>
     </FormControl>
   );
-}
+};

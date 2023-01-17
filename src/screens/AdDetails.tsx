@@ -1,7 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProductDetails } from "../components/ProductDetails";
-import { BottomSection } from "../components/BottomSection";
 import { Button } from "../components/Button";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";

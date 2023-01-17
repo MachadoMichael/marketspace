@@ -1,38 +1,44 @@
 import { Checkbox, HStack, Text, VStack } from "native-base";
 import { useState, useEffect } from "react";
-import { PaymentMethodDTO } from "../dtos/MethodDTO";
 interface PaymentMethodsProps {
-  methods: PaymentMethodDTO[];
-  setMethods: React.Dispatch<React.SetStateAction<PaymentMethodDTO[]>>;
+  methods: string[];
+  setMethods: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
-export function PaymentMethodCheckbox({
+export const PaymentMethodCheckbox = ({
   methods,
   setMethods,
-}: PaymentMethodsProps) {
-  function handleChangeIsAccepetedMethod(index: number) {
-    const methodsList = [...methods];
-    methodsList[index].isAccepted = !methodsList[index].isAccepted;
-    setMethods(methodsList);
+}: PaymentMethodsProps) => {
+  const methodList = ["cash", "pix", "deposit", "card", "boleto"];
+
+  function handleMethodSelector(selectedMethod: string) {
+    if (methods.includes(selectedMethod))
+      methods.filter((method) => method !== selectedMethod);
+    else setMethods([...methods, selectedMethod]);
+
+    setMethods(methodList);
   }
 
   return (
     <VStack mt={2}>
-      {methods
-        ? methods.map((method, index) => {
-            return (
-              <Checkbox
-                key={index + method.name}
-                value={method.name}
-                colorScheme="purple"
-                isChecked={method.isAccepted}
-                onChange={() => handleChangeIsAccepetedMethod(index)}
-              >
-                {method.name}
-              </Checkbox>
-            );
-          })
-        : false}
+      {methodList.map((method, index) => {
+        return (
+          <Checkbox
+            key={index + method}
+            value={method}
+            colorScheme="purple"
+            _checked={{
+              bg: "blue.light",
+              borderColor: "blue.light",
+              _pressed: { borderColor: "blueLight", bg: "blue" },
+            }}
+            onChange={() => handleMethodSelector(method)}
+            accessibilityLabel={`Opção ${method}`}
+          >
+            {method}
+          </Checkbox>
+        );
+      })}
     </VStack>
   );
-}
+};

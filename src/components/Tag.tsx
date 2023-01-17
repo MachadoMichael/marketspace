@@ -6,7 +6,7 @@ interface TagProps {
   handleFunction?: () => void;
 }
 
-export function Tag({ text, isSelect, handleFunction }: TagProps) {
+export const Tag = ({ text, isSelect, handleFunction }: TagProps) => {
   return (
     <Pressable
       w={66}
@@ -26,4 +26,4 @@ export function Tag({ text, isSelect, handleFunction }: TagProps) {
       </Text>
     </Pressable>
   );
-}
+};

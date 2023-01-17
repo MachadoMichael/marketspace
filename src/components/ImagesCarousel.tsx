@@ -9,7 +9,7 @@ interface CarouselProps {
   isActiveAd: boolean;
 }
 
-export function ImagesCarousel({ imagesURI, isActiveAd }: CarouselProps) {
+export const ImagesCarousel = ({ imagesURI, isActiveAd }: CarouselProps) => {
   const { width } = Dimensions.get("window");
   return (
     <View>
@@ -59,4 +59,4 @@ export function ImagesCarousel({ imagesURI, isActiveAd }: CarouselProps) {
       />
     </View>
   );
-}
+};

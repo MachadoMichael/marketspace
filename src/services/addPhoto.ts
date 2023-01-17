@@ -3,7 +3,7 @@ import * as FileSystem from "expo-file-system";
 import { Alert } from "react-native";
 import uuid from "uuid";
 
-export async function AddPhoto() {
+export const AddPhoto = async () => {
   try {
     const selectedPhoto = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -24,9 +24,9 @@ export async function AddPhoto() {
   } catch (error) {
     console.log(error);
   }
-}
+};
 
-async function checkingPhotoSize(selectedPhotoURI: string) {
+const checkingPhotoSize = async (selectedPhotoURI: string) => {
   const photoInfo = await FileSystem.getInfoAsync(selectedPhotoURI);
   if (photoInfo.size) {
     const photoSizeInMb = photoInfo.size / 1024 / 1024;
@@ -42,7 +42,7 @@ async function checkingPhotoSize(selectedPhotoURI: string) {
   } else {
     return false;
   }
-}
+};
 
 const photoFileConstructor = async (
   selectedPhoto: ImagePicker.ImagePickerResult

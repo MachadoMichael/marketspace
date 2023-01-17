@@ -1,58 +1,31 @@
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
-import {
-  HStack,
-  ScrollView,
-  Switch,
-  Text,
-  View,
-  VStack,
-} from "native-base";
+import { HStack, ScrollView, Switch, Text, View, VStack } from "native-base";
 import { Tag } from "./Tag";
 import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
-import { PaymentMethodDTO } from "../dtos/MethodDTO";
-import { ItemDTO } from "../dtos/ItemDTO";
+
+import { ProductDTO } from "../dtos/ProductsDTO";
+import { Pressable } from "react-native";
 
 interface FilterProps {
   closeBottomSheet: () => void;
-  itemList: ItemDTO[];
-  setItemList: React.Dispatch<React.SetStateAction<ItemDTO[]>>;
+  itemList: ProductDTO[];
+  setItemList: React.Dispatch<React.SetStateAction<ProductDTO[]>>;
 }
 
-export function Filter({
+export const Filter = ({
   closeBottomSheet,
   itemList,
   setItemList,
-}: FilterProps) {
+}: FilterProps) => {
   const [isNew, setIsNew] = useState(true);
   const [canExchange, setCanExchange] = useState(false);
-  const [selectedPaymentMethods, setSelectedPaymentMethods] = useState<
-    PaymentMethodDTO[]
-  >([
-    {
-      name: "Boleto",
-      isAccepted: false,
-    },
-    {
-      name: "Dinheiro",
-      isAccepted: false,
-    },
-    {
-      name: "Pix",
-      isAccepted: false,
-    },
-    {
-      name: "Cartão de crédito",
-      isAccepted: false,
-    },
-    {
-      name: "Depósito bancário",
-      isAccepted: false,
-    },
-  ]);
+  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
-  const [initialItemList, setInitialItemList] = useState<ItemDTO[]>(itemList);
+  const [initialItemList, setInitialItemList] = useState<ProductDTO[]>(
+    [] as ProductDTO[]
+  );
 
   useEffect(() => {
     setInitialItemList(itemList);
@@ -68,45 +41,27 @@ export function Filter({
     closeBottomSheet();
   }
 
-  function isNewFilter(itemList: ItemDTO[]) {
-    const filteredItemList = itemList.filter((item) => item.isNew === isNew);
+  function isNewFilter(itemList: ProductDTO[]) {
+    const filteredItemList = itemList.filter((item) => item.is_new === isNew);
     return filteredItemList;
   }
 
-  function canExchangeFilter(itemList: ItemDTO[]) {
+  function canExchangeFilter(itemList: ProductDTO[]) {
     const filteredItemList = itemList.filter(
-      (item) => item.canExchange === canExchange
+      (item) => item.accept_trade === canExchange
     );
     return filteredItemList;
   }
 
-  function methodsFilter(itemList: ItemDTO[]) {
-    const filteredItemList = itemList.filter((item) => {
-      if (
-        item.paymentMethods[0].isAccepted ===
-          selectedPaymentMethods[0].isAccepted &&
-        item.paymentMethods[1].isAccepted ===
-          selectedPaymentMethods[1].isAccepted &&
-        item.paymentMethods[2].isAccepted ===
-          selectedPaymentMethods[2].isAccepted &&
-        item.paymentMethods[3].isAccepted ===
-          selectedPaymentMethods[3].isAccepted &&
-        item.paymentMethods[4].isAccepted ===
-          selectedPaymentMethods[4].isAccepted
-      ) {
-        return item;
-      }
-    });
+  function methodsFilter(itemList: ProductDTO[]) {
+    const filteredItemList = itemList.filter((item) => {});
     return filteredItemList;
   }
 
   function resetFilters() {
     setIsNew(false);
     setCanExchange(false);
-
-    const AllMethodsAreFalse = [...selectedPaymentMethods];
-    AllMethodsAreFalse.forEach((method) => (method.isAccepted = false));
-    setSelectedPaymentMethods(AllMethodsAreFalse);
+    setPaymentMethods([]);
     setItemList(initialItemList);
   }
 
@@ -126,11 +81,11 @@ export function Filter({
             <Text fontFamily="heading" fontSize="lg">
               Filtrar anúncios
             </Text>
-            <TouchableOpacity onPress={closeBottomSheet}>
+            <Pressable onPress={closeBottomSheet}>
               <Text color="gray.300" fontSize="xl" fontFamily="heading">
                 X
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </HStack>
 
           <Text fontFamily="heading" mb={2}>
@@ -156,15 +111,17 @@ export function Filter({
           <Switch
             mb={4}
             size="md"
-            onToggle={() => setCanExchange(!canExchange)}
+            onToggle={() => setCanExchange((prev) => !prev)}
             isChecked={canExchange}
+            onTrackColor="blue.light"
+            offTrackColor="gray.500"
           />
 
           <Text fontFamily="heading">Meios de pagamento aceitos</Text>
 
           <PaymentMethodCheckbox
-            methods={selectedPaymentMethods}
-            setMethods={setSelectedPaymentMethods}
+            methods={paymentMethods}
+            setMethods={setPaymentMethods}
           />
         </VStack>
         <HStack
@@ -189,4 +146,4 @@ export function Filter({
       </VStack>
     </ScrollView>
   );
-}
+};

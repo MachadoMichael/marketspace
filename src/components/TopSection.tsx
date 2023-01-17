@@ -8,11 +8,11 @@ interface TopSectionProps {
   rightElement?: JSX.Element;
 }
 
-export function TopSection({
+export const TopSection = ({
   leftElement,
   centerElement,
   rightElement,
-}: TopSectionProps) {
+}: TopSectionProps) => {
   const { width } = Dimensions.get("window");
   return (
     <HStack
@@ -30,4 +30,4 @@ export function TopSection({
       <Box w="1/5">{rightElement}</Box>
     </HStack>
   );
-}
+};

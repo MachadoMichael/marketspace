@@ -11,7 +11,7 @@ export function Routes() {
   return (
     <Box flex={1} bg="blue.basic">
       <NavigationContainer>
-        {user.id ? <AppRoutes /> : <AuthRoutes />}
+        {user ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   );
