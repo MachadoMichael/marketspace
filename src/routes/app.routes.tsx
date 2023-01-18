@@ -3,20 +3,22 @@ import {
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens/Home";
-import { AdDetails } from "../screens/AdDetails";
+import { AdvertDetails } from "../screens/AdvertDetails";
 import { UserAdsList } from "../screens/UserAdsList";
 import { NewAdvert } from "../screens/NewAdvert";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { AdPreview } from "../screens/AdPreview";
+import { AdvertPreview } from "../screens/AdvertPreview";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { SignIn } from "../screens/SignIn";
+import { ProductDTO } from "../dtos/ProductDTO";
+import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 type AppTabRoutes = {
   home: undefined;
@@ -27,10 +29,15 @@ export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
 const Tab = createBottomTabNavigator<AppTabRoutes>();
 
 type AppStackRoutes = {
-  addetails: { itemID: string };
+  addetails: { advertID: string; owner: boolean };
   newadvert: { itemID: string | null };
   tabroutes: undefined;
-  adpreview: { itemID: string };
+  advertpreview: {
+    productData: ProductDTO;
+    advertImages: PhotoFileDTO[];
+    is_preview?: boolean;
+    owner?: boolean;
+  };
 };
 
 export type AppStackNavigatorRouteProps =
@@ -38,7 +45,7 @@ export type AppStackNavigatorRouteProps =
 const Stack = createNativeStackNavigator<AppStackRoutes>();
 
 const TabRoutes = () => {
-  const { logOut } = useContext(AuthContext);
+  const { signOut } = useContext(AuthContext);
 
   return (
     <Tab.Navigator
@@ -79,7 +86,7 @@ const TabRoutes = () => {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            logOut();
+            signOut();
           },
         }}
       />
@@ -96,8 +103,8 @@ export const AppRoutes = () => {
     >
       <Stack.Screen name="tabroutes" component={TabRoutes} />
       <Stack.Screen name="newadvert" component={NewAdvert} />
-      <Stack.Screen name="adpreview" component={AdPreview} />
-      <Stack.Screen name="addetails" component={AdDetails} />
+      <Stack.Screen name="advertpreview" component={AdvertPreview} />
+      <Stack.Screen name="addetails" component={AdvertDetails} />
     </Stack.Navigator>
   );
 };

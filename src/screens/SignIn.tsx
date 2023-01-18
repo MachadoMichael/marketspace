@@ -7,7 +7,7 @@ import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../contexts/AuthContext";
 import { useContext, useState } from "react";
-import { userLogin } from "../storage/userLogin";
+import { userLogin } from "../storage/user/userLogin";
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -27,7 +27,7 @@ const signInSchema = Yup.object({
 
 export const SignIn = () => {
   const { navigate } = useNavigation<AuthNavigatorRouteProps>();
-  const { logIn } = useContext(AuthContext);
+  const { signIn } = useContext(AuthContext);
   const [hidePassword, setHidePassword] = useState(true);
 
   const {
@@ -46,7 +46,7 @@ export const SignIn = () => {
     email,
     password,
   }) => {
-    await logIn(email, password);
+    await signIn(email, password);
   };
 
   function handleNewAccount() {

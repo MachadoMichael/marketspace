@@ -3,13 +3,14 @@ import * as React from "react";
 import { Dimensions } from "react-native";
 import { View } from "native-base";
 import Carousel from "react-native-reanimated-carousel";
+import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 interface CarouselProps {
-  imagesURI: string[];
+  images: PhotoFileDTO[];
   isActiveAd: boolean;
 }
 
-export const ImagesCarousel = ({ imagesURI, isActiveAd }: CarouselProps) => {
+export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
   const { width } = Dimensions.get("window");
   return (
     <View>
@@ -18,8 +19,8 @@ export const ImagesCarousel = ({ imagesURI, isActiveAd }: CarouselProps) => {
         width={width}
         height={width / 2}
         autoPlay
-        data={[...new Array(imagesURI.length).keys()]}
-        scrollAnimationDuration={imagesURI.length > 1 ? 5000 : 0}
+        data={[...new Array(images.length).keys()]}
+        scrollAnimationDuration={images.length > 1 ? 5000 : 0}
         renderItem={({ index }) => (
           <Box flex={1} justifyContent="center">
             {!isActiveAd ? (
@@ -49,7 +50,7 @@ export const ImagesCarousel = ({ imagesURI, isActiveAd }: CarouselProps) => {
               alignItems="center"
               justifyContent="center"
               source={{
-                uri: imagesURI[index],
+                uri: images[index].uri,
               }}
               alt="selected product details"
             />

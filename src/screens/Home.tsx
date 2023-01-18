@@ -2,7 +2,7 @@ import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
 import { ItemCard } from "../components/ItemCard";
 import { useEffect, useRef, useState } from "react";
-import { ProductDTO } from "../dtos/ProductsDTO";
+import { ProductDTO } from "../dtos/ProductDTO";
 import { Dimensions } from "react-native";
 import { HomeHeader } from "../components/HomeHeader";
 
@@ -15,7 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { SectionUserAds } from "../components/SectionUserAds";
-import { getProducts } from "../storage/getProducts";
+import { getProducts } from "../storage/product/getProducts";
 
 export function Home() {
   const { height } = Dimensions.get("window");
@@ -31,7 +31,7 @@ export function Home() {
   useEffect(() => {
     // setItemList(itemsForTest);
     // setInitialItemList(itemsForTest);
-    getProducts();
+    // getProducts();
   }, []);
 
   function handleHideModal() {

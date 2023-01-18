@@ -11,7 +11,7 @@ import { AuthNavigatorRouteProps } from "../routes/auth.routes";
 import { useState } from "react";
 import { Alert } from "react-native";
 import { AddPhoto } from "../services/addPhoto";
-import { addUser } from "../storage/addUser";
+import { addUser } from "../storage/user/addUser";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";

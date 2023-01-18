@@ -4,12 +4,13 @@ import { Alert } from "react-native";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
-import { userLogin } from "../storage/userLogin";
+import { refreshToken } from "../storage/token/refreshToken";
+import { userLogin } from "../storage/user/userLogin";
 
 export interface AuthContextDataProps {
   user: UserDTO | undefined;
-  logIn: (email: string, password: string) => Promise<void>;
-  logOut: () => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
+  signOut: () => Promise<void>;
 }
 
 export const AuthContext = createContext<AuthContextDataProps>(
@@ -23,32 +24,38 @@ interface AuthContextProviderProps {
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const [user, setUser] = useState<UserDTO>();
 
-  const logIn = async (email: string, password: string) => {
+  const signIn = async (email: string, password: string) => {
     try {
-      const { data } = await api.post("/sessions", {
+      const user = await api.post("/sessions", {
         email: email.toLowerCase(),
         password,
       });
-      setUser(data as UserDTO);
-      console.log("USUARIO LOGadO", data);
+      setUser(user.data as UserDTO);
+      tokenAuthorization(user.data.token);
+      refreshToken(user.data.token);
+      console.log("USUARIO LOGadO", user.data);
     } catch (error) {
       if (axios.isAxiosError(error)) console.log(error.response?.data);
       else console.log(error, "XX");
     }
   };
 
-  const logOut = async () => {
+  const signOut = async () => {
     try {
       setUser(undefined);
     } catch (error) {}
+  };
+
+  const tokenAuthorization = (token: string) => {
+    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   };
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        logIn,
-        logOut,
+        signIn,
+        signOut,
       }}
     >
       {children}

@@ -27,7 +27,7 @@ import { Button } from "../components/Button";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 import { TopSection } from "../components/TopSection";
-import { ProductDTO } from "../dtos/ProductsDTO";
+import { ProductDTO } from "../dtos/ProductDTO";
 
 import { v4 as uuid } from "uuid";
 import { AddPhoto } from "../services/addPhoto";
@@ -36,7 +36,6 @@ import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
-import { addProduct } from "../storage/addProduct";
 import { useAuth } from "../hooks/useAuth";
 
 interface RouteParamsProps {
@@ -44,13 +43,13 @@ interface RouteParamsProps {
 }
 
 interface FormDataProps {
-  title: string;
+  name: string;
   description: string;
   price: string;
 }
 
 const NewAdvertSchema = Yup.object({
-  title: Yup.string().required("Informe o título"),
+  name: Yup.string().required("Informe o título"),
   description: Yup.string()
     .required("Informe a descrição do produto")
     .max(200, "São aceitos no máximo 200 caracteres"),
@@ -61,6 +60,8 @@ export const NewAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
 
+  const { user } = useAuth();
+
   const route = useRoute();
   const { itemID } = route.params as RouteParamsProps;
 
@@ -70,7 +71,7 @@ export const NewAdvert = () => {
     formState: { errors },
   } = useForm<FormDataProps>({
     defaultValues: {
-      title: "",
+      name: "",
       description: "",
       price: "",
     },
@@ -91,20 +92,24 @@ export const NewAdvert = () => {
     setAdvertImages([...advertImages, AdvertPhoto]);
   };
 
-  const handleOnSubmit: SubmitHandler<FormDataProps> = async ({
-    title,
+  const handleCreateAdvertData: SubmitHandler<FormDataProps> = ({
+    name,
     description,
     price,
   }) => {
     try {
-      await addProduct({
-        name: title,
+      const productData: ProductDTO = {
+        name,
         description,
         is_new: isNew === "true" ? true : false,
         accept_trade: acceptTrade ? acceptTrade : false,
-        price,
+        price: Number(price) * 100,
         payment_methods: paymentMethods,
-        images: advertImages,
+      };
+      navigate("advertpreview", {
+        productData,
+        advertImages,
+        is_preview: true,
       });
     } catch (error) {
       console.warn(error);
@@ -212,7 +217,7 @@ export const NewAdvert = () => {
             </Text>
 
             <Controller
-              name="title"
+              name="name"
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Input
@@ -306,12 +311,17 @@ export const NewAdvert = () => {
         bgColor="white"
         bottom={0}
       >
-        <Button title="Cancelar" bgColor="gray.500" textColor="gray.100" onPress={handleGoBack}/>
+        <Button
+          title="Cancelar"
+          bgColor="gray.500"
+          textColor="gray.100"
+          onPress={handleGoBack}
+        />
         <Button
           title="Avançar"
           bgColor="gray.100"
           textColor="white"
-          onPress={handleSubmit(handleOnSubmit)}
+          onPress={handleSubmit(handleCreateAdvertData)}
         />
       </HStack>
     </SafeAreaView>

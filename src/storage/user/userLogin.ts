@@ -1,6 +1,6 @@
 import axios from "axios";
-import { UserDTO } from "../dtos/UserDTO";
-import { api } from "../services/api";
+import { UserDTO } from "../../dtos/UserDTO";
+import { api } from "../../services/api";
 
 export const userLogin = async (email: string, password: string) => {
   try {
