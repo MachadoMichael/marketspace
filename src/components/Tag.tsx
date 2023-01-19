@@ -1,7 +1,7 @@
 import { Pressable, Text, View } from "native-base";
 
 interface TagProps {
-  text: string;
+  text: "NOVO" | "USADO";
   isSelect: boolean;
   handleFunction?: () => void;
 }
@@ -14,11 +14,12 @@ export const Tag = ({ text, isSelect, handleFunction }: TagProps) => {
       justifyContent="center"
       alignItems="center"
       rounded={9999}
-      bgColor={isSelect ? "blue.light" : "gray.500"}
+      bgColor={text === "NOVO" ? "blue.light" : "gray.500"}
       onPress={handleFunction}
+      opacity={isSelect ? 1 : 0.3}
     >
       <Text
-        color={isSelect ? "white" : "gray.200"}
+        color={text === "NOVO" ? "white" : "gray.200"}
         fontFamily="heading"
         fontSize="xs"
       >

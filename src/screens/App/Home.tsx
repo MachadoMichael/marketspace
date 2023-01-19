@@ -25,7 +25,7 @@ export function Home() {
   );
   const [products, setProducts] = useState<any>([]);
   const [inputFilter, setInputFilter] = useState("");
-  const snapPoints = [1, height - 110];
+  const snapPoints = [1, height - 160];
 
   useEffect(() => {
     readingDatabase();
@@ -56,7 +56,7 @@ export function Home() {
   }
 
   return (
-    <Center justifyContent={"space-between"}>
+    <Center justifyContent={"space-between"} w="full" h="full">
       <ScrollView mt={8}>
         <HomeHeader />
 

@@ -9,6 +9,7 @@ import {
 import { Routes } from "./src/routes";
 import { Platform } from "react-native";
 import { AuthContextProvider } from "./src/contexts/AuthContext";
+import { Loading } from "./src/components/Loading";
 
 export default function App() {
   const [fontsLoaded] = useFonts({ Karla_400Regular, Karla_700Bold });
@@ -18,7 +19,7 @@ export default function App() {
         barStyle={Platform.OS === "android" ? "light-content" : "dark-content"}
       />
       <AuthContextProvider>
-        {fontsLoaded ? <Routes /> : false}
+        {fontsLoaded ? <Routes /> : <Loading />}
       </AuthContextProvider>
     </NativeBaseProvider>
   );
