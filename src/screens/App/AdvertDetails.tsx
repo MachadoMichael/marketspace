@@ -1,22 +1,21 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { ProductDetails } from "../components/ProductDetails";
-import { Button } from "../components/Button";
+import { ProductDetails } from "../../components/ProductDetails";
+import { Button } from "../../components/Button";
 import { FontAwesome } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
-import { TopSection } from "../components/TopSection";
+import { TopSection } from "../../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { ScrollView, VStack } from "native-base";
 import { Dimensions } from "react-native";
-import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
 import { useEffect, useState } from "react";
-import { ImagesCarousel } from "../components/ImagesCarousel";
+import { ImagesCarousel } from "../../components/ImagesCarousel";
 
-import { AppStackNavigatorRouteProps } from "../routes/app.routes";
-import { getAdvert } from "../storage/advert/getAdvert";
-import { AdvertDTO } from "../dtos/AdvertDTO";
-import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
+import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
+import { getAdvert } from "../../services/advert/getAdvert";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
+import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 
 interface RouteParamsProps {
   advertID: string;
@@ -32,7 +31,6 @@ export const AdvertDetails = () => {
   const { advertID, owner } = route.params as RouteParamsProps;
   const [advert, setAdvert] = useState<AdvertDTO>({} as AdvertDTO);
   const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
-  const [userLogged, setUserLogged] = useState(itemsForTest[2].user);
 
   useEffect(() => {
     if (advertID) getSelectedAdvert();
@@ -67,7 +65,7 @@ export const AdvertDetails = () => {
             }
           />
           <ImagesCarousel images={images} isActiveAd={advert.is_active} />
-          <ProductDetails />
+          <ProductDetails advert={advert}/>
         </VStack>
       </ScrollView>
 

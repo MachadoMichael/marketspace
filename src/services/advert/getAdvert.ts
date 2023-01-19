@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "../../services/api";
+import { api } from "../api";
 
 export const getAdvert = async (advertID: string) => {
   try {

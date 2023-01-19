@@ -1,21 +1,20 @@
 import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
-import { ItemCard } from "../components/ItemCard";
+import { ItemCard } from "../../components/ItemCard";
 import { useEffect, useRef, useState } from "react";
-import { ProductDTO } from "../dtos/ProductDTO";
+import { ProductDTO } from "../../dtos/ProductDTO";
 import { Dimensions } from "react-native";
-import { HomeHeader } from "../components/HomeHeader";
+import { HomeHeader } from "../../components/HomeHeader";
 
 import { Feather } from "@expo/vector-icons";
 import { Octicons } from "@expo/vector-icons";
-import { Input } from "../components/Input";
-import { Filter } from "../components/Filter";
+import { Input } from "../../components/Input";
+import { Filter } from "../../components/Filter";
 import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
-import { AppTabNavigatorRouteProps } from "../routes/app.routes";
-import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
-import { SectionUserAds } from "../components/SectionUserAds";
-import { getProducts } from "../storage/product/getProducts";
+import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
+import { SectionUserAds } from "../../components/SectionUserAds";
+import { getProducts } from "../../services/product/getProducts";
 
 export function Home() {
   const { height } = Dimensions.get("window");

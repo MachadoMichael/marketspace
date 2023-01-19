@@ -10,10 +10,10 @@ import {
 import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
-import { ItemCard } from "../components/ItemCard";
+import { ItemCard } from "../../components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import { AppStackNavigatorRouteProps } from "../routes/app.routes";
+import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 
 export function UserAdsList() {
   const [userAds, setUserAds] = useState(itemsForTest);

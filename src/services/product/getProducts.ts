@@ -1,5 +1,5 @@
 import axios from "axios";
-import { api } from "../../services/api";
+import { api } from "../api";
 
 export const getProducts = async () => {
   const id = "7f3227d7-be3f-47a6-81ab-ad742a546ade";

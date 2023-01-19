@@ -1,6 +1,6 @@
-import { api } from "../../services/api";
+import { api } from "../api";
 
-export const getUser = async () => {
+export const getUserLogged = async () => {
   const userData = await api.get("/users/me");
   console.log(userData.data, "user data");
 };

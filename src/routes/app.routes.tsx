@@ -2,21 +2,21 @@ import {
   createBottomTabNavigator,
   BottomTabNavigationProp,
 } from "@react-navigation/bottom-tabs";
-import { Home } from "../screens/Home";
-import { AdvertDetails } from "../screens/AdvertDetails";
-import { UserAdsList } from "../screens/UserAdsList";
-import { NewAdvert } from "../screens/NewAdvert";
+import { Home } from "../screens/app/Home";
+import { AdvertDetails } from "../screens/app/AdvertDetails";
+import { UserAdsList } from "../screens/app/UserAdsList";
+import { NewAdvert } from "../screens/app/NewAdvert";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { AdvertPreview } from "../screens/AdvertPreview";
+import { AdvertPreview } from "../screens/app/AdvertPreview";
 import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
-import { SignIn } from "../screens/SignIn";
+import { SignIn } from "../screens/auth/SignIn";
 import { ProductDTO } from "../dtos/ProductDTO";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 

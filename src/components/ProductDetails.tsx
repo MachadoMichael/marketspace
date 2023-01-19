@@ -1,12 +1,30 @@
-import { Box, Center, HStack, ScrollView, Text, VStack } from "native-base";
+import {
+  Box,
+  Center,
+  HStack,
+  Image,
+  ScrollView,
+  Text,
+  VStack,
+} from "native-base";
 import { Button } from "./Button";
 import { PaymentMethodsList } from "./PaymentMethodsList";
 
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Tag } from "../components/Tag";
+import { ProductDTO } from "../dtos/ProductDTO";
 
-export const ProductDetails = () => {
+import { useAuth } from "../hooks/useAuth";
+import { AdvertDTO } from "../dtos/AdvertDTO";
+
+interface ProductDetailsProps {
+  advert: AdvertDTO;
+}
+
+export const ProductDetails = ({ advert }: ProductDetailsProps) => {
+  const { user } = useAuth();
+
   return (
     <Box>
       <VStack m={6}>
@@ -23,63 +41,50 @@ export const ProductDetails = () => {
             alignItems="center"
             rounded={9999}
           >
-            {
-              //   item.user ? (
-              //     <Image
-              //       w={8}
-              //       h={8}
-              //       shadow={5}
-              //       rounded={9999}
-              //       source={{
-              //         uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80",
-              //       }}
-              //       alt="userAvatar"
-              //     />
-              //   ) :
+            {user?.user.avatar.uri ? (
+              <Image
+                w={8}
+                h={8}
+                shadow={5}
+                rounded={9999}
+                source={{
+                  uri: user.user.avatar.uri,
+                }}
+                alt="userAvatar"
+              />
+            ) : (
               <Entypo name="user" size={20} color="gray" />
-            }
+            )}
           </Box>
-          <Text ml={12}>User Name</Text>
+          <Text ml={12}>{user?.user.name}</Text>
         </HStack>
 
-        <Tag text="NOVO" isSelect={true} />
+        <Tag text={advert.is_new ? "NOVO" : "USADO"} isSelect={true} />
 
         <HStack justifyContent="space-between" mt={2} mb={2}>
           <Text fontFamily="heading" fontSize="xl">
-            Item.name
+            {advert.name}
           </Text>
           <Text fontFamily="heading" fontSize="lg" color="blue.light">
             R$
             <Text fontFamily="heading" fontSize="xl" color="blue.light">
-              120,00
+              {advert.price / 100}
             </Text>
           </Text>
         </HStack>
 
-        <Text>
-          ITEM DESCRIPTION - ITEM DESCRIPTION - ITEM DESCRIPTION - ITEM
-          DESCRIPTION ITEM DESCRIPTION - ITEM DESCRIPTION - ITEM DESCRIPTION -
-          ITEM DESCRIPTION ITEM DESCRIPTION - ITEM DESCRIPTION - ITEM
-          DESCRIPTION - ITEM DESCRIPTION ITEM DESCRIPTION - ITEM DESCRIPTION -
-        </Text>
+        <Text>{advert.description}</Text>
 
         <Text fontFamily="heading" mt={4}>
-          Aceita troca? <Text fontFamily="body">Sim</Text>
+          Aceita troca?
+          <Text fontFamily="body">{advert.accept_trade ? "Sim" : "Não"}</Text>
         </Text>
 
         <Text fontFamily="heading" mt={4}>
           Meios de pagamento:
         </Text>
 
-        <PaymentMethodsList
-          methodsList={[
-            "Boleto",
-            "Dinheiro",
-            "Pix",
-            "Cartão de crédito",
-            "Depósito bancário",
-          ]}
-        />
+        <PaymentMethodsList methodsList={advert.payment_methods} />
       </VStack>
     </Box>
   );

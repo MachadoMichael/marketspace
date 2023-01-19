@@ -4,7 +4,7 @@ export interface UserDTO {
   token: string;
   user: UserDataDTO;
 }
-export interface UserDataDTO {
+interface UserDataDTO {
   name: string;
   email: string;
   tel: string;

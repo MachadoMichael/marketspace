@@ -1,6 +1,6 @@
 import axios from "axios";
 import { ProductDTO } from "../../dtos/ProductDTO";
-import { api } from "../../services/api";
+import { api } from "../api";
 
 export const addProduct = async (productRequest: ProductDTO) => {
   try {

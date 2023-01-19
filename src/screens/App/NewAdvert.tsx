@@ -19,24 +19,24 @@ import {
   Alert,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import { Input } from "../components/Input";
-import { TextArea } from "../components/TextArea";
+import { Input } from "../../components/Input";
+import { TextArea } from "../../components/TextArea";
 import { useState } from "react";
-import { PaymentMethodCheckbox } from "../components/PaymentMethodCheckbox";
-import { Button } from "../components/Button";
-import { AppStackNavigatorRouteProps } from "../routes/app.routes";
+import { PaymentMethodCheckbox } from "../../components/PaymentMethodCheckbox";
+import { Button } from "../../components/Button";
+import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 
-import { TopSection } from "../components/TopSection";
-import { ProductDTO } from "../dtos/ProductDTO";
+import { TopSection } from "../../components/TopSection";
+import { ProductDTO } from "../../dtos/ProductDTO";
 
 import { v4 as uuid } from "uuid";
-import { AddPhoto } from "../services/addPhoto";
+import { AddPhoto } from "../../services/addPhoto";
 
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
-import { useAuth } from "../hooks/useAuth";
+import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
+import { useAuth } from "../../hooks/useAuth";
 
 interface RouteParamsProps {
   itemID: string | null;
