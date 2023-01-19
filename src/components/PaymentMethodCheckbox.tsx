@@ -1,6 +1,6 @@
-import { Checkbox, HStack, Text, VStack } from "native-base";
-import { useState, useEffect } from "react";
-interface PaymentMethodsProps {
+import { Checkbox, VStack, IStackProps } from "native-base";
+import { LogBox } from "react-native";
+interface PaymentMethodsProps extends IStackProps {
   methods: string[];
   setMethods: React.Dispatch<React.SetStateAction<string[]>>;
 }
@@ -11,35 +11,31 @@ export const PaymentMethodCheckbox = ({
 }: PaymentMethodsProps) => {
   const methodList = ["cash", "pix", "deposit", "card", "boleto"];
 
-  function handleMethodSelector(selectedMethod: string) {
-    if (methods.includes(selectedMethod)) {
-      const removedMethod = methods.filter(
-        (method) => method !== selectedMethod
-      );
-      setMethods(removedMethod);
-    } else setMethods([...methods, selectedMethod]);
-  }
+  LogBox.ignoreLogs([
+    "We can not support a function callback. See Github Issues for details https://github.com/adobe/react-spectrum/issues/2320",
+  ]);
 
   return (
     <VStack mt={2}>
-      {methodList.map((method, index) => {
-        return (
-          <Checkbox
-            key={index + method}
-            value={method}
-            colorScheme="purple"
-            _checked={{
-              bg: "blue.light",
-              borderColor: "blue.light",
-              _pressed: { borderColor: "blueLight", bg: "blue" },
-            }}
-            onChange={() => handleMethodSelector(method)}
-            accessibilityLabel={`Opção ${method}`}
-          >
-            {method}
-          </Checkbox>
-        );
-      })}
+      <Checkbox.Group value={methods} onChange={setMethods}>
+        {methodList.map((method, index) => {
+          return (
+            <Checkbox
+              key={index + method}
+              value={method}
+              colorScheme="purple"
+              _checked={{
+                bg: "blue.light",
+                borderColor: "blue.light",
+                _pressed: { borderColor: "blueLight", bg: "blue" },
+              }}
+              accessibilityLabel={`Opção ${method}`}
+            >
+              {method}
+            </Checkbox>
+          );
+        })}
+      </Checkbox.Group>
     </VStack>
   );
 };
