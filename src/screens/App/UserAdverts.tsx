@@ -8,15 +8,16 @@ import {
   VStack,
 } from "native-base";
 import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { ItemCard } from "../../components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
+import { fetchUserProducts } from "../../services/user/fetchUserProducts";
 
-export const UserAdsList = () => {
-  // const [userAds, setUserAds] = useState(itemsForTest);
+export const UserAdverts = () => {
+  const [userAds, setUserAds] = useState();
   const [service, setService] = useState("Todos");
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
@@ -27,6 +28,15 @@ export const UserAdsList = () => {
   // const userFilteredAdList =
   //   service === 'enable' ? userAds.filter(ad => ad.isActive === true)
   //     : service === 'disable' ? userAds.filter(ad => ad.isActive === false) : userAds;
+
+  const getProducts = async () => {
+    const response = await fetchUserProducts();
+    console.log("resposta fetchProducts", response);
+  };
+
+  useEffect(() => {
+    getProducts();
+  }, []);
 
   return (
     <SafeAreaView>

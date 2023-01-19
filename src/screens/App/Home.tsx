@@ -13,7 +13,7 @@ import { Filter } from "../../components/Filter";
 import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
-import { SectionUserAds } from "../../components/SectionUserAds";
+import { SectionUserAdverts } from "../../components/SectionUserAdverts";
 import { fetchProducts } from "../../services/product/fetchProducts";
 
 export function Home() {
@@ -65,7 +65,7 @@ export function Home() {
             Seus produtos anunciados para venda
           </Text>
 
-          <SectionUserAds />
+          <SectionUserAdverts />
         </VStack>
 
         <VStack w={327} mt={8} mb={4}>

@@ -4,11 +4,11 @@ import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { HStack, Text, VStack } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 
-export const SectionUserAds = () => {
+export const SectionUserAdverts = () => {
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
 
   function handleGoToUserAdverts() {
-    navigate("useradslist");
+    navigate("useradverts");
   }
 
   return (

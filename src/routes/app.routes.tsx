@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/bottom-tabs";
 import { Home } from "../screens/app/Home";
 import { AdvertDetails } from "../screens/app/AdvertDetails";
-import { UserAdsList } from "../screens/app/UserAdsList";
+import { UserAdverts } from "../screens/app/UserAdverts";
 import { NewAdvert } from "../screens/app/NewAdvert";
 import {
   createNativeStackNavigator,
@@ -22,7 +22,7 @@ import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 type AppTabRoutes = {
   home: undefined;
-  useradslist: undefined;
+  useradverts: undefined;
   signIn: undefined;
 };
 export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
@@ -66,8 +66,8 @@ const TabRoutes = () => {
       />
 
       <Tab.Screen
-        name="useradslist"
-        component={UserAdsList}
+        name="useradverts"
+        component={UserAdverts}
         options={{
           tabBarIcon: ({ color, size }) => (
             <AntDesign name="tago" size={size} color={color} />
