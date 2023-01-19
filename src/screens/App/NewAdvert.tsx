@@ -30,7 +30,7 @@ import { TopSection } from "../../components/TopSection";
 import { ProductDTO } from "../../dtos/ProductDTO";
 
 import { v4 as uuid } from "uuid";
-import { AddPhoto } from "../../services/addPhoto";
+import { AddPhoto } from "../../services/user/addPhoto";
 
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";

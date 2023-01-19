@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRouteProps } from "../../routes/auth.routes";
 import { useState } from "react";
 import { Alert } from "react-native";
-import { AddPhoto } from "../../services/addPhoto";
+import { AddPhoto } from "../../services/user/addPhoto";
 import { addUser } from "../../services/user/addUser";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import * as Yup from "yup";

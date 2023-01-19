@@ -23,15 +23,16 @@ export function Home() {
   const [initialItemList, setInitialItemList] = useState<ProductDTO[]>(
     [] as ProductDTO[]
   );
-  const [itemList, setItemList] = useState<ProductDTO[]>([] as ProductDTO[]);
+  const [products, setProducts] = useState<any>([]);
   const [inputFilter, setInputFilter] = useState("");
   const snapPoints = [1, height - 110];
 
-  useEffect(() => {
-    // setItemList(itemsForTest);
-    // setInitialItemList(itemsForTest);
-    // getProducts();
-  }, []);
+  useEffect(() => {}, []);
+
+  const readingDatabase = async () => {
+    const registredProducts = await getProducts();
+    if (registredProducts !== undefined) setProducts(registredProducts);
+  };
 
   function handleHideModal() {
     bottomSheetRef.current?.close();
@@ -42,20 +43,58 @@ export function Home() {
   }
 
   function handleTitleFilter() {
-    if (inputFilter === "") {
-      setItemList(initialItemList);
-    } else {
-      const filteredList = initialItemList.filter((item) =>
-        item.name.includes(inputFilter)
-      );
-      setItemList(filteredList);
-    }
+    // if (inputFilter === "") {
+    //   setItemList(initialItemList);
+    // } else {
+    //   const filteredList = initialItemList.filter((item) =>
+    //     item.name.includes(inputFilter)
+    //   );
+    //   setItemList(filteredList);
+    // }
   }
 
   return (
     <Center justifyContent={"space-between"}>
+      <ScrollView mt={8}>
+        <HomeHeader />
+
+        <VStack mt={4} justifyContent={"center"}>
+          <Text mb={2} color={"gray.300"}>
+            Seus produtos anunciados para venda
+          </Text>
+
+          <SectionUserAds />
+        </VStack>
+
+        <VStack w={327} mt={8} mb={4}>
+          <Text color={"gray.300"} mb={2}>
+            Compre produtos variados
+          </Text>
+
+          <Input
+            placeholder={"Buscar anúncio"}
+            w={327}
+            InputRightElement={
+              <HStack w={20}>
+                <TouchableOpacity onPress={handleTitleFilter}>
+                  <Feather name="search" size={24} color="black" />
+                </TouchableOpacity>
+                <Text ml={2} mr={2}>
+                  |
+                </Text>
+                <TouchableOpacity onPress={handleShowModal}>
+                  <Octicons name="filter" size={24} color="black" />
+                </TouchableOpacity>
+              </HStack>
+            }
+            value={inputFilter}
+            onChangeText={setInputFilter}
+          />
+        </VStack>
+      </ScrollView>
+
       <FlatList
-        data={itemList}
+        data={products}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ItemCard item={item} />}
         horizontal={false}
@@ -63,45 +102,7 @@ export function Home() {
         bounces={false}
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={{ justifyContent: "space-around" }}
-        ListHeaderComponent={
-          <ScrollView mt={8}>
-            <HomeHeader />
-
-            <VStack mt={4} justifyContent={"center"}>
-              <Text mb={2} color={"gray.300"}>
-                Seus produtos anunciados para venda
-              </Text>
-
-              <SectionUserAds />
-            </VStack>
-
-            <VStack w={327} mt={8} mb={4}>
-              <Text color={"gray.300"} mb={2}>
-                Compre produtos variados
-              </Text>
-
-              <Input
-                placeholder={"Buscar anúncio"}
-                w={327}
-                InputRightElement={
-                  <HStack w={20}>
-                    <TouchableOpacity onPress={handleTitleFilter}>
-                      <Feather name="search" size={24} color="black" />
-                    </TouchableOpacity>
-                    <Text ml={2} mr={2}>
-                      |
-                    </Text>
-                    <TouchableOpacity onPress={handleShowModal}>
-                      <Octicons name="filter" size={24} color="black" />
-                    </TouchableOpacity>
-                  </HStack>
-                }
-                value={inputFilter}
-                onChangeText={setInputFilter}
-              />
-            </VStack>
-          </ScrollView>
-        }
+        // ListHeaderComponent={}
       />
 
       <BottomSheet
@@ -114,8 +115,8 @@ export function Home() {
       >
         <Filter
           closeBottomSheet={handleHideModal}
-          itemList={itemList}
-          setItemList={setItemList}
+          advertList={products}
+          setAdvertList={setProducts}
         />
       </BottomSheet>
     </Center>

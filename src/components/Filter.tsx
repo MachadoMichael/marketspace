@@ -10,14 +10,14 @@ import { Pressable } from "react-native";
 
 interface FilterProps {
   closeBottomSheet: () => void;
-  itemList: ProductDTO[];
-  setItemList: React.Dispatch<React.SetStateAction<ProductDTO[]>>;
+  advertList: ProductDTO[];
+  setAdvertList: React.Dispatch<React.SetStateAction<ProductDTO[]>>;
 }
 
 export const Filter = ({
   closeBottomSheet,
-  itemList,
-  setItemList,
+  advertList,
+  setAdvertList,
 }: FilterProps) => {
   const [isNew, setIsNew] = useState(true);
   const [canExchange, setCanExchange] = useState(false);
@@ -28,7 +28,7 @@ export const Filter = ({
   );
 
   useEffect(() => {
-    setInitialItemList(itemList);
+    setInitialItemList(advertList);
   }, []);
 
   function handleFilter() {
@@ -37,7 +37,7 @@ export const Filter = ({
     const listAfterIsNewFilter = isNewFilter(itemListCopy);
     const listAfterCanExchangeFilter = canExchangeFilter(listAfterIsNewFilter);
     const listAfterMethodFilter = methodsFilter(listAfterCanExchangeFilter);
-    setItemList(listAfterMethodFilter);
+    setAdvertList(listAfterMethodFilter);
     closeBottomSheet();
   }
 
@@ -62,7 +62,7 @@ export const Filter = ({
     setIsNew(false);
     setCanExchange(false);
     setPaymentMethods([]);
-    setItemList(initialItemList);
+    setAdvertList(initialItemList);
   }
 
   return (

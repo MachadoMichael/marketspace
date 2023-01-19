@@ -13,9 +13,9 @@ import { useEffect, useState } from "react";
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
-import { getAdvert } from "../../services/advert/getAdvert";
 import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
+import { getSelectedProduct } from "../../services/product/getSelectedProduct";
 
 interface RouteParamsProps {
   advertID: string;
@@ -37,7 +37,7 @@ export const AdvertDetails = () => {
   });
 
   const getSelectedAdvert = async () => {
-    const response = await getAdvert(advertID);
+    const response = await getSelectedProduct(advertID);
     // const selectedAdvert: AdvertDTO = advertConstructor(response);
 
     if (response) setAdvert(response?.data);

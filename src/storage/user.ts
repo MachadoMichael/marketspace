@@ -1,5 +1,4 @@
-import AsyncStorage from "@react-native-community/async-storage";
-import { UserDTO } from "../dtos/UserDTO";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { USER_STORAGE } from "./variables";
 
 export interface UserStorage {

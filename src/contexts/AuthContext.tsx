@@ -6,7 +6,11 @@ import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
 import { refreshToken } from "../services/token/refreshToken";
 import { userLogin } from "../services/user/userLogin";
-import { getStorageUser, setStorageUser } from "../storage/user";
+import {
+  getStorageUser,
+  removeStorageUser,
+  setStorageUser,
+} from "../storage/user";
 
 export interface AuthContextDataProps {
   user: UserDTO | undefined;
@@ -49,6 +53,7 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
   const signOut = async () => {
     try {
       setUser(undefined);
+      removeStorageUser();
     } catch (error) {}
   };
 

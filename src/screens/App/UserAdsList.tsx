@@ -9,29 +9,29 @@ import {
 } from "native-base";
 import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { useState } from "react";
-import { itemsForTest } from "../itemsForInterfaceTest/itemsAdverts";
+
 import { ItemCard } from "../../components/ItemCard";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 
-export function UserAdsList() {
-  const [userAds, setUserAds] = useState(itemsForTest);
+export const UserAdsList = () => {
+  // const [userAds, setUserAds] = useState(itemsForTest);
   const [service, setService] = useState("Todos");
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   function handleToAdForm() {
-    navigate("adform", { itemID: null });
+    // navigate("adform", { itemID: null });
   }
 
-  const userFilteredAdList =
-    service === 'enable' ? userAds.filter(ad => ad.isActive === true)
-      : service === 'disable' ? userAds.filter(ad => ad.isActive === false) : userAds;
+  // const userFilteredAdList =
+  //   service === 'enable' ? userAds.filter(ad => ad.isActive === true)
+  //     : service === 'disable' ? userAds.filter(ad => ad.isActive === false) : userAds;
 
   return (
     <SafeAreaView>
       <View justifyContent="space-between" p={8} pb={0}>
-        <FlatList
+        {/* <FlatList
           data={userFilteredAdList}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <ItemCard item={item} isUserAd />}
@@ -86,8 +86,8 @@ export function UserAdsList() {
               </HStack>
             </VStack>
           }
-        />
+        /> */}
       </View>
     </SafeAreaView>
   );
-}
+};

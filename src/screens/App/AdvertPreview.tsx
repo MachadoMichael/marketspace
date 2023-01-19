@@ -15,7 +15,7 @@ import { ProductDetails } from "../../components/ProductDetails";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { ProductDTO } from "../../dtos/ProductDTO";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
-import { AddImagesInAdvert } from "../../services/advert/addImagesInAdvert";
+import { addImages } from "../../services/product/addImages";
 import { addProduct } from "../../services/product/addProduct";
 
 type RouteParamsProps = {
@@ -42,7 +42,7 @@ export const AdvertPreview = () => {
 
       console.warn("ProductID", advertID);
 
-      const imagesAreAdded = await AddImagesInAdvert(advertID, advertImages);
+      const imagesAreAdded = await addImages(advertID, advertImages);
       if (imagesAreAdded) navigate("addetails", { advertID, owner: true });
     }
   };

@@ -2,7 +2,7 @@ import axios from "axios";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { api } from "../api";
 
-export const addImagesInAdvert = async (
+export const addImages = async (
   product_id: string,
   images: PhotoFileDTO[]
 ) => {
