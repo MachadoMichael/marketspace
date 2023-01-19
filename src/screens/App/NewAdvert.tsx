@@ -29,7 +29,6 @@ import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { TopSection } from "../../components/TopSection";
 import { ProductDTO } from "../../dtos/ProductDTO";
 
-import { v4 as uuid } from "uuid";
 import { AddPhoto } from "../../services/user/addPhoto";
 
 import * as Yup from "yup";
@@ -88,8 +87,9 @@ export const NewAdvert = () => {
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
   const handleProductPhotoSelect = async () => {
-    const AdvertPhoto = await AddPhoto();
-    setAdvertImages([...advertImages, AdvertPhoto]);
+    const advertPhoto = await AddPhoto();
+    if (advertPhoto !== undefined)
+      setAdvertImages([...advertImages, advertPhoto]);
   };
 
   const handleCreateAdvertData: SubmitHandler<FormDataProps> = ({
@@ -97,7 +97,9 @@ export const NewAdvert = () => {
     description,
     price,
   }) => {
-    try {
+    console.log("PAYMENTMETHODS in NEWADVERT", paymentMethods);
+
+    if (advertHasImage() && advertHasPaymnetMethod()) {
       const productData: ProductDTO = {
         name,
         description,
@@ -106,36 +108,47 @@ export const NewAdvert = () => {
         price: Number(price) * 100,
         payment_methods: paymentMethods,
       };
-      navigate("advertpreview", {
-        productData,
-        advertImages,
-        is_preview: true,
-      });
-    } catch (error) {
-      console.warn(error);
+
+      sendAdvertPreview(productData);
     }
-    //gerar produto e enviar iD
-    // handleGoToAdPreview();
   };
 
-  function handleGoToAdPreview() {
-    // if (itemID !== null) {
-    //   navigate("adpreview", { itemID: itemID });
-    // } else {
-    // navigate("adpreview", { itemID: newAd.id });
-    // }
-  }
+  const sendAdvertPreview = (productData: ProductDTO) => {
+    navigate("advertpreview", {
+      productData,
+      advertImages,
+      is_preview: true,
+    });
+  };
 
-  function deletePhoto(photoIndex: number) {
+  const advertHasImage = () => {
+    if (advertImages.length > 0) return true;
+    else {
+      Alert.alert("Por favor adcione ao menos uma imagem ao seu anúncio.");
+      return false;
+    }
+  };
+
+  const advertHasPaymnetMethod = () => {
+    if (paymentMethods.length > 0) return true;
+    else {
+      Alert.alert(
+        "Por favor adcione ao menos um método de pagamento ao anúncio."
+      );
+      return false;
+    }
+  };
+
+  const removePhoto = (photoIndex: number) => {
     const newImageList = [...advertImages].filter(
       (photoURI, index) => index !== photoIndex
     );
     setAdvertImages(newImageList);
-  }
+  };
 
-  function handleGoBack() {
+  const handleGoBack = () => {
     goBack();
-  }
+  };
 
   return (
     <SafeAreaView>
@@ -177,7 +190,7 @@ export const NewAdvert = () => {
                     h={4}
                     justifyContent="center"
                     alignItems="center"
-                    onPress={() => deletePhoto(index)}
+                    onPress={() => removePhoto(index)}
                   >
                     <Text color="white" fontSize="xs">
                       X
@@ -225,6 +238,7 @@ export const NewAdvert = () => {
                   placeholder="Título do anúncio"
                   value={value}
                   onChangeText={onChange}
+                  errorMessage={errors.name?.message}
                 />
               )}
             />
@@ -237,6 +251,7 @@ export const NewAdvert = () => {
                   placeholder="Descrição do produto"
                   value={value}
                   onChangeText={onChange}
+                  errorMessage={errors.description?.message}
                 />
               )}
             />
@@ -276,6 +291,7 @@ export const NewAdvert = () => {
                   value={value}
                   onChangeText={onChange}
                   keyboardType="decimal-pad"
+                  errorMessage={errors.price?.message}
                 />
               )}
             />

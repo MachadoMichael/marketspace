@@ -2,6 +2,7 @@ import * as ImagePicker from "expo-image-picker";
 import * as FileSystem from "expo-file-system";
 import { Alert } from "react-native";
 import uuid from "uuid";
+import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 
 export const AddPhoto = async () => {
   try {
@@ -18,7 +19,7 @@ export const AddPhoto = async () => {
     const photoIsValid = await checkingPhotoSize(selectedPhoto.assets[0].uri);
 
     if (photoIsValid) {
-      const photoFile = await photoFileConstructor(selectedPhoto);
+      const photoFile: PhotoFileDTO = await photoFileConstructor(selectedPhoto);
       return photoFile;
     }
   } catch (error) {

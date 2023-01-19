@@ -12,11 +12,12 @@ export const PaymentMethodCheckbox = ({
   const methodList = ["cash", "pix", "deposit", "card", "boleto"];
 
   function handleMethodSelector(selectedMethod: string) {
-    if (methods.includes(selectedMethod))
-      methods.filter((method) => method !== selectedMethod);
-    else setMethods([...methods, selectedMethod]);
-
-    setMethods(methodList);
+    if (methods.includes(selectedMethod)) {
+      const removedMethod = methods.filter(
+        (method) => method !== selectedMethod
+      );
+      setMethods(removedMethod);
+    } else setMethods([...methods, selectedMethod]);
   }
 
   return (

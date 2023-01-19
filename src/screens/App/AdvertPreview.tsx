@@ -86,7 +86,7 @@ export const AdvertPreview = () => {
         />
         <Button
           title="Publicar"
-          icon={<AntDesign name="arrowleft" size={16} color="black" />}
+          icon={<AntDesign name="tago" size={16} color="white" />}
           bgColor="blue.light"
           textColor="gray.700"
           onPress={handleOnSubmit}

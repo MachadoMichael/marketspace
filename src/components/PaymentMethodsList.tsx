@@ -9,22 +9,23 @@ interface PaymentMethodsProps {
 }
 
 export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
-  function selectIcon(method: string) {
+
+  const selectIcon = (method: string) => {
     switch (method) {
-      case "Boleto":
+      case "boleto":
         return <Ionicons name="ios-barcode-outline" size={24} color="black" />;
-      case "Pix":
+      case "pix":
         return <MaterialIcons name="qr-code" size={24} color="black" />;
-      case "Dinheiro":
+      case "cash":
         return <MaterialCommunityIcons name="cash" size={24} color="black" />;
-      case "Cartão de crédito":
+      case "card":
         return <FontAwesome name="credit-card" size={24} color="black" />;
-      case "Depósito bancário":
+      case "deposit":
         return <FontAwesome name="bank" size={24} color="black" />;
       default:
         break;
     }
-  }
+  };
 
   return (
     <VStack mt={2}>

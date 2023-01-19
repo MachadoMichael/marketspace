@@ -77,7 +77,7 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
 
         <Text fontFamily="heading" mt={4}>
           Aceita troca?
-          <Text fontFamily="body">{advert.accept_trade ? "Sim" : "Não"}</Text>
+          <Text fontFamily="body">{advert.accept_trade ? " Sim" : " Não"}</Text>
         </Text>
 
         <Text fontFamily="heading" mt={4}>

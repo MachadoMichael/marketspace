@@ -14,7 +14,7 @@ import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
 import { SectionUserAds } from "../../components/SectionUserAds";
-import { getProducts } from "../../services/product/getProducts";
+import { fetchProducts } from "../../services/product/fetchProducts";
 
 export function Home() {
   const { height } = Dimensions.get("window");
@@ -27,10 +27,12 @@ export function Home() {
   const [inputFilter, setInputFilter] = useState("");
   const snapPoints = [1, height - 110];
 
-  useEffect(() => {}, []);
+  useEffect(() => {
+    readingDatabase();
+  }, []);
 
   const readingDatabase = async () => {
-    const registredProducts = await getProducts();
+    const registredProducts = await fetchProducts();
     if (registredProducts !== undefined) setProducts(registredProducts);
   };
 
