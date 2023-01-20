@@ -201,7 +201,7 @@ export const NewAdvert = () => {
                     h="full"
                     rounded={6}
                     source={{
-                      uri: photoFile.uri,
+                      uri: photoFile.path,
                     }}
                     alt={"product photo" + index}
                   />

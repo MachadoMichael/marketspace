@@ -2,12 +2,17 @@ import axios from "axios";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { api } from "../api";
 
-export const addImages = async (
-  product_id: string,
-  images: PhotoFileDTO[]
-) => {
+export const addImages = async (product_id: string, images: PhotoFileDTO[]) => {
   try {
-    const response = await api.post("/products/images", { product_id, images });
+    const imagesForm = new FormData();
+    images.forEach((image) => imagesForm.append("images", image as any));
+    imagesForm.append("product_id", product_id);
+
+    const response = await api.post("/products/images", imagesForm, {
+      headers: {
+        "Content-type": "multpart/form-data",
+      },
+    });
     if (response) return true;
   } catch (error) {
     if (axios.isAxiosError(error))

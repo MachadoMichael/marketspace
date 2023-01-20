@@ -17,6 +17,7 @@ import { ProductDTO } from "../../dtos/ProductDTO";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
 import { addProduct } from "../../services/product/addProduct";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
 
 type RouteParamsProps = {
   productData: ProductDTO;
@@ -36,14 +37,25 @@ export const AdvertPreview = () => {
   };
 
   const handleOnSubmit = async () => {
-    const response = await addProduct(productData);
+    const response = await addProduct({
+      ...productData,
+      is_active: true,
+      images: advertImages,
+    });
     if (response) {
       const advertID = response.data.id;
 
-      console.warn("ProductID", advertID);
+      console.log("response", response);
 
       const imagesAreAdded = await addImages(advertID, advertImages);
-      if (imagesAreAdded) navigate("addetails", { advertID, owner: true });
+      if (imagesAreAdded === true) {
+        // const ad: AdvertDTO = {
+        //   ...productData,
+        //   is_active: true,
+        //   images: advertImages,
+        // };
+        navigate("addetails", { advertID, owner: true });
+      } else return;
     }
   };
 

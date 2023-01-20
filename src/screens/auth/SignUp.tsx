@@ -67,7 +67,7 @@ export const SignUp = () => {
   const handleAddUserAvatar = async () => {
     try {
       const avatar = await AddPhoto();
-      if (avatar.uri) setUserAvatar(avatar);
+      if (avatar) setUserAvatar(avatar);
     } catch (error) {}
   };
 
@@ -81,7 +81,7 @@ export const SignUp = () => {
     tel,
     password,
   }) => {
-    userAvatar.uri !== ""
+    userAvatar.path !== ""
       ? await addUser({
           userAvatar,
           name,
@@ -115,13 +115,13 @@ export const SignUp = () => {
           borderColor="blue.light"
           mb={4}
         >
-          {userAvatar.uri ? (
+          {userAvatar.path ? (
             <Image
               w="full"
               h="full"
               rounded={9999}
               source={{
-                uri: userAvatar.uri,
+                uri: userAvatar.path,
               }}
               alt={"user photo"}
             />

@@ -9,7 +9,6 @@ interface PaymentMethodsProps {
 }
 
 export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
-
   const selectIcon = (method: string) => {
     switch (method) {
       case "boleto":
@@ -29,15 +28,21 @@ export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
 
   return (
     <VStack mt={2}>
-      {methodsList.map((method) => {
-        const icon = selectIcon(method);
-        return (
-          <HStack mb={1} mt={1} key={method}>
-            {icon}
-            <Text ml={2}>{method}</Text>
-          </HStack>
-        );
-      })}
+      {methodsList
+        ? methodsList.map((method, index) => {
+            const icon = selectIcon(method);
+            return (
+              <HStack
+                mb={1}
+                mt={1}
+                key={`methodList, choice method${method}` + index}
+              >
+                {icon}
+                <Text ml={2}>{method}</Text>
+              </HStack>
+            );
+          })
+        : false}
     </VStack>
   );
 };

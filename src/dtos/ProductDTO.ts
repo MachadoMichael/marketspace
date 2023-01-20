@@ -8,5 +8,4 @@ export interface ProductDTO {
   accept_trade: boolean;
   payment_methods: string[];
   price: number;
-  images?: PhotoFileDTO[];
 }

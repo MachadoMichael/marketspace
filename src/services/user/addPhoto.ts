@@ -53,7 +53,7 @@ const photoFileConstructor = async (
     const fileExtension = selectedPhoto.assets[0].uri.split(".").pop();
     const photoFile = {
       name: `${imageRandomName}.${fileExtension}`,
-      uri: selectedPhoto.assets[0].uri,
+      path: selectedPhoto.assets[0].uri,
       type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
     } as any;
 

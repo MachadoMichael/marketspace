@@ -43,10 +43,9 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         refreshToken(user.data.token);
       }
 
-      console.log("LOGGED USER", user.data);
     } catch (error) {
       if (axios.isAxiosError(error)) console.log(error.response?.data);
-      else console.log(error, "XX");
+      else console.log(error);
     }
   };
 
