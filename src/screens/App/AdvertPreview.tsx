@@ -13,14 +13,13 @@ import { Button } from "../../components/Button";
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 import { ProductDetails } from "../../components/ProductDetails";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
-import { ProductDTO } from "../../dtos/ProductDTO";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
-import { addProduct } from "../../services/product/addProduct";
-import { AdvertDTO } from "../../dtos/AdvertDTO";
+import { addAdvert } from "../../services/product/addAdvert";
 
 type RouteParamsProps = {
-  productData: ProductDTO;
+  productData: AdvertDTO;
   advertImages: PhotoFileDTO[];
   is_preview?: boolean;
   owner?: boolean;
@@ -37,10 +36,10 @@ export const AdvertPreview = () => {
   };
 
   const handleOnSubmit = async () => {
-    const response = await addProduct({
+    const response = await addAdvert({
       ...productData,
       is_active: true,
-      images: advertImages,
+      product_images: advertImages,
     });
     if (response) {
       const advertID = response.data.id;
@@ -73,7 +72,7 @@ export const AdvertPreview = () => {
         <ProductDetails
           advert={{
             ...productData,
-            images: advertImages,
+            product_images: advertImages,
             is_active: true,
           }}
         />

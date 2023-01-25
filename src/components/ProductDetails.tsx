@@ -13,7 +13,6 @@ import { PaymentMethodsList } from "./PaymentMethodsList";
 import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Tag } from "../components/Tag";
-import { ProductDTO } from "../dtos/ProductDTO";
 
 import { useAuth } from "../hooks/useAuth";
 import { AdvertDTO } from "../dtos/AdvertDTO";
@@ -25,7 +24,6 @@ interface ProductDetailsProps {
 
 export const ProductDetails = ({ advert }: ProductDetailsProps) => {
   const { user } = useAuth();
-  const [selectedAdvert, setSelectedAdvert] = useState<AdvertDTO>(advert);
 
   return (
     <Box>
@@ -61,34 +59,32 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
           <Text ml={12}>{user?.user.name}</Text>
         </HStack>
 
-        <Tag text={selectedAdvert.is_new ? "NOVO" : "USADO"} isSelect={true} />
+        <Tag text={advert.is_new ? "NOVO" : "USADO"} isSelect={true} />
 
         <HStack justifyContent="space-between" mt={2} mb={2}>
           <Text fontFamily="heading" fontSize="xl">
-            {selectedAdvert.name}
+            {advert.name}
           </Text>
           <Text fontFamily="heading" fontSize="lg" color="blue.light">
             R$
             <Text fontFamily="heading" fontSize="xl" color="blue.light">
-              {selectedAdvert.price / 100}
+              {advert.price / 100}
             </Text>
           </Text>
         </HStack>
 
-        <Text>{selectedAdvert.description}</Text>
+        <Text>{advert.description}</Text>
 
         <Text fontFamily="heading" mt={4}>
           Aceita troca?
-          <Text fontFamily="body">
-            {selectedAdvert.accept_trade ? " Sim" : " Não"}
-          </Text>
+          <Text fontFamily="body">{advert.accept_trade ? " Sim" : " Não"}</Text>
         </Text>
 
         <Text fontFamily="heading" mt={4}>
           Meios de pagamento:
         </Text>
 
-        <PaymentMethodsList methodsList={selectedAdvert.payment_methods} />
+        <PaymentMethodsList methodsList={advert.payment_methods} />
       </VStack>
     </Box>
   );

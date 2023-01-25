@@ -3,9 +3,10 @@ import { Ionicons } from "@expo/vector-icons";
 import { MaterialIcons } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { FontAwesome } from "@expo/vector-icons";
+import { PaymentMethodsDTO } from "../dtos/PaymentMethodsDTO";
 
 interface PaymentMethodsProps {
-  methodsList: string[];
+  methodsList: PaymentMethodsDTO[] | string[];
 }
 
 export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
@@ -30,7 +31,9 @@ export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
     <VStack mt={2}>
       {methodsList
         ? methodsList.map((method, index) => {
-            const icon = selectIcon(method);
+            const icon = selectIcon(
+              typeof method === "string" ? method : method.key
+            );
             return (
               <HStack
                 mb={1}
@@ -38,7 +41,9 @@ export const PaymentMethodsList = ({ methodsList }: PaymentMethodsProps) => {
                 key={`methodList, choice method${method}` + index}
               >
                 {icon}
-                <Text ml={2}>{method}</Text>
+                <Text ml={2}>
+                  {typeof method === "string" ? method : method.name}
+                </Text>
               </HStack>
             );
           })

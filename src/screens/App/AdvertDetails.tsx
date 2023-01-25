@@ -17,7 +17,6 @@ import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { getSelectedProduct } from "../../services/product/getSelectedProduct";
 import { Loading } from "../../components/Loading";
-import { ProductDTO } from "../../dtos/ProductDTO";
 
 interface RouteParamsProps {
   advertID: string;
@@ -34,36 +33,20 @@ export const AdvertDetails = () => {
   const [selectedAdvert, setSelectedAdvert] = useState<AdvertDTO>(
     {} as AdvertDTO
   );
-  const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
-  const [hasAdvert, setHasAdvert] = useState(false);
+  // const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
 
   useEffect(() => {
-    setHasAdvert(false);
     getSelectedAdvert();
   }, []);
 
   const getSelectedAdvert = async () => {
     const response = await getSelectedProduct(advertID);
-    // const selectedAdvert: AdvertDTO = advertConstructor(response);
-    console.log("XXXXX IMAGES", response?.data.product_images, "responseDATA");
-    if (response) {
-      setSelectedAdvert({
-        id: response.data.id,
-        name: response.data.name,
-        description: response.data.description,
-        is_new: response.data.is_new,
-        accept_trade: response.data.accept_trade,
-        payment_methods: [
-          response.data.payment_methods[0],
-          response.data.payment_methods[1],
-          response.data.payment_methods[2],
-        ],
-        price: response.data.price / 1000,
-        images: response.data.product_images,
-        is_active: response.data.is_active,
-      });
 
-      setImages(response.data.product_images);
+    if (response) {
+      setSelectedAdvert(response.data);
+      console.log(response.data.product_images, "IMAGES");
+
+      // setImages(response.data.product_images);
     }
   };
 
@@ -74,10 +57,6 @@ export const AdvertDetails = () => {
   const handleGoBack = () => {
     goBack();
   };
-
-  useEffect(() => {
-    if (selectedAdvert.name && images.length > 0) setHasAdvert(true);
-  }, [selectedAdvert]);
 
   return (
     <SafeAreaView>
@@ -91,10 +70,10 @@ export const AdvertDetails = () => {
             }
           />
 
-          {hasAdvert ? (
+          {selectedAdvert.product_images && selectedAdvert.is_active ? (
             <>
               <ImagesCarousel
-                images={images}
+                images={selectedAdvert.product_images}
                 isActiveAd={selectedAdvert.is_active}
               />
               <ProductDetails advert={selectedAdvert} />

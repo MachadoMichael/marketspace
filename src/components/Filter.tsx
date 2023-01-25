@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 
-import { ProductDTO } from "../dtos/ProductDTO";
+import { ProductDTO } from "../dtos/AdvertDTO";
 import { Pressable } from "react-native";
 
 interface FilterProps {

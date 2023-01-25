@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { SignIn } from "../screens/auth/SignIn";
-import { ProductDTO } from "../dtos/ProductDTO";
+import { ProductDTO } from "../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 type AppTabRoutes = {

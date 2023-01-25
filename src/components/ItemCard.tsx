@@ -1,6 +1,6 @@
 import { Box, Image, Pressable, Text, View, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { ItemDTO } from "../dtos/ProductDTO";
+import { ItemDTO } from "../dtos/AdvertDTO";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 

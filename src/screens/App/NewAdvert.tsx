@@ -27,7 +27,7 @@ import { Button } from "../../components/Button";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 
 import { TopSection } from "../../components/TopSection";
-import { ProductDTO } from "../../dtos/ProductDTO";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
 
 import { AddPhoto } from "../../services/user/addPhoto";
 
@@ -100,7 +100,7 @@ export const NewAdvert = () => {
     console.log("PAYMENTMETHODS in NEWADVERT", paymentMethods);
 
     if (advertHasImage() && advertHasPaymnetMethod()) {
-      const productData: ProductDTO = {
+      const productData: AdvertDTO = {
         name,
         description,
         is_new: isNew === "true" ? true : false,
@@ -113,7 +113,7 @@ export const NewAdvert = () => {
     }
   };
 
-  const sendAdvertPreview = (productData: ProductDTO) => {
+  const sendAdvertPreview = (productData: AdvertDTO) => {
     navigate("advertpreview", {
       productData,
       advertImages,

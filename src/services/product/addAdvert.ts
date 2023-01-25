@@ -1,9 +1,8 @@
 import axios from "axios";
 import { AdvertDTO } from "../../dtos/AdvertDTO";
-import { ProductDTO } from "../../dtos/ProductDTO";
 import { api } from "../api";
 
-export const addProduct = async (productRequest: AdvertDTO) => {
+export const addAdvert = async (productRequest: AdvertDTO) => {
   try {
     const response = await api.post("/products", productRequest);
     return response;

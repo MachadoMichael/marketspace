@@ -2,7 +2,7 @@ import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
 import { ItemCard } from "../../components/ItemCard";
 import { useEffect, useRef, useState } from "react";
-import { ProductDTO } from "../../dtos/ProductDTO";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { Dimensions } from "react-native";
 import { HomeHeader } from "../../components/HomeHeader";
 
@@ -20,8 +20,8 @@ export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-  const [initialItemList, setInitialItemList] = useState<ProductDTO[]>(
-    [] as ProductDTO[]
+  const [initialItemList, setInitialItemList] = useState<AdvertDTO[]>(
+    [] as AdvertDTO[]
   );
   const [products, setProducts] = useState<any>([]);
   const [inputFilter, setInputFilter] = useState("");

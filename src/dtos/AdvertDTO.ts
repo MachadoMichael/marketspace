@@ -1,7 +1,14 @@
+import { PaymentMethodsDTO } from "./PaymentMethodsDTO";
 import { PhotoFileDTO } from "./PhotoFileDTO";
-import { ProductDTO } from "./ProductDTO";
 
-export interface AdvertDTO extends ProductDTO {
-  images: PhotoFileDTO[];
-  is_active: boolean;
+export interface AdvertDTO {
+  id?: string;
+  name: string;
+  description: string;
+  is_new: boolean;
+  accept_trade: boolean;
+  payment_methods: string[] | PaymentMethodsDTO[];
+  price: number;
+  product_images?: PhotoFileDTO[];
+  is_active?: boolean;
 }

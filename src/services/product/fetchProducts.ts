@@ -3,7 +3,8 @@ import { api } from "../api";
 
 export const fetchProducts = async () => {
   try {
-    const products = await api.get(`/products`, {});
+    const params = {};
+    const products = await api.get(`/products`, { params });
     console.log("DATABASE PRODUCTS", products.data);
     return products.data;
   } catch (error) {

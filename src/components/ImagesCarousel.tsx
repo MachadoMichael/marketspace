@@ -21,10 +21,10 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
         width={width}
         height={width / 2}
         autoPlay
-  data={images}
+        data={images}
         scrollAnimationDuration={images.length > 1 ? 5000 : 0}
         renderItem={({ index }) => (
-          <Box flex={1} justifyContent="center" >
+          <Box flex={1} justifyContent="center">
             {!isActiveAd ? (
               <Box
                 w="full"
