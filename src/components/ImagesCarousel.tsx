@@ -4,16 +4,18 @@ import { Dimensions } from "react-native";
 import { View } from "native-base";
 import Carousel from "react-native-reanimated-carousel";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
+import { api } from "../services/api";
 
 interface CarouselProps {
   images: PhotoFileDTO[];
-  isActiveAd: boolean;
+  isActiveAd?: boolean;
 }
 
 export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
   const { width } = Dimensions.get("window");
 
   console.warn("ïmages", images);
+  console.log(isActiveAd);
   return (
     <View>
       <Carousel
@@ -22,10 +24,17 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
         height={width / 2}
         autoPlay
         data={images}
-        scrollAnimationDuration={images.length > 1 ? 5000 : 0}
-        renderItem={({ index }) => (
-          <Box flex={1} justifyContent="center">
-            {!isActiveAd ? (
+        scrollAnimationDuration={images.length > 1 ? 5000 : 1}
+        renderItem={({ item }) => (
+          <Box
+            flex={1}
+            justifyContent="center"
+            align-items="center"
+            bgColor={"red.100"}
+          >
+            {isActiveAd || isActiveAd === undefined ? (
+              <></>
+            ) : (
               <Box
                 w="full"
                 h="full"
@@ -40,23 +49,21 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
                   ANÚNCIO DESATIVADO
                 </Text>
               </Box>
-            ) : (
-              false
             )}
 
             <Image
-              w={375}
-              h={280}
+              w={"full"}
+              h={"full"}
               bgColor="black"
               resizeMode="contain"
               alignItems="center"
               justifyContent="center"
               source={{
-                uri: images[index].path,
+                uri: item.uri,
               }}
-              alt="selected product details"
+              alt="product images"
             />
-            <Text style={{ textAlign: "center", fontSize: 30 }}>{index}</Text>
+            {/* <Text style={{ textAlign: "center", fontSize: 30 }}>{}</Text> */}
           </Box>
         )}
       />

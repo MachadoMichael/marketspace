@@ -17,6 +17,7 @@ import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { getSelectedProduct } from "../../services/product/getSelectedProduct";
 import { Loading } from "../../components/Loading";
+import { api } from "../../services/api";
 
 interface RouteParamsProps {
   advertID: string;
@@ -33,7 +34,7 @@ export const AdvertDetails = () => {
   const [selectedAdvert, setSelectedAdvert] = useState<AdvertDTO>(
     {} as AdvertDTO
   );
-  // const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
+  const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
 
   useEffect(() => {
     getSelectedAdvert();
@@ -45,14 +46,12 @@ export const AdvertDetails = () => {
     if (response) {
       setSelectedAdvert(response.data);
       console.log(response.data.product_images, "IMAGES");
-
-      // setImages(response.data.product_images);
     }
   };
 
-  const advertConstructor = (response: any) => {
-    return {} as AdvertDTO;
-  };
+  // const advertConstructor = (response: any) => {
+  //   return {} as AdvertDTO;
+  // };
 
   const handleGoBack = () => {
     goBack();

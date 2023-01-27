@@ -1,10 +1,18 @@
 import axios from "axios";
 import { api } from "../api";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
+
+export interface ProductResponseDTO extends AdvertDTO {
+  id: string;
+  created_at: string;
+  upload_at: string;
+  user_id: string;
+}
 
 export const fetchProducts = async () => {
   try {
     const params = {};
-    const products = await api.get(`/products`, { params });
+    const products = await api.get<ProductResponseDTO[]>("/products", {});
     console.log("DATABASE PRODUCTS", products.data);
     return products.data;
   } catch (error) {

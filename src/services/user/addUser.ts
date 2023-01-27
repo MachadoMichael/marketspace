@@ -24,9 +24,9 @@ export const addUser = async ({
     userForm.append("tel", tel);
     userForm.append("password", password);
 
-    await api.post("/users/", userForm, {
+    await api.post("/users", userForm, {
       headers: {
-        "Content-Type": "multpart/form-data",
+        "Content-Type": "multipart/form-data",
       },
     });
 

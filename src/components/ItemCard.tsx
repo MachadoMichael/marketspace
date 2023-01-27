@@ -1,11 +1,13 @@
 import { Box, Image, Pressable, Text, View, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
-import { ItemDTO } from "../dtos/AdvertDTO";
+import { AdvertDTO } from "../dtos/AdvertDTO";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
+import { ProductResponseDTO } from "../services/product/fetchProducts";
+import { api } from "../services/api";
 
 interface ItemCardProps {
-  item: ItemDTO;
+  item: ProductResponseDTO;
   isUserAd?: boolean;
 }
 
@@ -13,7 +15,7 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   function handleGoToAdvertDetails(itemID: string) {
-    navigate("addetails", { itemID });
+    // navigate("addetails", { itemID: item.id });
   }
 
   return (
@@ -30,13 +32,13 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
         m={1}
         w={50}
         h={17}
-        bgColor={item.isNew ? "blue.light" : "gray.300"}
+        bgColor={item.is_new ? "blue.light" : "gray.300"}
         justifyContent="center"
         alignItems="center"
         rounded={9999}
       >
         <Text fontFamily="heading" color="white" fontSize="xs">
-          {item.isNew ? "NOVO" : "USADO"}
+          {item.is_new ? "NOVO" : "USADO"}
         </Text>
       </Box>
       <Box
@@ -52,7 +54,7 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
         alignItems="center"
         rounded={9999}
       >
-        {item.user ? (
+        {item.user_id ? (
           <Image
             w={8}
             h={8}
@@ -76,7 +78,9 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
         resizeMode="contain"
         rounded={4}
         source={{
-          uri: item.uri[0],
+          uri: item.product_images
+            ? `${api.defaults.baseURL}/images/${item.product_images[0].path}`
+            : "fail",
         }}
         alt="imagem do produto"
       />
@@ -86,7 +90,7 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
           {item.name}
         </Text>
         <Text fontFamily="heading" fontSize={"md"} color="gray.100">
-          R$ {item.value}
+          R$ {item.price}
         </Text>
       </VStack>
     </Pressable>

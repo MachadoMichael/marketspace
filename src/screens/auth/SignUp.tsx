@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRouteProps } from "../../routes/auth.routes";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { AddPhoto } from "../../services/user/addPhoto";
 import { addUser } from "../../services/user/addUser";
@@ -67,8 +67,10 @@ export const SignUp = () => {
   const handleAddUserAvatar = async () => {
     try {
       const avatar = await AddPhoto();
-      if (avatar) setUserAvatar(avatar);
-    } catch (error) {}
+      if (avatar !== undefined) setUserAvatar(avatar);
+    } catch (error) {
+      console.log("deu erro na seleção da foto", error);
+    }
   };
 
   function handleBackToSignIn() {
@@ -81,16 +83,27 @@ export const SignUp = () => {
     tel,
     password,
   }) => {
+    console.log("AVATAR XX", userAvatar);
     userAvatar.path !== ""
-      ? await addUser({
-          userAvatar,
+      ? (await addUser({
+          userAvatar: {
+            name: `${name}.${userAvatar.extension}`.toLowerCase(),
+            uri: userAvatar.path,
+            type: userAvatar.type,
+          },
           name,
           email,
           password,
           tel,
-        })
+        }))
+        ? navigate("home")
+        : false
       : Alert.alert("Por favor adcione uma imagem ao seu avatar.");
   };
+
+  useEffect(() => {
+    console.log(userAvatar);
+  }, [userAvatar]);
 
   return (
     <ScrollView flex={1} bgColor="gray.600">

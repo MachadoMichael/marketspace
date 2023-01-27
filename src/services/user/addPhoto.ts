@@ -19,7 +19,7 @@ export const AddPhoto = async () => {
     const photoIsValid = await checkingPhotoSize(selectedPhoto.assets[0].uri);
 
     if (photoIsValid) {
-      const photoFile: PhotoFileDTO = await photoFileConstructor(selectedPhoto);
+      const photoFile = await photoFileConstructor(selectedPhoto);
       return photoFile;
     }
   } catch (error) {
@@ -49,20 +49,16 @@ const photoFileConstructor = async (
   selectedPhoto: ImagePicker.ImagePickerResult
 ) => {
   if (selectedPhoto.assets) {
-    const imageRandomName = uuid.v4();
     const fileExtension = selectedPhoto.assets[0].uri.split(".").pop();
+
     const photoFile = {
-      name: `${imageRandomName}.${fileExtension}`,
-      path: selectedPhoto.assets[0].uri,
+      uri: selectedPhoto.assets[0].uri,
       type: `${selectedPhoto.assets[0].type}/${fileExtension}`,
+      extension: fileExtension,
     } as any;
 
     return photoFile;
   } else {
-    return {
-      name: "",
-      uri: "",
-      type: "",
-    };
+    return {} as PhotoFileDTO;
   }
 };

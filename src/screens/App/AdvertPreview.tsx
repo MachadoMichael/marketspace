@@ -21,15 +21,14 @@ import { addAdvert } from "../../services/product/addAdvert";
 type RouteParamsProps = {
   productData: AdvertDTO;
   advertImages: PhotoFileDTO[];
-  is_preview?: boolean;
+  // is_preview?: boolean;
   owner?: boolean;
 };
 
 export const AdvertPreview = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const route = useRoute();
-  const { productData, advertImages, is_preview, owner } =
-    route.params as RouteParamsProps;
+  const { productData, owner } = route.params as RouteParamsProps;
 
   const handleGoBack = () => {
     goBack();
@@ -39,22 +38,15 @@ export const AdvertPreview = () => {
     const response = await addAdvert({
       ...productData,
       is_active: true,
-      product_images: advertImages,
     });
     if (response) {
       const advertID = response.data.id;
 
-      console.log("response", response);
-
-      const imagesAreAdded = await addImages(advertID, advertImages);
-      if (imagesAreAdded === true) {
-        // const ad: AdvertDTO = {
-        //   ...productData,
-        //   is_active: true,
-        //   images: advertImages,
-        // };
-        navigate("addetails", { advertID, owner: true });
-      } else return;
+      const imagesAreAdded = await addImages(
+        advertID,
+        productData.product_images
+      );
+      imagesAreAdded ? navigate("addetails", { advertID, owner: true }) : false;
     }
   };
 
@@ -68,11 +60,11 @@ export const AdvertPreview = () => {
       </Center>
 
       <ScrollView>
-        <ImagesCarousel images={advertImages} isActiveAd />
+        <ImagesCarousel images={productData.product_images} />
         <ProductDetails
           advert={{
             ...productData,
-            product_images: advertImages,
+            product_images: productData.product_images,
             is_active: true,
           }}
         />

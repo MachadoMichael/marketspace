@@ -21,7 +21,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Input } from "../../components/Input";
 import { TextArea } from "../../components/TextArea";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { PaymentMethodCheckbox } from "../../components/PaymentMethodCheckbox";
 import { Button } from "../../components/Button";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
@@ -87,9 +87,18 @@ export const NewAdvert = () => {
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
   const handleProductPhotoSelect = async () => {
-    const advertPhoto = await AddPhoto();
-    if (advertPhoto !== undefined)
-      setAdvertImages([...advertImages, advertPhoto]);
+    const advertPhoto: PhotoFileDTO = await AddPhoto();
+
+    if (advertPhoto !== undefined) {
+      setAdvertImages((prev) => [
+        {
+          name: `${user?.user.name}_1.${advertPhoto.extension}`,
+          uri: advertPhoto.uri,
+          type: advertPhoto.type,
+        },
+        ...prev,
+      ]);
+    }
   };
 
   const handleCreateAdvertData: SubmitHandler<FormDataProps> = ({
@@ -97,8 +106,6 @@ export const NewAdvert = () => {
     description,
     price,
   }) => {
-    console.log("PAYMENTMETHODS in NEWADVERT", paymentMethods);
-
     if (advertHasImage() && advertHasPaymnetMethod()) {
       const productData: AdvertDTO = {
         name,
@@ -107,6 +114,7 @@ export const NewAdvert = () => {
         accept_trade: acceptTrade ? acceptTrade : false,
         price: Number(price) * 100,
         payment_methods: paymentMethods,
+        product_images: advertImages,
       };
 
       sendAdvertPreview(productData);
@@ -116,8 +124,6 @@ export const NewAdvert = () => {
   const sendAdvertPreview = (productData: AdvertDTO) => {
     navigate("advertpreview", {
       productData,
-      advertImages,
-      is_preview: true,
     });
   };
 
@@ -149,6 +155,10 @@ export const NewAdvert = () => {
   const handleGoBack = () => {
     goBack();
   };
+
+  useEffect(() => {
+    console.log("DEntro do newadvert", advertImages);
+  }, [advertImages]);
 
   return (
     <SafeAreaView>
@@ -201,7 +211,7 @@ export const NewAdvert = () => {
                     h="full"
                     rounded={6}
                     source={{
-                      uri: photoFile.path,
+                      uri: photoFile.uri,
                     }}
                     alt={"product photo" + index}
                   />

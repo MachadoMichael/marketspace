@@ -15,9 +15,12 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { fetchUserProducts } from "../../services/user/fetchUserProducts";
+import { ProductResponseDTO } from "../../services/product/fetchProducts";
 
 export const UserAdverts = () => {
-  const [userAds, setUserAds] = useState();
+  const [userAdverts, setUserAdverts] = useState<ProductResponseDTO[]>(
+    [] as ProductResponseDTO[]
+  );
   const [service, setService] = useState("Todos");
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
@@ -31,6 +34,7 @@ export const UserAdverts = () => {
 
   const getProducts = async () => {
     const response = await fetchUserProducts();
+    setUserAdverts(response);
     console.log("resposta fetchProducts", response);
   };
 
@@ -41,9 +45,9 @@ export const UserAdverts = () => {
   return (
     <SafeAreaView>
       <View justifyContent="space-between" p={8} pb={0}>
-        {/* <FlatList
-          data={userFilteredAdList}
-          keyExtractor={(item) => item.id}
+        <FlatList
+          data={userAdverts}
+          keyExtractor={(item) => item.description + item.id}
           renderItem={({ item }) => <ItemCard item={item} isUserAd />}
           horizontal={false}
           numColumns={2}
@@ -66,7 +70,7 @@ export const UserAdverts = () => {
               </Center>
 
               <HStack alignItems="center" justifyContent="space-between" mb={6}>
-                <Text>{userAds.length} anúncios</Text>
+                <Text>{userAdverts.length} anúncios</Text>
 
                 <Select
                   selectedValue={service}
@@ -96,7 +100,7 @@ export const UserAdverts = () => {
               </HStack>
             </VStack>
           }
-        /> */}
+        />
       </View>
     </SafeAreaView>
   );

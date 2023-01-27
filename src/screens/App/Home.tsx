@@ -27,13 +27,14 @@ export function Home() {
   const [inputFilter, setInputFilter] = useState("");
   const snapPoints = [1, height - 160];
 
-  useEffect(() => {
-    readingDatabase();
-  }, []);
+  console.log(products, "XXX PRODUCTS");
 
   const readingDatabase = async () => {
+    console.log("executei");
+
     const registredProducts = await fetchProducts();
-    if (registredProducts !== undefined) setProducts(registredProducts);
+    console.log("registredProducts", registredProducts);
+
   };
 
   function handleHideModal() {
@@ -54,6 +55,10 @@ export function Home() {
     //   setItemList(filteredList);
     // }
   }
+
+  useEffect(() => {
+    readingDatabase();
+  }, []);
 
   return (
     <Center justifyContent={"space-between"} w="full" h="full">

@@ -17,7 +17,7 @@ import { useContext } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { SignIn } from "../screens/auth/SignIn";
-import { ProductDTO } from "../dtos/AdvertDTO";
+import { AdvertDTO } from "../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 type AppTabRoutes = {
@@ -33,9 +33,9 @@ type AppStackRoutes = {
   newadvert: { itemID: string | null };
   tabroutes: undefined;
   advertpreview: {
-    productData: ProductDTO;
-    advertImages: PhotoFileDTO[];
-    is_preview?: boolean;
+    productData: AdvertDTO;
+    // advertImages: PhotoFileDTO[];
+    // is_preview?: boolean;
     owner?: boolean;
   };
 };
