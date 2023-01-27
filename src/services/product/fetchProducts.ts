@@ -12,11 +12,11 @@ export interface ProductResponseDTO extends AdvertDTO {
 export const fetchProducts = async () => {
   try {
     const params = {};
-    const products = await api.get<ProductResponseDTO[]>("/products", {
-      params,
-    });
-    console.log("DATABASE PRODUCTS", products.data);
-    return products.data;
+    const response = await api.get<ProductResponseDTO[]>(
+      `/products/`
+    );
+    console.log("DATABASE PRODUCTS", response.data);
+    return response.data;
   } catch (error) {
     if (axios.isAxiosError(error))
       console.log(error.response?.data, error.response?.status);

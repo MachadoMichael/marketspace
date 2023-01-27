@@ -13,9 +13,7 @@ interface CarouselProps {
 
 export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
   const { width } = Dimensions.get("window");
-
-  console.warn("ïmages", images);
-  console.log(isActiveAd);
+  console.log(images[0], "uri NO CAROUSEL");
   return (
     <View>
       <Carousel
@@ -25,12 +23,13 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
         autoPlay
         data={images}
         scrollAnimationDuration={images.length > 1 ? 5000 : 1}
-        renderItem={({ item }) => (
+        renderItem={({ index }) => (
           <Box
             flex={1}
             justifyContent="center"
             align-items="center"
-            bgColor={"red.100"}
+            borderWidth={1}
+            borderColor={"black"}
           >
             {isActiveAd || isActiveAd === undefined ? (
               <></>
@@ -59,7 +58,9 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
               alignItems="center"
               justifyContent="center"
               source={{
-                uri: item.uri,
+                uri:
+                  `${api.defaults.baseURL}/images/${images[index].path}` ??
+                  images[index].uri,
               }}
               alt="product images"
             />

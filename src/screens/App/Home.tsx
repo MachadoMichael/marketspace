@@ -31,13 +31,6 @@ export function Home() {
 
   console.log(data, "XXX DATA QUERY PRODUCTS");
 
-  // const readingDatabase = async () => {
-  //   console.log("executei");
-
-  //   const registredProducts = await fetchProducts();
-  //   console.log("registredProducts", registredProducts);
-  // };
-
   function handleHideModal() {
     bottomSheetRef.current?.close();
   }
@@ -56,10 +49,6 @@ export function Home() {
     //   setItemList(filteredList);
     // }
   }
-
-  // useEffect(() => {
-  //   readingDatabase();
-  // }, []);
 
   return (
     <Center justifyContent={"space-between"} w="full" h="full">

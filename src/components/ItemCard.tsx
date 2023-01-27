@@ -1,4 +1,4 @@
-import { Box, Image, Pressable, Text, View, VStack } from "native-base";
+import { Box, Image, Pressable, Text, VStack } from "native-base";
 import { Entypo } from "@expo/vector-icons";
 import { AdvertDTO } from "../dtos/AdvertDTO";
 import { useNavigation } from "@react-navigation/native";
@@ -14,9 +14,9 @@ interface ItemCardProps {
 export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
-  function handleGoToAdvertDetails(itemID: string) {
-    // navigate("addetails", { itemID: item.id });
-  }
+  const handleGoToAdvertDetails = (itemID: string) => {
+    navigate("addetails", { advertID: item.id, owner: true });
+  };
 
   return (
     <Pressable
@@ -90,7 +90,7 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
           {item.name}
         </Text>
         <Text fontFamily="heading" fontSize={"md"} color="gray.100">
-          R$ {item.price}
+          R$ {item.price / 100}
         </Text>
       </VStack>
     </Pressable>

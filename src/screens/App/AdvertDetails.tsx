@@ -32,19 +32,9 @@ export const AdvertDetails = () => {
 
   // pegar o item pelo ID
   const { advertID, owner } = route.params as RouteParamsProps;
-  const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
 
   const { data } = useQuery("product-details", () => getProduct(advertID));
   const advertData = data?.data;
-
-  advertData
-    ? setImages([
-        {
-          uri: advertData.product_images[0].path,
-          id: advertData.product_images[0].id,
-        },
-      ] as PhotoFileDTO[])
-    : false;
 
   console.log(data?.data, "Data product details");
 
@@ -64,10 +54,10 @@ export const AdvertDetails = () => {
             }
           />
 
-          {advertData && images.length > 0 ? (
+          {advertData ? (
             <>
               <ImagesCarousel
-                images={images}
+                images={advertData.product_images}
                 isActiveAd={advertData.is_active}
               />
               <ProductDetails advert={advertData} />

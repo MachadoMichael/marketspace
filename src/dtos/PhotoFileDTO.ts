@@ -1,5 +1,6 @@
 export interface PhotoFileDTO {
-  uri: string;
+  uri?: string;
+  path?: string;
   type?: string;
   extension?: string;
   id?: string;
