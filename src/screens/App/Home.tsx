@@ -15,6 +15,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
 import { SectionUserAdverts } from "../../components/SectionUserAdverts";
 import { fetchProducts } from "../../services/product/fetchProducts";
+import { useQuery } from "react-query";
 
 export function Home() {
   const { height } = Dimensions.get("window");
@@ -25,17 +26,17 @@ export function Home() {
   );
   const [products, setProducts] = useState<any>([]);
   const [inputFilter, setInputFilter] = useState("");
-  const snapPoints = [1, height - 160];
 
-  console.log(products, "XXX PRODUCTS");
+  const { data } = useQuery("fetch-products", fetchProducts);
 
-  const readingDatabase = async () => {
-    console.log("executei");
+  console.log(data, "XXX DATA QUERY PRODUCTS");
 
-    const registredProducts = await fetchProducts();
-    console.log("registredProducts", registredProducts);
+  // const readingDatabase = async () => {
+  //   console.log("executei");
 
-  };
+  //   const registredProducts = await fetchProducts();
+  //   console.log("registredProducts", registredProducts);
+  // };
 
   function handleHideModal() {
     bottomSheetRef.current?.close();
@@ -56,9 +57,9 @@ export function Home() {
     // }
   }
 
-  useEffect(() => {
-    readingDatabase();
-  }, []);
+  // useEffect(() => {
+  //   readingDatabase();
+  // }, []);
 
   return (
     <Center justifyContent={"space-between"} w="full" h="full">
@@ -115,7 +116,7 @@ export function Home() {
       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
-        snapPoints={snapPoints}
+        snapPoints={[1, height - 160]}
         backgroundStyle={{
           backgroundColor: "white",
         }}

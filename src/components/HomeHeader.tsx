@@ -8,6 +8,8 @@ import { userLogin } from "../services/user/userLogin";
 import { useEffect, useState } from "react";
 import { getUserLogged } from "../services/user/getUserLogged";
 import { api } from "../services/api";
+import { useQuery } from "react-query";
+import { Loading } from "./Loading";
 
 interface UserData {
   avatar: string;
@@ -19,24 +21,16 @@ interface UserData {
 
 export const HomeHeader = () => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
-  const [user, setUser] = useState<UserData>();
+  const { data, isError } = useQuery("user-selected", getUserLogged);
 
   function handleGoAdvertForm() {
     navigate("newadvert", { itemID: null });
   }
 
-  const getUserData = async () => {
-    const response = await getUserLogged();
-    response !== undefined ? setUser(response) : false;
-  };
-
-  useEffect(() => {
-    getUserData();
-  }, []);
   return (
     <HStack w={327} justifyContent="space-between" mt={4}>
       <HStack>
-        {user !== undefined ? (
+        {data ? (
           <Box
             rounded="full"
             w={45}
@@ -45,22 +39,22 @@ export const HomeHeader = () => {
             borderWidth={2}
           >
             <Image
-              w={'full'}
-              h={'full'}
+              w={"full"}
+              h={"full"}
               shadow={5}
               rounded={9999}
-              source={{ uri: `${api.defaults.baseURL}/images/${user.avatar}` }}
-              alt="userAvatar"
+              source={{ uri: `${api.defaults.baseURL}/images/${data.avatar}` }}
+              alt="user-avatar"
             />
           </Box>
         ) : (
-          false
+          <Loading />
         )}
 
         <VStack ml={2}>
           <Text fontSize="md">Boas vindas,</Text>
           <Text fontSize="md" fontFamily="heading">
-            Maria!
+            {data?.name}
           </Text>
         </VStack>
       </HStack>

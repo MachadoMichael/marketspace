@@ -15,9 +15,10 @@ import { ImagesCarousel } from "../../components/ImagesCarousel";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
-import { getSelectedProduct } from "../../services/product/getSelectedProduct";
+import { getProduct } from "../../services/product/getProduct";
 import { Loading } from "../../components/Loading";
 import { api } from "../../services/api";
+import { useQuery } from "react-query";
 
 interface RouteParamsProps {
   advertID: string;
@@ -31,27 +32,21 @@ export const AdvertDetails = () => {
 
   // pegar o item pelo ID
   const { advertID, owner } = route.params as RouteParamsProps;
-  const [selectedAdvert, setSelectedAdvert] = useState<AdvertDTO>(
-    {} as AdvertDTO
-  );
   const [images, setImages] = useState<PhotoFileDTO[]>([] as PhotoFileDTO[]);
 
-  useEffect(() => {
-    getSelectedAdvert();
-  }, []);
+  const { data } = useQuery("product-details", () => getProduct(advertID));
+  const advertData = data?.data;
 
-  const getSelectedAdvert = async () => {
-    const response = await getSelectedProduct(advertID);
+  advertData
+    ? setImages([
+        {
+          uri: advertData.product_images[0].path,
+          id: advertData.product_images[0].id,
+        },
+      ] as PhotoFileDTO[])
+    : false;
 
-    if (response) {
-      setSelectedAdvert(response.data);
-      console.log(response.data.product_images, "IMAGES");
-    }
-  };
-
-  // const advertConstructor = (response: any) => {
-  //   return {} as AdvertDTO;
-  // };
+  console.log(data?.data, "Data product details");
 
   const handleGoBack = () => {
     goBack();
@@ -69,13 +64,13 @@ export const AdvertDetails = () => {
             }
           />
 
-          {selectedAdvert.product_images && selectedAdvert.is_active ? (
+          {advertData && images.length > 0 ? (
             <>
               <ImagesCarousel
-                images={selectedAdvert.product_images}
-                isActiveAd={selectedAdvert.is_active}
+                images={images}
+                isActiveAd={advertData.is_active}
               />
-              <ProductDetails advert={selectedAdvert} />
+              <ProductDetails advert={advertData} />
             </>
           ) : (
             <Loading />

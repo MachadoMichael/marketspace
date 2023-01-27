@@ -1,6 +1,6 @@
 import { api } from "../api";
 
-export const getSelectedProduct = async (productID: string) => {
+export const getProduct = async (productID: string) => {
   try {
     const response = await api.get(`/products/${productID}`);
     console.log(response.data, "getProduct");
