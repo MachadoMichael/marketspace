@@ -92,7 +92,7 @@ export const NewAdvert = () => {
     if (advertPhoto !== undefined) {
       setAdvertImages((prev) => [
         {
-          name: `${user?.user.name}_1.${advertPhoto.extension}`,
+          name: `${user?.user.name}.${advertPhoto.extension}`,
           uri: advertPhoto.uri,
           type: advertPhoto.type,
         },

@@ -3,8 +3,10 @@ import { Entypo } from "@expo/vector-icons";
 import { AdvertDTO } from "../dtos/AdvertDTO";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
-import { ProductResponseDTO } from "../services/product/fetchProducts";
+
 import { api } from "../services/api";
+import { ProductResponseDTO } from "../dtos/ProductResponseDTO";
+import { useAuth } from "../hooks/useAuth";
 
 interface ItemCardProps {
   item: ProductResponseDTO;
@@ -13,6 +15,7 @@ interface ItemCardProps {
 
 export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
+  const { user } = useAuth();
 
   const handleGoToAdvertDetails = (itemID: string) => {
     navigate("addetails", { advertID: item.id, owner: true });
@@ -61,7 +64,9 @@ export const ItemCard = ({ item, isUserAd = false }: ItemCardProps) => {
             shadow={5}
             rounded={9999}
             source={{
-              uri: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80",
+              uri: user?.user.avatar
+                ? `${api.defaults.baseURL}/images/${user?.user.avatar}`
+                : "11",
             }}
             alt="userAvatar"
           />

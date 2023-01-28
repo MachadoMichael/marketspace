@@ -15,7 +15,6 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { fetchUserProducts } from "../../services/user/fetchUserProducts";
-import { ProductResponseDTO } from "../../services/product/fetchProducts";
 import { useQuery } from "react-query";
 
 export const UserAdverts = () => {
@@ -24,7 +23,7 @@ export const UserAdverts = () => {
   const { data } = useQuery("user-products", fetchUserProducts);
 
   function handleToAdForm() {
-    // navigate("adform", { itemID: null });
+    navigate("newadvert", { itemID: null });
   }
 
   // const userFilteredAdList =

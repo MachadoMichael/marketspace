@@ -3,10 +3,23 @@ import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../routes/app.routes";
 import { HStack, Text, VStack } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
+import { useQuery, useQueryClient } from "react-query";
+import { fetchUserProducts } from "../services/user/fetchUserProducts";
+import { AdvertDTO } from "../dtos/AdvertDTO";
+import { useEffect } from "react";
 
 export const SectionUserAdverts = () => {
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
+  const { data } = useQuery("user-products", fetchUserProducts);
 
+  const activeAdverts: AdvertDTO[] = data?.filter(
+    (advert: AdvertDTO) => advert.is_active === true
+  );
+  const queryClient = useQueryClient();
+
+  useEffect(() => {
+    () => queryClient.invalidateQueries("user-prodcuts");
+  }, []);
   function handleGoToUserAdverts() {
     navigate("useradverts");
   }
@@ -26,7 +39,7 @@ export const SectionUserAdverts = () => {
           <AntDesign name="tago" size={24} color="black" />
           <VStack ml={2}>
             <Text fontSize="lg" fontFamily="heading">
-              4
+              {activeAdverts?.length}
             </Text>
             <Text fontSize="xs">anúncios ativos</Text>
           </VStack>

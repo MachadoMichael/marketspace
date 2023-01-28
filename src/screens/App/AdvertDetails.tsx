@@ -18,7 +18,9 @@ import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { getProduct } from "../../services/product/getProduct";
 import { Loading } from "../../components/Loading";
 import { api } from "../../services/api";
-import { useQuery } from "react-query";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteProduct } from "../../services/product/deleteProduct";
+import { patchProduct } from "../../services/product/patchProduct";
 
 interface RouteParamsProps {
   advertID: string;
@@ -29,12 +31,20 @@ export const AdvertDetails = () => {
   const route = useRoute();
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
+  const queryClient = useQueryClient();
 
   // pegar o item pelo ID
   const { advertID, owner } = route.params as RouteParamsProps;
 
   const { data } = useQuery("product-details", () => getProduct(advertID));
   const advertData = data?.data;
+
+  const { isLoading, mutate } = useMutation(() => deleteProduct(advertID), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("user-products");
+      navigate("tabroutes");
+    },
+  });
 
   console.log(data?.data, "Data product details");
 
@@ -92,7 +102,7 @@ export const AdvertDetails = () => {
             title="Excluir anúncio"
             bgColor="gray.500"
             textColor="gray.100"
-            onPress={handleGoBack}
+            onPress={() => mutate()}
             w={327}
           />
         </VStack>

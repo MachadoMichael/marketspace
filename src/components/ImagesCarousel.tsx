@@ -59,8 +59,9 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
               justifyContent="center"
               source={{
                 uri:
-                  `${api.defaults.baseURL}/images/${images[index].path}` ??
-                  images[index].uri,
+                  images[index].uri !== undefined
+                    ? images[index].uri
+                    : `${api.defaults.baseURL}/images/${images[index].path}`,
               }}
               alt="product images"
             />

@@ -14,22 +14,22 @@ import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { useNavigation } from "@react-navigation/native";
 import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
 import { SectionUserAdverts } from "../../components/SectionUserAdverts";
-import { fetchProducts } from "../../services/product/fetchProducts";
+import {
+  fetchProducts,
+  FilterParamsProps,
+} from "../../services/product/fetchProducts";
 import { useQuery } from "react-query";
+import { api } from "../../services/api";
 
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-  const [initialItemList, setInitialItemList] = useState<AdvertDTO[]>(
-    [] as AdvertDTO[]
-  );
+
   const [products, setProducts] = useState<any>([]);
   const [inputFilter, setInputFilter] = useState("");
 
   const { data } = useQuery("fetch-products", fetchProducts);
-
-  console.log(data, "XXX DATA QUERY PRODUCTS");
 
   function handleHideModal() {
     bottomSheetRef.current?.close();

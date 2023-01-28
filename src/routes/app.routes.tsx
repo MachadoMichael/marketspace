@@ -34,8 +34,6 @@ type AppStackRoutes = {
   tabroutes: undefined;
   advertpreview: {
     productData: AdvertDTO;
-    // advertImages: PhotoFileDTO[];
-    // is_preview?: boolean;
     owner?: boolean;
   };
 };

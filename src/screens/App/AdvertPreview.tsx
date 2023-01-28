@@ -17,11 +17,11 @@ import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
 import { addAdvert } from "../../services/product/addAdvert";
+import { useMutation, useQueryClient } from "react-query";
 
 type RouteParamsProps = {
   productData: AdvertDTO;
   advertImages: PhotoFileDTO[];
-  // is_preview?: boolean;
   owner?: boolean;
 };
 
@@ -29,6 +29,7 @@ export const AdvertPreview = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const route = useRoute();
   const { productData, owner } = route.params as RouteParamsProps;
+  const queryClient = useQueryClient();
 
   const handleGoBack = () => {
     goBack();
@@ -46,7 +47,9 @@ export const AdvertPreview = () => {
         advertID,
         productData.product_images
       );
-      imagesAreAdded ? navigate("addetails", { advertID, owner: true }) : false;
+
+      queryClient.invalidateQueries("user-products");
+      imagesAreAdded ? navigate("tabroutes") : false;
     }
   };
 
