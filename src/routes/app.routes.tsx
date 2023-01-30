@@ -5,7 +5,7 @@ import {
 import { Home } from "../screens/app/Home";
 import { AdvertDetails } from "../screens/app/AdvertDetails";
 import { UserAdverts } from "../screens/app/UserAdverts";
-import { NewAdvert } from "../screens/app/NewAdvert";
+import { CreateOrEditAdvert } from "../screens/app/CreateOrEditAdvert";
 import {
   createNativeStackNavigator,
   NativeStackNavigationProp,
@@ -29,8 +29,8 @@ export type AppTabNavigatorRouteProps = BottomTabNavigationProp<AppTabRoutes>;
 const Tab = createBottomTabNavigator<AppTabRoutes>();
 
 type AppStackRoutes = {
-  addetails: { advertID: string; owner: boolean };
-  newadvert: { itemID: string | null };
+  addetails: { advertID: string };
+  createoreditadvert: { advertID: string | null };
   tabroutes: undefined;
   advertpreview: {
     productData: AdvertDTO;
@@ -100,7 +100,7 @@ export const AppRoutes = () => {
       }}
     >
       <Stack.Screen name="tabroutes" component={TabRoutes} />
-      <Stack.Screen name="newadvert" component={NewAdvert} />
+      <Stack.Screen name="createoreditadvert" component={CreateOrEditAdvert} />
       <Stack.Screen name="advertpreview" component={AdvertPreview} />
       <Stack.Screen name="addetails" component={AdvertDetails} />
     </Stack.Navigator>

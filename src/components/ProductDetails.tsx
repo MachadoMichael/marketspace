@@ -58,9 +58,9 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
                 shadow={5}
                 rounded={9999}
                 source={{
-                  uri:
-                    `${api.defaults.baseURL}/images/${user?.user.avatar}` ??
-                    `${api.defaults.baseURL}/images/${advert?.user?.avatar}`,
+                  uri: advert?.user
+                    ? `${api.defaults.baseURL}/images/${advert?.user?.avatar}`
+                    : `${api.defaults.baseURL}/images/${user?.user.avatar}`,
                 }}
                 alt="userAvatar"
               />

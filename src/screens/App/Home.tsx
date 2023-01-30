@@ -51,7 +51,7 @@ export function Home() {
   }
 
   return (
-    <Center w="full" h="full" pt={16}>
+    <Center w="full" h="full" pt='1/6'>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}

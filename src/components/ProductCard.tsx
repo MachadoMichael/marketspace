@@ -12,14 +12,14 @@ interface ProductCardProps extends ProductResponseDTO {
 
 interface ItemCardProps {
   product: ProductCardProps;
-  isUserAd?: boolean;
+  isUserAdvert?: boolean;
 }
 
-export const ProductCard = ({ product, isUserAd = false }: ItemCardProps) => {
+export const ProductCard = ({ product, isUserAdvert = false }: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   const handleGoToAdvertDetails = (productID: string) => {
-    navigate("addetails", { advertID: product.id, owner: true });
+    navigate("addetails", { advertID: product.id });
   };
 
   return (
@@ -57,21 +57,25 @@ export const ProductCard = ({ product, isUserAd = false }: ItemCardProps) => {
         rounded={9999}
         zIndex={1}
       >
-        {product.user && product.user !== undefined ? (
-          <Image
-            w={8}
-            h={8}
-            shadow={5}
-            borderColor={"gray.700"}
-            borderWidth={1}
-            rounded={9999}
-            source={{
-              uri: `${api.defaults.baseURL}/images/${product.user?.avatar}`,
-            }}
-            alt="userAvatar"
-          />
+        {!isUserAdvert ? (
+          product.user && product.user !== undefined ? (
+            <Image
+              w={8}
+              h={8}
+              shadow={5}
+              borderColor={"gray.700"}
+              borderWidth={1}
+              rounded={9999}
+              source={{
+                uri: `${api.defaults.baseURL}/images/${product.user?.avatar}`,
+              }}
+              alt="userAvatar"
+            />
+          ) : (
+            <Entypo name="user" size={20} color="gray" />
+          )
         ) : (
-          <Entypo name="user" size={20} color="gray" />
+          false
         )}
       </Box>
 

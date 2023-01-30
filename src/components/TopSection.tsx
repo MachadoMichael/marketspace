@@ -24,9 +24,15 @@ export const TopSection = ({
       pr={6}
       top={0}
     >
-      <Box w="1/5">{leftElement}</Box>
-      <Box w="3/5">{centerElement}</Box>
-      <Box w="1/5">{rightElement}</Box>
+      <Box w="1/5" alignItems="flex-start">
+        {leftElement}
+      </Box>
+      <Box w="3/5" alignItems="center">
+        {centerElement}
+      </Box>
+      <Box w="1/5" alignItems="flex-end">
+        {rightElement}
+      </Box>
     </HStack>
   );
 };

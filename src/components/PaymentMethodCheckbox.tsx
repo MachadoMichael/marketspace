@@ -21,6 +21,7 @@ export const PaymentMethodCheckbox = ({
         {methodList.map((method, index) => {
           return (
             <Checkbox
+              defaultIsChecked
               key={index + method}
               value={method}
               colorScheme="purple"

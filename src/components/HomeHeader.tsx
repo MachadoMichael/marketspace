@@ -24,7 +24,7 @@ export const HomeHeader = () => {
   const { data, isError } = useQuery("user-selected", getUserLogged);
 
   const handleGoAdvertForm = () => {
-    navigate("newadvert", { itemID: null });
+    navigate("createoreditadvert", { advertID: null });
   };
 
   return (
@@ -65,6 +65,7 @@ export const HomeHeader = () => {
         textColor="white"
         icon={<Ionicons name="add" size={24} color="white" />}
         onPress={handleGoAdvertForm}
+        w="2/4"
       />
     </HStack>
   );

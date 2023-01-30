@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { TopSection } from "../../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { HStack, ScrollView, Text, VStack } from "native-base";
-import { Dimensions } from "react-native";
+import { Alert, Dimensions } from "react-native";
 
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 
@@ -20,10 +20,23 @@ import { deleteProduct } from "../../services/product/deleteProduct";
 import { patchProduct } from "../../services/product/patchProduct";
 import { useAuth } from "../../hooks/useAuth";
 import { OpenURLButton } from "../../components/OpenURLButton";
+import { removeImage } from "../../services/product/removeImage";
+
+import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
 
 interface RouteParamsProps {
   advertID: string;
   owner: boolean;
+}
+
+interface UserDTO {
+  avatar: string;
+  name: string;
+  tel: string;
+}
+
+interface AdvertDetailsResponse extends ProductResponseDTO {
+  user: UserDTO;
 }
 
 export const AdvertDetails = () => {
@@ -36,19 +49,23 @@ export const AdvertDetails = () => {
   const { advertID } = route.params as RouteParamsProps;
 
   const { data } = useQuery("product-details", () => getProduct(advertID));
-  const advertData = data?.data;
+  const advertData: AdvertDetailsResponse = data?.data;
 
   const { isLoading, mutate } = useMutation(() => deleteProduct(advertID), {
-    onSuccess: () => {
+    onSuccess: async () => {
+      await removeImage(advertData.product_images);
+
       queryClient.invalidateQueries("user-products");
       navigate("tabroutes");
     },
   });
 
-  console.log(advertData?.user?.tel, "Data product details");
-
   const handleGoBack = () => {
     goBack();
+  };
+
+  const handleEditAdvert = () => {
+    navigate("createoreditadvert", { advertID });
   };
 
   const handleEnableOrDisableAdvert = async () => {
@@ -59,7 +76,6 @@ export const AdvertDetails = () => {
 
   const sellerPhoneNumber: string = advertData?.user?.tel;
   const supportedURL = `https://wa.me/${sellerPhoneNumber}`;
-  const handleContactSeller = () => {};
 
   return (
     <SafeAreaView>
@@ -69,6 +85,11 @@ export const AdvertDetails = () => {
             leftElement={
               <TouchableOpacity onPress={handleGoBack}>
                 <AntDesign name="arrowleft" size={24} color="black" />
+              </TouchableOpacity>
+            }
+            rightElement={
+              <TouchableOpacity onPress={handleEditAdvert}>
+                <AntDesign name="edit" size={24} color="black" />
               </TouchableOpacity>
             }
           />
@@ -100,9 +121,9 @@ export const AdvertDetails = () => {
           <Button
             icon={<AntDesign name="poweroff" size={16} color="white" />}
             title={
-              advertData?.is_active ? "Desativar anúncio" : "Ativar anúncio"
+              advertData?.is_active ? "Desativar anúncio" : "Reativar anúncio"
             }
-            bgColor={advertData?.is_active ? "blue.light" : "gray.200"}
+            bgColor={advertData?.is_active ? "gray.200" : "blue.light"}
             textColor="white"
             onPress={handleEnableOrDisableAdvert}
             w={327}

@@ -36,9 +36,14 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { useAuth } from "../../hooks/useAuth";
+import { useQuery } from "react-query";
+import { getProduct } from "../../services/product/getProduct";
+import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
+import { PaymentMethodsDTO } from "../../dtos/PaymentMethodsDTO";
+import { api } from "../../services/api";
 
 interface RouteParamsProps {
-  itemID: string | null;
+  advertID: string | null;
 }
 
 interface FormDataProps {
@@ -55,14 +60,24 @@ const NewAdvertSchema = Yup.object({
   price: Yup.string().required("Informe o valor do produto"),
 });
 
-export const NewAdvert = () => {
+export const CreateOrEditAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
-  const { height, width } = Dimensions.get("window");
+  const { height } = Dimensions.get("window");
 
   const { user } = useAuth();
 
   const route = useRoute();
-  const { itemID } = route.params as RouteParamsProps;
+  const { advertID } = route.params as RouteParamsProps;
+
+  const { data } = useQuery(
+    "product-details",
+    advertID !== null ? () => getProduct(advertID) : () => false,
+    {
+      onSuccess: () => setAdvertDataFields(),
+    }
+  );
+
+  const advertForEditData: ProductResponseDTO = data?.data;
 
   const {
     control,
@@ -70,9 +85,11 @@ export const NewAdvert = () => {
     formState: { errors },
   } = useForm<FormDataProps>({
     defaultValues: {
-      name: "",
-      description: "",
-      price: "",
+      name: advertForEditData ? advertForEditData.name : "",
+      description: advertForEditData ? advertForEditData.description : "",
+      price: advertForEditData
+        ? (advertForEditData.price / 100).toString()
+        : "",
     },
     resolver: yupResolver(NewAdvertSchema),
   });
@@ -84,7 +101,26 @@ export const NewAdvert = () => {
   const [advertImages, setAdvertImages] = useState<PhotoFileDTO[]>(
     [] as PhotoFileDTO[]
   );
-  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
+  const [paymentMethods, setPaymentMethods] = useState<string[]>(
+    [] as string[]
+  );
+
+  const setAdvertDataFields = () => {
+    if (advertForEditData) {
+      console.warn(advertForEditData.product_images);
+
+      setAdvertImages(
+        advertForEditData.product_images ? advertForEditData.product_images : []
+      );
+      setIsNew(advertForEditData.is_new ? "true" : "false");
+      setAccepetTrade(advertForEditData.accept_trade);
+      setPaymentMethods(
+        advertForEditData.payment_methods.map((payment) =>
+          typeof payment === "string" ? payment : payment.name
+        )
+      );
+    }
+  };
 
   const handleProductPhotoSelect = async () => {
     const advertPhoto: PhotoFileDTO = await AddPhoto();
@@ -156,7 +192,6 @@ export const NewAdvert = () => {
     goBack();
   };
 
-
   return (
     <SafeAreaView>
       <Box
@@ -174,7 +209,7 @@ export const NewAdvert = () => {
             }
             centerElement={
               <Text fontFamily="heading" fontSize="xl" textAlign="center">
-                {itemID !== null ? "Editar anúncio" : "Criar anúncio"}
+                {advertID !== null ? "Editar anúncio" : "Criar anúncio"}
               </Text>
             }
           />
@@ -213,7 +248,9 @@ export const NewAdvert = () => {
                     h="full"
                     rounded={6}
                     source={{
-                      uri: photoFile.uri,
+                      uri: photoFile.uri
+                        ? photoFile.uri
+                        : `${api.defaults.baseURL}/images/${photoFile.path}`,
                     }}
                     alt={"product photo" + index}
                   />

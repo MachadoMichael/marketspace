@@ -5,6 +5,7 @@ import { View } from "native-base";
 import Carousel from "react-native-reanimated-carousel";
 import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 import { api } from "../services/api";
+import { Loading } from "./Loading";
 
 interface CarouselProps {
   images: PhotoFileDTO[];
@@ -23,11 +24,9 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
         data={images}
         scrollAnimationDuration={images.length > 1 ? 5000 : 1}
         renderItem={({ index }) => (
-          <Box
-            flex={1}
-            justifyContent="center"
-            align-items="center"
-          >
+          <Box flex={1} justifyContent="center" align-items="center">
+
+            
             {isActiveAd || isActiveAd === undefined ? (
               <></>
             ) : (
@@ -35,7 +34,6 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
                 w="full"
                 h="full"
                 position="absolute"
-                bgColor="gray.100"
                 opacity={0.9}
                 zIndex={1}
                 justifyContent="center"
@@ -62,7 +60,6 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
               }}
               alt="product images"
             />
-            {/* <Text style={{ textAlign: "center", fontSize: 30 }}>{}</Text> */}
           </Box>
         )}
       />

@@ -84,7 +84,7 @@ export const UserAdverts = () => {
         <FlatList
           data={userFilteredAdvertList ? userFilteredAdvertList : []}
           keyExtractor={(item) => item.description + item.id}
-          renderItem={({ item }) => <ProductCard product={item} isUserAd />}
+          renderItem={({ item }) => <ProductCard product={item} isUserAdvert />}
           horizontal={false}
           numColumns={2}
           bounces={false}

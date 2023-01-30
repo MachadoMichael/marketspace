@@ -1,11 +1,11 @@
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { api } from "../api";
 
-export const removeImage = async (image: PhotoFileDTO) => {
+export const removeImage = async (images: any) => {
   try {
-    const response = await api.delete("/products/images", {
-      data: { productImagesIds: [image.id] },
-    });
-    return image;
-  } catch (error) {}
+    await api.delete("/products/images", images);
+    return true;
+  } catch (error) {
+    return false;
+  }
 };
