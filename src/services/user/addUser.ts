@@ -32,8 +32,10 @@ export const addUser = async ({
 
     return true;
   } catch (error) {
-    if (axios.isAxiosError(error)) console.log(error.response?.data);
-    else console.log(error);
-    return false;
+    // if (axios.isAxiosError(error)) console.log(error.response?.data);
+    // else console.log(error);
+
+    // return false;
+    throw error;
   }
 };

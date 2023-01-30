@@ -1,6 +1,6 @@
 import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
-import { ItemCard } from "../../components/ItemCard";
+import { ProductCard } from "../../components/ProductCard";
 import { useEffect, useRef, useState } from "react";
 import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { Dimensions } from "react-native";
@@ -51,7 +51,7 @@ export function Home() {
   }
 
   return (
-    <Center justifyContent={"space-between"} w="full" h="full">
+    <Center justifyContent={"space-between"} w="full" h="full" mt={6}>
       <ScrollView mt={8}>
         <HomeHeader />
 
@@ -91,21 +91,20 @@ export function Home() {
       </ScrollView>
 
       <FlatList
-        data={products}
+        data={data}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => <ItemCard item={item} />}
+        renderItem={({ item }) => <ProductCard product={item} />}
         horizontal={false}
         numColumns={2}
         bounces={false}
         showsVerticalScrollIndicator={false}
         columnWrapperStyle={{ justifyContent: "space-around" }}
-        // ListHeaderComponent={}
       />
 
       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
-        snapPoints={[1, height - 160]}
+        snapPoints={[1, height - 400]}
         backgroundStyle={{
           backgroundColor: "white",
         }}

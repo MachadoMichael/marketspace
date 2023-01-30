@@ -10,12 +10,14 @@ import {
 import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
 import { useEffect, useState } from "react";
 
-import { ItemCard } from "../../components/ItemCard";
+import { ProductCard } from "../../components/ProductCard";
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { fetchUserProducts } from "../../services/user/fetchUserProducts";
 import { useQuery } from "react-query";
+import { AdvertDTO } from "../../dtos/AdvertDTO";
+import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
 
 export const UserAdverts = () => {
   const [service, setService] = useState("Todos");
@@ -26,9 +28,14 @@ export const UserAdverts = () => {
     navigate("newadvert", { itemID: null });
   }
 
-  // const userFilteredAdList =
-  //   service === 'enable' ? userAds.filter(ad => ad.isActive === true)
-  //     : service === 'disable' ? userAds.filter(ad => ad.isActive === false) : userAds;
+  const userAdvertsData: ProductResponseDTO[] = data;
+
+  const userFilteredAdvertList =
+    service === "enable"
+      ? userAdvertsData?.filter((advert) => advert.is_active === true)
+      : service === "disable"
+      ? userAdvertsData.filter((ad) => ad.is_active === false)
+      : userAdvertsData;
 
   return (
     <SafeAreaView>
@@ -48,7 +55,7 @@ export const UserAdverts = () => {
           </Center>
 
           <HStack alignItems="center" justifyContent="space-between" mb={6}>
-            <Text>{data?.length} anúncios</Text>
+            <Text>{userFilteredAdvertList?.length} anúncios</Text>
 
             <Select
               selectedValue={service}
@@ -66,7 +73,7 @@ export const UserAdverts = () => {
               <Select.Item label="Todos" value="" fontFamily="heading" />
               <Select.Item label="Ativos" value="enable" fontFamily="heading" />
               <Select.Item
-                label="Desativos"
+                label="Desativados"
                 value="disable"
                 fontFamily="heading"
               />
@@ -75,9 +82,9 @@ export const UserAdverts = () => {
         </VStack>
 
         <FlatList
-          data={data ? data : []}
+          data={userFilteredAdvertList ? userFilteredAdvertList : []}
           keyExtractor={(item) => item.description + item.id}
-          renderItem={({ item }) => <ItemCard item={item} isUserAd />}
+          renderItem={({ item }) => <ProductCard item={item} isUserAd />}
           horizontal={false}
           numColumns={2}
           bounces={false}

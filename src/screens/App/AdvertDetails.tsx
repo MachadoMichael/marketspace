@@ -13,11 +13,8 @@ import { useEffect, useState } from "react";
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
-import { AdvertDTO } from "../../dtos/AdvertDTO";
-import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { getProduct } from "../../services/product/getProduct";
 import { Loading } from "../../components/Loading";
-import { api } from "../../services/api";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteProduct } from "../../services/product/deleteProduct";
 import { patchProduct } from "../../services/product/patchProduct";
@@ -50,6 +47,12 @@ export const AdvertDetails = () => {
 
   const handleGoBack = () => {
     goBack();
+  };
+
+  const handleEnableOrDisableAdvert = async () => {
+    await patchProduct(advertID, !advertData.is_active);
+    queryClient.invalidateQueries("product-details");
+    queryClient.invalidateQueries("user-products");
   };
 
   return (
@@ -85,15 +88,17 @@ export const AdvertDetails = () => {
           h={32}
           justifyContent="space-around"
           alignItems="center"
-          bottom={12}
+          bottom={24}
           p={4}
         >
           <Button
             icon={<AntDesign name="poweroff" size={16} color="white" />}
-            title="Desativar anúncio"
+            title={
+              advertData?.is_active ? "Desativar anúncio" : "Ativar anúncio"
+            }
             bgColor="gray.200"
             textColor="white"
-            onPress={null}
+            onPress={handleEnableOrDisableAdvert}
             w={327}
           />
 

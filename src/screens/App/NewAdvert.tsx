@@ -57,7 +57,7 @@ const NewAdvertSchema = Yup.object({
 
 export const NewAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
-  const { height } = Dimensions.get("window");
+  const { height, width } = Dimensions.get("window");
 
   const { user } = useAuth();
 
@@ -156,14 +156,16 @@ export const NewAdvert = () => {
     goBack();
   };
 
-  useEffect(() => {
-    console.log("DEntro do newadvert", advertImages);
-  }, [advertImages]);
 
   return (
     <SafeAreaView>
-      <Box position="fixed" height={height - 100}>
-        <ScrollView>
+      <Box
+        position="fixed"
+        height={height - 100}
+        w="full"
+        alignContent="center"
+      >
+        <ScrollView mb={12}>
           <TopSection
             leftElement={
               <TouchableOpacity onPress={handleGoBack}>
@@ -244,7 +246,7 @@ export const NewAdvert = () => {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Input
-                  w={327}
+                  w={"full"}
                   placeholder="Título do anúncio"
                   value={value}
                   onChangeText={onChange}
@@ -260,6 +262,7 @@ export const NewAdvert = () => {
                 <TextArea
                   placeholder="Descrição do produto"
                   value={value}
+                  w={"full"}
                   onChangeText={onChange}
                   errorMessage={errors.description?.message}
                 />
@@ -273,9 +276,9 @@ export const NewAdvert = () => {
               onChange={setIsNew}
             >
               <HStack
-                justifyContent="space-between"
+                justifyContent="space-evenly"
                 mb={8}
-                w={327}
+                w={"full"}
                 alignItems="center"
               >
                 <Radio value="true" mb={2}>
@@ -296,7 +299,7 @@ export const NewAdvert = () => {
               control={control}
               render={({ field: { onChange, value } }) => (
                 <Input
-                  w={327}
+                  w={"full"}
                   placeholder="R$"
                   value={value}
                   onChangeText={onChange}
@@ -330,12 +333,10 @@ export const NewAdvert = () => {
       <HStack
         justifyContent="space-evenly"
         alignItems="center"
-        borderWidth={1}
-        borderColor="yellow.100"
         p={4}
         minH={20}
-        bgColor="white"
-        bottom={0}
+        bgColor="gray.700"
+        bottom={12}
       >
         <Button
           title="Cancelar"

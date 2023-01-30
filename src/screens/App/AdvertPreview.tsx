@@ -18,6 +18,7 @@ import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
 import { addAdvert } from "../../services/product/addAdvert";
 import { useMutation, useQueryClient } from "react-query";
+import { SafeAreaView } from "react-native";
 
 type RouteParamsProps = {
   productData: AdvertDTO;
@@ -55,11 +56,13 @@ export const AdvertPreview = () => {
 
   return (
     <View flex={1}>
-      <Center h={100} bgColor="blue.light">
+      <Center h={150} bgColor="blue.light" justifyContent="flex-end">
         <Text fontFamily="heading" color="white">
           Pré-visulização do anúncio
         </Text>
-        <Text color="white">É assim que seu produto vai aparecer!</Text>
+        <Text color="white" mb={6}>
+          É assim que seu produto vai aparecer!
+        </Text>
       </Center>
 
       <ScrollView>
@@ -76,12 +79,10 @@ export const AdvertPreview = () => {
       <HStack
         justifyContent="space-evenly"
         alignItems="center"
-        borderWidth={1}
-        borderColor="yellow.100"
         p={4}
         minH={20}
-        bgColor="white"
-        bottom={0}
+        bgColor="gray.700"
+        bottom={4}
       >
         <Button
           title="Voltar e editar"

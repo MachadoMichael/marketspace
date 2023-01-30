@@ -17,9 +17,19 @@ import { Tag } from "../components/Tag";
 import { useAuth } from "../hooks/useAuth";
 import { AdvertDTO } from "../dtos/AdvertDTO";
 import { useState } from "react";
+import { api } from "../services/api";
 
+interface UserData {
+  avatar: string;
+  name: string;
+  tel: string;
+}
+
+interface AdvertResponse extends AdvertDTO {
+  user?: UserData;
+}
 interface ProductDetailsProps {
-  advert: AdvertDTO;
+  advert: AdvertResponse;
 }
 
 export const ProductDetails = ({ advert }: ProductDetailsProps) => {
@@ -41,14 +51,16 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
             alignItems="center"
             rounded={9999}
           >
-            {user?.user.avatar.path ? (
+            {advert.user?.avatar !== undefined || user?.user.avatar ? (
               <Image
                 w={8}
                 h={8}
                 shadow={5}
                 rounded={9999}
                 source={{
-                  uri: user.user.avatar.path,
+                  uri:
+                    `${api.defaults.baseURL}/images/${user?.user.avatar}` ??
+                    `${api.defaults.baseURL}/images/${advert?.user?.avatar}`,
                 }}
                 alt="userAvatar"
               />
@@ -56,7 +68,9 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
               <Entypo name="user" size={20} color="gray" />
             )}
           </Box>
-          <Text ml={12}>{user?.user.name}</Text>
+          <Text ml={12}>
+            {advert.user?.name ? advert.user.name : user?.user.name}
+          </Text>
         </HStack>
 
         <Tag text={advert.is_new ? "NOVO" : "USADO"} isSelect={true} />

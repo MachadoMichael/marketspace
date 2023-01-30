@@ -22,7 +22,6 @@ export const TopSection = ({
       h={16}
       pl={6}
       pr={6}
-      bgColor="gray.600"
       top={0}
     >
       <Box w="1/5">{leftElement}</Box>

@@ -5,13 +5,13 @@ import { useState, useEffect } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 
-import { ProductDTO } from "../dtos/AdvertDTO";
+import { AdvertDTO } from "../dtos/AdvertDTO";
 import { Pressable } from "react-native";
 
 interface FilterProps {
   closeBottomSheet: () => void;
-  advertList: ProductDTO[];
-  setAdvertList: React.Dispatch<React.SetStateAction<ProductDTO[]>>;
+  advertList: AdvertDTO[];
+  setAdvertList: React.Dispatch<React.SetStateAction<AdvertDTO[]>>;
 }
 
 export const Filter = ({
@@ -23,8 +23,8 @@ export const Filter = ({
   const [canExchange, setCanExchange] = useState(false);
   const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
 
-  const [initialItemList, setInitialItemList] = useState<ProductDTO[]>(
-    [] as ProductDTO[]
+  const [initialItemList, setInitialItemList] = useState<AdvertDTO[]>(
+    [] as AdvertDTO[]
   );
 
   useEffect(() => {
@@ -41,19 +41,19 @@ export const Filter = ({
     closeBottomSheet();
   }
 
-  function isNewFilter(itemList: ProductDTO[]) {
+  function isNewFilter(itemList: AdvertDTO[]) {
     const filteredItemList = itemList.filter((item) => item.is_new === isNew);
     return filteredItemList;
   }
 
-  function canExchangeFilter(itemList: ProductDTO[]) {
+  function canExchangeFilter(itemList: AdvertDTO[]) {
     const filteredItemList = itemList.filter(
       (item) => item.accept_trade === canExchange
     );
     return filteredItemList;
   }
 
-  function methodsFilter(itemList: ProductDTO[]) {
+  function methodsFilter(itemList: AdvertDTO[]) {
     const filteredItemList = itemList.filter((item) => {});
     return filteredItemList;
   }

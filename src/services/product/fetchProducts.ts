@@ -4,16 +4,18 @@ import { api } from "../api";
 import { PaymentMethodsDTO } from "../../dtos/PaymentMethodsDTO";
 
 export interface FilterParamsProps {
-  query: string;
-  is_new: boolean;
-  accept_trade: boolean;
-  payment_methods: PaymentMethodsDTO[];
+  query?: string;
+  is_new?: boolean;
+  accept_trade?: boolean;
+  payment_methods?: PaymentMethodsDTO[];
 }
 
 export const fetchProducts = async () => {
+  const params: FilterParamsProps = {};
+
   try {
-    const response = await api.get(`/products/`);
-    console.log("DATABASE PRODUCTS", response.data);
+    const response = await api.get("/products", { params } as any);
+    console.log("DATABASE PRODUCTS", response);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error))

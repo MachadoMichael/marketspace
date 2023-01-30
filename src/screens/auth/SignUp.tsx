@@ -9,7 +9,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AuthNavigatorRouteProps } from "../../routes/auth.routes";
 import { useEffect, useState } from "react";
-import { Alert } from "react-native";
+import { Alert, SafeAreaView } from "react-native";
 import { AddPhoto } from "../../services/user/addPhoto";
 import { addUser } from "../../services/user/addUser";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
@@ -18,6 +18,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
 import { useAuth } from "../../hooks/useAuth";
+import axios from "axios";
 interface FormDataProps {
   name: string;
   email: string;
@@ -40,14 +41,12 @@ const SignUpSchema = Yup.object({
 
 export const SignUp = () => {
   const { goBack } = useNavigation<AuthNavigatorRouteProps>();
-  const [userAvatar, setUserAvatar] = useState<PhotoFileDTO>(
-    {} as PhotoFileDTO
-  );
+  const [userAvatar, setUserAvatar] = useState<PhotoFileDTO>();
 
   const [hidePassword, setHidePassword] = useState(true);
   const [hideConfirmPassword, setHideConfirmPassword] = useState(true);
   const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
-  const {} = useAuth();
+  const { signIn } = useAuth();
 
   const {
     control,
@@ -69,7 +68,7 @@ export const SignUp = () => {
       const avatar = await AddPhoto();
       if (avatar !== undefined) setUserAvatar(avatar);
     } catch (error) {
-      console.log("deu erro na seleção da foto", error);
+      console.log("Não foi possivel adcionar uma nova foto", error);
     }
   };
 
@@ -83,30 +82,42 @@ export const SignUp = () => {
     tel,
     password,
   }) => {
-    console.log("AVATAR XX", userAvatar);
-    userAvatar.path !== ""
-      ? (await addUser({
-          userAvatar: {
-            name: `${name}.${userAvatar.extension}`.toLowerCase(),
-            uri: userAvatar.path,
-            type: userAvatar.type,
-          },
-          name,
-          email,
-          password,
-          tel,
-        }))
-        ? navigate("home")
-        : false
-      : Alert.alert("Por favor adcione uma imagem ao seu avatar.");
+    try {
+      userAvatar && userAvatar !== undefined
+        ? (await addUser({
+            userAvatar: {
+              ...userAvatar,
+              name: `${name}.${userAvatar.extension}`.toLowerCase(),
+            },
+            // photoFileConstructor(userAvatar, name),
+            name,
+            email,
+            password,
+            tel,
+          }))
+          ? await signIn(email, password)
+          : Alert.alert(
+              "Não foi possível se conectar, por favor tente mais tarder"
+            )
+        : Alert.alert("Por favor adcione uma imagem ao seu avatar.");
+    } catch (error) {
+      if (axios.isAxiosError(error)) Alert.alert(error.response?.data);
+      else console.log(error);
+    }
   };
 
-  useEffect(() => {
-    console.log(userAvatar);
-  }, [userAvatar]);
+  // const photoFileConstructor = (userAvatar: PhotoFileDTO, username: string) => {
+  //   const photoObject = {
+  //     name: `${username}.${userAvatar.extension}`.toLowerCase(),
+  //     uri: userAvatar.path,
+  //     type: userAvatar.type,
+  //   } as PhotoFileDTO;
+
+  //   return photoObject;
+  // };
 
   return (
-    <ScrollView flex={1} bgColor="gray.600">
+    <ScrollView flex={1} bgColor="gray.600" pt={10}>
       <Center m={10}>
         <SvgLogo width={60} height={40} />
         <Text fontFamily="heading" fontSize="lg">
@@ -128,19 +139,20 @@ export const SignUp = () => {
           borderColor="blue.light"
           mb={4}
         >
-          {userAvatar.path ? (
+          {userAvatar ? (
             <Image
               w="full"
               h="full"
               rounded={9999}
               source={{
-                uri: userAvatar.path,
+                uri: userAvatar.uri,
               }}
               alt={"user photo"}
             />
           ) : (
             <Entypo name="user" size={48} color="gray" />
           )}
+
           <Pressable
             justifyContent={"center"}
             position={"absolute"}
@@ -178,7 +190,7 @@ export const SignUp = () => {
             render={({ field: { onChange, value } }) => (
               <Input
                 placeholder="E-mail"
-                value={value}
+                value={value.toLowerCase()}
                 onChangeText={onChange}
                 keyboardType="email-address"
                 errorMessage={errors.email?.message}

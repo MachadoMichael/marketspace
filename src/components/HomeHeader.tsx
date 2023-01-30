@@ -23,9 +23,9 @@ export const HomeHeader = () => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { data, isError } = useQuery("user-selected", getUserLogged);
 
-  function handleGoAdvertForm() {
+  const handleGoAdvertForm = () => {
     navigate("newadvert", { itemID: null });
-  }
+  };
 
   return (
     <HStack w={327} justifyContent="space-between" mt={4}>
@@ -54,7 +54,7 @@ export const HomeHeader = () => {
         <VStack ml={2}>
           <Text fontSize="md">Boas vindas,</Text>
           <Text fontSize="md" fontFamily="heading">
-            {data?.name}
+            {data?.name.substr(0, 7)}
           </Text>
         </VStack>
       </HStack>
