@@ -7,15 +7,13 @@ export interface FilterParamsProps {
   query?: string;
   is_new?: boolean;
   accept_trade?: boolean;
-  payment_methods?: PaymentMethodsDTO[];
+  payment_methods?: PaymentMethodsDTO[] | string[];
 }
 
-export const fetchProducts = async () => {
-  const params: FilterParamsProps = {};
-
+export const fetchProducts = async (params?: FilterParamsProps) => {
   try {
     const response = await api.get("/products", { params } as any);
-    console.log("DATABASE PRODUCTS", response);
+    console.log("DATABASE PRODUCTS", response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error))

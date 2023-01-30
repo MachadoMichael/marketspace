@@ -16,7 +16,6 @@ import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { fetchUserProducts } from "../../services/user/fetchUserProducts";
 import { useQuery } from "react-query";
-import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
 
 export const UserAdverts = () => {
@@ -24,9 +23,9 @@ export const UserAdverts = () => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { data } = useQuery("user-products", fetchUserProducts);
 
-  function handleToAdForm() {
-    navigate("newadvert", { itemID: null });
-  }
+  const handleToCreateNewAdvert = () => {
+    navigate("createoreditadvert", { advertID: null });
+  };
 
   const userAdvertsData: ProductResponseDTO[] = data;
 
@@ -47,7 +46,7 @@ export const UserAdverts = () => {
                 Meus anúncios
               </Text>
               <Box position="absolute" right={-70}>
-                <TouchableOpacity onPress={handleToAdForm}>
+                <TouchableOpacity onPress={handleToCreateNewAdvert}>
                   <AntDesign name="plus" size={24} color="black" />
                 </TouchableOpacity>
               </Box>

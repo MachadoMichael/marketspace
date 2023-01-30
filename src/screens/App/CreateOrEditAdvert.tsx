@@ -71,7 +71,7 @@ export const CreateOrEditAdvert = () => {
 
   const { data } = useQuery(
     "product-details",
-    advertID !== null ? () => getProduct(advertID) : () => false,
+    advertID !== null ? () => getProduct(advertID) : () => undefined,
     {
       onSuccess: () => setAdvertDataFields(),
     }

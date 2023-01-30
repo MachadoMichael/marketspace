@@ -7,63 +7,41 @@ import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 
 import { AdvertDTO } from "../dtos/AdvertDTO";
 import { Pressable } from "react-native";
+import {
+  fetchProducts,
+  FilterParamsProps,
+} from "../services/product/fetchProducts";
+import { useMutation, useQueryClient } from "react-query";
 
 interface FilterProps {
   closeBottomSheet: () => void;
-  advertList: AdvertDTO[];
-  setAdvertList: React.Dispatch<React.SetStateAction<AdvertDTO[]>>;
+  params: FilterParamsProps;
+  setParams: React.Dispatch<React.SetStateAction<FilterParamsProps>>;
 }
 
 export const Filter = ({
   closeBottomSheet,
-  advertList,
-  setAdvertList,
+  params,
+  setParams,
 }: FilterProps) => {
-  const [isNew, setIsNew] = useState(true);
-  const [canExchange, setCanExchange] = useState(false);
-  const [paymentMethods, setPaymentMethods] = useState<string[]>([]);
-
-  const [initialItemList, setInitialItemList] = useState<AdvertDTO[]>(
-    [] as AdvertDTO[]
+  const [is_new, setIs_new] = useState(true);
+  const [accept_trade, setAccept_trade] = useState(false);
+  const [payment_methods, setPayment_methods] = useState<string[]>(
+    [] as string[]
   );
 
-  useEffect(() => {
-    setInitialItemList(advertList);
-  }, []);
-
-  function handleFilter() {
-    const itemListCopy = [...initialItemList];
-
-    const listAfterIsNewFilter = isNewFilter(itemListCopy);
-    const listAfterCanExchangeFilter = canExchangeFilter(listAfterIsNewFilter);
-    const listAfterMethodFilter = methodsFilter(listAfterCanExchangeFilter);
-    setAdvertList(listAfterMethodFilter);
+  const handleFilter = () => {
+    setParams({ ...params, is_new, accept_trade, payment_methods });
     closeBottomSheet();
-  }
+  };
 
-  function isNewFilter(itemList: AdvertDTO[]) {
-    const filteredItemList = itemList.filter((item) => item.is_new === isNew);
-    return filteredItemList;
-  }
-
-  function canExchangeFilter(itemList: AdvertDTO[]) {
-    const filteredItemList = itemList.filter(
-      (item) => item.accept_trade === canExchange
-    );
-    return filteredItemList;
-  }
-
-  function methodsFilter(itemList: AdvertDTO[]) {
-    const filteredItemList = itemList.filter((item) => {});
-    return filteredItemList;
-  }
-
-  function resetFilters() {
-    setIsNew(false);
-    setCanExchange(false);
-    setPaymentMethods([]);
-    setAdvertList(initialItemList);
-  }
+  const resetFilters = () => {
+    setIs_new(false);
+    setAccept_trade(false);
+    setPayment_methods([]);
+    setParams({});
+    closeBottomSheet();
+  };
 
   return (
     <ScrollView>
@@ -94,13 +72,13 @@ export const Filter = ({
           <HStack w={140} mb={4} justifyContent="space-between">
             <Tag
               text="NOVO"
-              isSelect={isNew}
-              handleFunction={() => setIsNew(!isNew)}
+              isSelect={is_new}
+              handleFunction={() => setIs_new(!is_new)}
             />
             <Tag
               text="USADO"
-              isSelect={!isNew}
-              handleFunction={() => setIsNew(!isNew)}
+              isSelect={!is_new}
+              handleFunction={() => setIs_new(!is_new)}
             />
           </HStack>
 
@@ -111,8 +89,8 @@ export const Filter = ({
           <Switch
             mb={4}
             size="md"
-            onToggle={() => setCanExchange((prev) => !prev)}
-            isChecked={canExchange}
+            onToggle={() => setAccept_trade((prev) => !prev)}
+            isChecked={accept_trade}
             onTrackColor="blue.light"
             offTrackColor="gray.500"
           />
@@ -120,8 +98,8 @@ export const Filter = ({
           <Text fontFamily="heading">Meios de pagamento aceitos</Text>
 
           <PaymentMethodCheckbox
-            methods={paymentMethods}
-            setMethods={setPaymentMethods}
+            methods={payment_methods}
+            setMethods={setPayment_methods}
           />
         </VStack>
         <HStack

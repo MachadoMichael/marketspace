@@ -2,7 +2,6 @@ import { Center, HStack, ScrollView, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
 import { ProductCard } from "../../components/ProductCard";
 import { useEffect, useRef, useState } from "react";
-import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { Dimensions } from "react-native";
 import { HomeHeader } from "../../components/HomeHeader";
 
@@ -11,49 +10,39 @@ import { Octicons } from "@expo/vector-icons";
 import { Input } from "../../components/Input";
 import { Filter } from "../../components/Filter";
 import BottomSheet, { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { useNavigation } from "@react-navigation/native";
-import { AppTabNavigatorRouteProps } from "../../routes/app.routes";
 import { SectionUserAdverts } from "../../components/SectionUserAdverts";
 import {
   fetchProducts,
   FilterParamsProps,
 } from "../../services/product/fetchProducts";
-import { useQuery } from "react-query";
-import { api } from "../../services/api";
 
 export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
-  const { navigate } = useNavigation<AppTabNavigatorRouteProps>();
+  const [query, setQuery] = useState("");
+  const [params, setParams] = useState<FilterParamsProps>({ query });
+  const [products, setProducts] = useState<any>();
 
-  const [products, setProducts] = useState<any>([]);
-  const [inputFilter, setInputFilter] = useState("");
-
-  const { data } = useQuery("fetch-products", fetchProducts);
-
-  function handleHideModal() {
+  const handleHideModal = () => {
     bottomSheetRef.current?.close();
-  }
+  };
 
-  function handleShowModal() {
+  const handleShowModal = () => {
     bottomSheetRef.current?.expand();
-  }
+  };
 
-  function handleTitleFilter() {
-    // if (inputFilter === "") {
-    //   setItemList(initialItemList);
-    // } else {
-    //   const filteredList = initialItemList.filter((item) =>
-    //     item.name.includes(inputFilter)
-    //   );
-    //   setItemList(filteredList);
-    // }
-  }
+  const readProductsOnDB = async () => {
+    setProducts(await fetchProducts(params));
+  };
+
+  useEffect(() => {
+    readProductsOnDB();
+  }, [params]);
 
   return (
-    <Center w="full" h="full" pt='1/6'>
+    <Center w="full" h="full" pt="1/6">
       <FlatList
-        data={data}
+        data={products}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => <ProductCard product={item} />}
         horizontal={false}
@@ -86,7 +75,7 @@ export function Home() {
                 w={"full"}
                 InputRightElement={
                   <HStack w={20}>
-                    <TouchableOpacity onPress={handleTitleFilter}>
+                    <TouchableOpacity>
                       <Feather name="search" size={24} color="black" />
                     </TouchableOpacity>
                     <Text ml={2} mr={2}>
@@ -97,8 +86,8 @@ export function Home() {
                     </TouchableOpacity>
                   </HStack>
                 }
-                value={inputFilter}
-                onChangeText={setInputFilter}
+                value={query}
+                onChangeText={setQuery}
               />
             </VStack>
           </>
@@ -115,8 +104,8 @@ export function Home() {
       >
         <Filter
           closeBottomSheet={handleHideModal}
-          advertList={products}
-          setAdvertList={setProducts}
+          params={params}
+          setParams={setParams}
         />
       </BottomSheet>
     </Center>
