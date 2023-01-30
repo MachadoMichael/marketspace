@@ -27,7 +27,7 @@ export const SectionUserAdverts = () => {
   return (
     <TouchableOpacity onPress={handleGoToUserAdverts}>
       <HStack
-        w={327}
+        w={"full"}
         h={66}
         rounded={6}
         bgColor={"blue.lowOpacity"}

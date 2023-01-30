@@ -1,11 +1,8 @@
 import axios from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
-import { Alert } from "react-native";
-import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
 import { refreshToken } from "../services/token/refreshToken";
-import { userLogin } from "../services/user/userLogin";
 import {
   getStorageUser,
   removeStorageUser,
@@ -42,7 +39,6 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
         setStorageUser({ email, password });
         refreshToken(user.data.token);
       }
-
     } catch (error) {
       if (axios.isAxiosError(error)) console.log(error.response?.data);
       else console.log(error);

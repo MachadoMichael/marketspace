@@ -51,45 +51,7 @@ export function Home() {
   }
 
   return (
-    <Center justifyContent={"space-between"} w="full" h="full" mt={6}>
-      <ScrollView mt={8}>
-        <HomeHeader />
-
-        <VStack mt={4} justifyContent={"center"}>
-          <Text mb={2} color={"gray.300"}>
-            Seus produtos anunciados para venda
-          </Text>
-
-          <SectionUserAdverts />
-        </VStack>
-
-        <VStack w={327} mt={8} mb={4}>
-          <Text color={"gray.300"} mb={2}>
-            Compre produtos variados
-          </Text>
-
-          <Input
-            placeholder={"Buscar anúncio"}
-            w={327}
-            InputRightElement={
-              <HStack w={20}>
-                <TouchableOpacity onPress={handleTitleFilter}>
-                  <Feather name="search" size={24} color="black" />
-                </TouchableOpacity>
-                <Text ml={2} mr={2}>
-                  |
-                </Text>
-                <TouchableOpacity onPress={handleShowModal}>
-                  <Octicons name="filter" size={24} color="black" />
-                </TouchableOpacity>
-              </HStack>
-            }
-            value={inputFilter}
-            onChangeText={setInputFilter}
-          />
-        </VStack>
-      </ScrollView>
-
+    <Center w="full" h="full" pt={16}>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id}
@@ -98,7 +60,49 @@ export function Home() {
         numColumns={2}
         bounces={false}
         showsVerticalScrollIndicator={false}
-        columnWrapperStyle={{ justifyContent: "space-around" }}
+        columnWrapperStyle={{ justifyContent: "space-between" }}
+        style={{
+          width: "80%",
+        }}
+        ListHeaderComponent={
+          <>
+            <HomeHeader />
+
+            <VStack mt={4} justifyContent={"center"}>
+              <Text mb={2} color={"gray.300"}>
+                Seus produtos anunciados para venda
+              </Text>
+
+              <SectionUserAdverts />
+            </VStack>
+
+            <VStack w={"full"} mt={8} mb={4}>
+              <Text color={"gray.300"} mb={2}>
+                Compre produtos variados
+              </Text>
+
+              <Input
+                placeholder={"Buscar anúncio"}
+                w={"full"}
+                InputRightElement={
+                  <HStack w={20}>
+                    <TouchableOpacity onPress={handleTitleFilter}>
+                      <Feather name="search" size={24} color="black" />
+                    </TouchableOpacity>
+                    <Text ml={2} mr={2}>
+                      |
+                    </Text>
+                    <TouchableOpacity onPress={handleShowModal}>
+                      <Octicons name="filter" size={24} color="black" />
+                    </TouchableOpacity>
+                  </HStack>
+                }
+                value={inputFilter}
+                onChangeText={setInputFilter}
+              />
+            </VStack>
+          </>
+        }
       />
 
       <BottomSheet

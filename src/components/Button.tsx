@@ -21,7 +21,7 @@ export const Button = ({
 }: ButtonProps) => {
   return (
     <NativeBaseButton
-      w={isBig ? 279 : 140}
+      w={isBig ? 279 : 170}
       height={42}
       fontFamily="heading"
       {...rest}

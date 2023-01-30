@@ -2,14 +2,14 @@ import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ProductDetails } from "../../components/ProductDetails";
 import { Button } from "../../components/Button";
-import { FontAwesome } from "@expo/vector-icons";
+
 import { AntDesign } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 import { TopSection } from "../../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { ScrollView, VStack } from "native-base";
+import { HStack, ScrollView, Text, VStack } from "native-base";
 import { Dimensions } from "react-native";
-import { useEffect, useState } from "react";
+
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
@@ -18,6 +18,8 @@ import { Loading } from "../../components/Loading";
 import { useMutation, useQuery, useQueryClient } from "react-query";
 import { deleteProduct } from "../../services/product/deleteProduct";
 import { patchProduct } from "../../services/product/patchProduct";
+import { useAuth } from "../../hooks/useAuth";
+import { OpenURLButton } from "../../components/OpenURLButton";
 
 interface RouteParamsProps {
   advertID: string;
@@ -26,12 +28,12 @@ interface RouteParamsProps {
 
 export const AdvertDetails = () => {
   const route = useRoute();
+  const { user } = useAuth();
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
   const queryClient = useQueryClient();
 
-  // pegar o item pelo ID
-  const { advertID, owner } = route.params as RouteParamsProps;
+  const { advertID } = route.params as RouteParamsProps;
 
   const { data } = useQuery("product-details", () => getProduct(advertID));
   const advertData = data?.data;
@@ -43,7 +45,7 @@ export const AdvertDetails = () => {
     },
   });
 
-  console.log(data?.data, "Data product details");
+  console.log(advertData?.user?.tel, "Data product details");
 
   const handleGoBack = () => {
     goBack();
@@ -54,6 +56,10 @@ export const AdvertDetails = () => {
     queryClient.invalidateQueries("product-details");
     queryClient.invalidateQueries("user-products");
   };
+
+  const sellerPhoneNumber: string = advertData?.user?.tel;
+  const supportedURL = `https://wa.me/${sellerPhoneNumber}`;
+  const handleContactSeller = () => {};
 
   return (
     <SafeAreaView>
@@ -81,7 +87,7 @@ export const AdvertDetails = () => {
         </VStack>
       </ScrollView>
 
-      {owner ? (
+      {advertData?.user_id === user?.user.id ? (
         <VStack
           bgColor="gray.600"
           w="full"
@@ -96,7 +102,7 @@ export const AdvertDetails = () => {
             title={
               advertData?.is_active ? "Desativar anúncio" : "Ativar anúncio"
             }
-            bgColor="gray.200"
+            bgColor={advertData?.is_active ? "blue.light" : "gray.200"}
             textColor="white"
             onPress={handleEnableOrDisableAdvert}
             w={327}
@@ -112,13 +118,26 @@ export const AdvertDetails = () => {
           />
         </VStack>
       ) : (
-        <Button
-          isBig
-          bgColor="blue.light"
-          textColor="white"
-          title="Entrar em contato"
-          icon={<FontAwesome name="whatsapp" size={24} color="white" />}
-        />
+        <HStack
+          bgColor="gray.600"
+          w="full"
+          h={32}
+          justifyContent="space-evenly"
+          alignItems="center"
+          bottom={24}
+          p={4}
+        >
+          <HStack>
+            <Text color="blue.basic" fontFamily={"heading"}>
+              R$
+            </Text>
+            <Text color="blue.basic" fontFamily={"heading"} fontSize={24}>
+              {advertData?.price / 100}
+            </Text>
+          </HStack>
+
+          <OpenURLButton url={supportedURL} />
+        </HStack>
       )}
     </SafeAreaView>
   );

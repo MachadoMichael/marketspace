@@ -13,7 +13,6 @@ interface CarouselProps {
 
 export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
   const { width } = Dimensions.get("window");
-  console.log(images[0], "uri NO CAROUSEL");
   return (
     <View>
       <Carousel
@@ -28,8 +27,6 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
             flex={1}
             justifyContent="center"
             align-items="center"
-            borderWidth={1}
-            borderColor={"black"}
           >
             {isActiveAd || isActiveAd === undefined ? (
               <></>
@@ -54,7 +51,7 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
               w={"full"}
               h={"full"}
               bgColor="black"
-              resizeMode="contain"
+              resizeMode="cover"
               alignItems="center"
               justifyContent="center"
               source={{

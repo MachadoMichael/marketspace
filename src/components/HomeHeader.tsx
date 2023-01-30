@@ -28,7 +28,7 @@ export const HomeHeader = () => {
   };
 
   return (
-    <HStack w={327} justifyContent="space-between" mt={4}>
+    <HStack w={"full"} justifyContent="space-between" mt={4}>
       <HStack>
         {data ? (
           <Box

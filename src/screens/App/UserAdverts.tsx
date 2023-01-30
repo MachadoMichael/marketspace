@@ -8,7 +8,7 @@ import {
   VStack,
 } from "native-base";
 import { FlatList, SafeAreaView, TouchableOpacity } from "react-native";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { ProductCard } from "../../components/ProductCard";
 import { AntDesign } from "@expo/vector-icons";
@@ -61,7 +61,7 @@ export const UserAdverts = () => {
               selectedValue={service}
               minWidth="150"
               accessibilityLabel="Choose Service"
-              placeholder="Choose Service"
+              placeholder="Filtro"
               _selectedItem={{
                 bg: "blue.light",
                 rounded: 8,
@@ -84,7 +84,7 @@ export const UserAdverts = () => {
         <FlatList
           data={userFilteredAdvertList ? userFilteredAdvertList : []}
           keyExtractor={(item) => item.description + item.id}
-          renderItem={({ item }) => <ProductCard item={item} isUserAd />}
+          renderItem={({ item }) => <ProductCard product={item} isUserAd />}
           horizontal={false}
           numColumns={2}
           bounces={false}
