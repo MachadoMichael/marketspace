@@ -25,8 +25,6 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
         scrollAnimationDuration={images.length > 1 ? 5000 : 1}
         renderItem={({ index }) => (
           <Box flex={1} justifyContent="center" align-items="center">
-
-            
             {isActiveAd || isActiveAd === undefined ? (
               <></>
             ) : (
@@ -45,21 +43,24 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
               </Box>
             )}
 
-            <Image
-              w={"full"}
-              h={"full"}
-              bgColor="black"
-              resizeMode="cover"
-              alignItems="center"
-              justifyContent="center"
-              source={{
-                uri:
-                  images[index].uri !== undefined
-                    ? images[index].uri
-                    : `${api.defaults.baseURL}/images/${images[index].path}`,
-              }}
-              alt="product images"
-            />
+            {images ? (
+              <Image
+                w={"full"}
+                h={"full"}
+                resizeMode="cover"
+                alignItems="center"
+                justifyContent="center"
+                source={{
+                  uri:
+                    images[index].uri !== undefined
+                      ? images[index].uri
+                      : `${api.defaults.baseURL}/images/${images[index].path}`,
+                }}
+                alt="product images"
+              />
+            ) : (
+              <Loading />
+            )}
           </Box>
         )}
       />

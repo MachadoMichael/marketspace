@@ -5,6 +5,7 @@ import { AppStackNavigatorRouteProps } from "../routes/app.routes";
 
 import { api } from "../services/api";
 import { ProductResponseDTO } from "../dtos/ProductResponseDTO";
+import { Loading } from "./Loading";
 
 interface ProductCardProps extends ProductResponseDTO {
   user?: { avatar: string };
@@ -15,7 +16,10 @@ interface ItemCardProps {
   isUserAdvert?: boolean;
 }
 
-export const ProductCard = ({ product, isUserAdvert = false }: ItemCardProps) => {
+export const ProductCard = ({
+  product,
+  isUserAdvert = false,
+}: ItemCardProps) => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
 
   const handleGoToAdvertDetails = (productID: string) => {
@@ -100,19 +104,24 @@ export const ProductCard = ({ product, isUserAdvert = false }: ItemCardProps) =>
           </Box>
         )}
 
-        <Image
-          p={4}
-          w={150}
-          h={100}
-          zIndex={-1}
-          resizeMode="cover"
-          rounded={4}
-          source={{
-            uri: `${api.defaults.baseURL}/images/${product.product_images[0].path}`,
-          }}
-          alt="imagem do produto"
-        />
+        {product ? (
+          <Image
+            p={4}
+            w={150}
+            h={100}
+            zIndex={-1}
+            resizeMode="cover"
+            rounded={4}
+            source={{
+              uri: `${api.defaults.baseURL}/images/${product.product_images[0].path}`,
+            }}
+            alt="imagem do produto"
+          />
+        ) : (
+          <Loading />
+        )}
       </Box>
+
       <VStack pl={2}>
         <Text fontFamily="body" color="gray.300">
           {product.name}

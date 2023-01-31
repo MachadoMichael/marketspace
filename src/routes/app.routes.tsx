@@ -18,7 +18,6 @@ import { AuthContext } from "../contexts/AuthContext";
 import { Ionicons } from "@expo/vector-icons";
 import { SignIn } from "../screens/auth/SignIn";
 import { AdvertDTO } from "../dtos/AdvertDTO";
-import { PhotoFileDTO } from "../dtos/PhotoFileDTO";
 
 type AppTabRoutes = {
   home: undefined;

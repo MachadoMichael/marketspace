@@ -3,25 +3,16 @@ import { Button } from "../components/Button";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { AppStackNavigatorRouteProps } from "../routes/app.routes";
-import { useAuth } from "../hooks/useAuth";
-import { userLogin } from "../services/user/userLogin";
-import { useEffect, useState } from "react";
 import { getUserLogged } from "../services/user/getUserLogged";
 import { api } from "../services/api";
 import { useQuery } from "react-query";
 import { Loading } from "./Loading";
-
-interface UserData {
-  avatar: string;
-  email: string;
-  id: string;
-  name: string;
-  tel: string;
-}
+import { Dimensions } from "react-native";
 
 export const HomeHeader = () => {
   const { navigate } = useNavigation<AppStackNavigatorRouteProps>();
-  const { data, isError } = useQuery("user-selected", getUserLogged);
+  const { width } = Dimensions.get("window");
+  const { data } = useQuery("user-selected", getUserLogged);
 
   const handleGoAdvertForm = () => {
     navigate("createoreditadvert", { advertID: null });
@@ -65,7 +56,7 @@ export const HomeHeader = () => {
         textColor="white"
         icon={<Ionicons name="add" size={24} color="white" />}
         onPress={handleGoAdvertForm}
-        w="2/4"
+        w={width / 2.7}
       />
     </HStack>
   );

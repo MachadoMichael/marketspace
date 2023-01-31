@@ -1,17 +1,11 @@
-import { TouchableOpacity } from "@gorhom/bottom-sheet";
-import { HStack, ScrollView, Switch, Text, View, VStack } from "native-base";
+import { HStack, ScrollView, Switch, Text, VStack } from "native-base";
 import { Tag } from "./Tag";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Button } from "./Button";
 import { PaymentMethodCheckbox } from "./PaymentMethodCheckbox";
 
-import { AdvertDTO } from "../dtos/AdvertDTO";
-import { Pressable } from "react-native";
-import {
-  fetchProducts,
-  FilterParamsProps,
-} from "../services/product/fetchProducts";
-import { useMutation, useQueryClient } from "react-query";
+import { Dimensions, Pressable } from "react-native";
+import { FilterParamsProps } from "../services/product/fetchProducts";
 
 interface FilterProps {
   closeBottomSheet: () => void;
@@ -24,6 +18,7 @@ export const Filter = ({
   params,
   setParams,
 }: FilterProps) => {
+  const { width } = Dimensions.get("window");
   const [is_new, setIs_new] = useState(true);
   const [accept_trade, setAccept_trade] = useState(false);
   const [payment_methods, setPayment_methods] = useState<string[]>(
@@ -106,19 +101,20 @@ export const Filter = ({
           justifyContent="space-between"
           mt={12}
           mb={10}
-          bottom={0}
           position="fixed"
         >
           <Button
             title="Resetar filtros"
             bgColor="gray.600"
             onPress={resetFilters}
+            w={width/2.5}
           />
           <Button
             title="Aplicar filtros"
             bgColor="gray.200"
             textColor="white"
             onPress={handleFilter}
+            w={width/2.5}
           />
         </HStack>
       </VStack>

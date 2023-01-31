@@ -1,5 +1,4 @@
 import {
-  Box,
   TextArea as NativeTextArea,
   ITextAreaProps,
   FormControl,

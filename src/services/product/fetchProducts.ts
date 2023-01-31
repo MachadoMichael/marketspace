@@ -13,7 +13,6 @@ export interface FilterParamsProps {
 export const fetchProducts = async (params?: FilterParamsProps) => {
   try {
     const response = await api.get("/products", { params } as any);
-    console.log("DATABASE PRODUCTS", response.data);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error))

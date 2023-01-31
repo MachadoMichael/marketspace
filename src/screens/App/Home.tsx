@@ -1,4 +1,4 @@
-import { Center, HStack, ScrollView, Text, VStack } from "native-base";
+import { Center, HStack, Text, VStack } from "native-base";
 import { FlatList } from "react-native";
 import { ProductCard } from "../../components/ProductCard";
 import { useEffect, useRef, useState } from "react";
@@ -20,7 +20,7 @@ export function Home() {
   const { height } = Dimensions.get("window");
   const bottomSheetRef = useRef<BottomSheet>(null);
   const [query, setQuery] = useState("");
-  const [params, setParams] = useState<FilterParamsProps>({ query });
+  const [params, setParams] = useState<FilterParamsProps>({});
   const [products, setProducts] = useState<any>();
 
   const handleHideModal = () => {
@@ -35,12 +35,21 @@ export function Home() {
     setProducts(await fetchProducts(params));
   };
 
+  const handleSearch = () => {
+    setParams({ ...params, query });
+    readProductsOnDB();
+  };
+
   useEffect(() => {
     readProductsOnDB();
   }, [params]);
 
+  useEffect(() => {
+    readProductsOnDB();
+  }, []);
+
   return (
-    <Center w="full" h="full" pt="1/6">
+    <Center w="full" h="full" pt={height / 20}>
       <FlatList
         data={products}
         keyExtractor={(item) => item.id}
@@ -75,7 +84,7 @@ export function Home() {
                 w={"full"}
                 InputRightElement={
                   <HStack w={20}>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={handleSearch}>
                       <Feather name="search" size={24} color="black" />
                     </TouchableOpacity>
                     <Text ml={2} mr={2}>
@@ -97,7 +106,7 @@ export function Home() {
       <BottomSheet
         ref={bottomSheetRef}
         enablePanDownToClose
-        snapPoints={[1, height - 400]}
+        snapPoints={[1, height / 1.4]}
         backgroundStyle={{
           backgroundColor: "white",
         }}

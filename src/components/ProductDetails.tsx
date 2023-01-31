@@ -1,22 +1,16 @@
 import {
   Box,
-  Center,
   HStack,
   Image,
-  ScrollView,
   Text,
   VStack,
 } from "native-base";
-import { Button } from "./Button";
 import { PaymentMethodsList } from "./PaymentMethodsList";
-
-import { AntDesign } from "@expo/vector-icons";
 import { Entypo } from "@expo/vector-icons";
 import { Tag } from "../components/Tag";
 
 import { useAuth } from "../hooks/useAuth";
 import { AdvertDTO } from "../dtos/AdvertDTO";
-import { useState } from "react";
 import { api } from "../services/api";
 
 interface UserData {

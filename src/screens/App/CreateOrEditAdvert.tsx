@@ -1,7 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
   Box,
-  Center,
   HStack,
   Image,
   Pressable,
@@ -9,7 +8,6 @@ import {
   ScrollView,
   Switch,
   Text,
-  View,
   VStack,
 } from "native-base";
 import {
@@ -21,7 +19,7 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import { Input } from "../../components/Input";
 import { TextArea } from "../../components/TextArea";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { PaymentMethodCheckbox } from "../../components/PaymentMethodCheckbox";
 import { Button } from "../../components/Button";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
@@ -39,7 +37,6 @@ import { useAuth } from "../../hooks/useAuth";
 import { useQuery } from "react-query";
 import { getProduct } from "../../services/product/getProduct";
 import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
-import { PaymentMethodsDTO } from "../../dtos/PaymentMethodsDTO";
 import { api } from "../../services/api";
 
 interface RouteParamsProps {
@@ -63,9 +60,7 @@ const NewAdvertSchema = Yup.object({
 export const CreateOrEditAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
-
   const { user } = useAuth();
-
   const route = useRoute();
   const { advertID } = route.params as RouteParamsProps;
 
@@ -73,7 +68,9 @@ export const CreateOrEditAdvert = () => {
     "product-details",
     advertID !== null ? () => getProduct(advertID) : () => undefined,
     {
-      onSuccess: () => setAdvertDataFields(),
+      onSuccess(data) {
+        data !== undefined ? setAdvertDataFields() : false;
+      },
     }
   );
 
@@ -84,13 +81,18 @@ export const CreateOrEditAdvert = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<FormDataProps>({
-    defaultValues: {
-      name: advertForEditData ? advertForEditData.name : "",
-      description: advertForEditData ? advertForEditData.description : "",
-      price: advertForEditData
-        ? (advertForEditData.price / 100).toString()
-        : "",
-    },
+    defaultValues:
+      advertID === null
+        ? {
+            name: "",
+            description: "",
+            price: "",
+          }
+        : {
+            name: advertForEditData.name,
+            description: advertForEditData.description,
+            price: (advertForEditData.price / 100).toString(),
+          },
     resolver: yupResolver(NewAdvertSchema),
   });
 
@@ -107,8 +109,6 @@ export const CreateOrEditAdvert = () => {
 
   const setAdvertDataFields = () => {
     if (advertForEditData) {
-      console.warn(advertForEditData.product_images);
-
       setAdvertImages(
         advertForEditData.product_images ? advertForEditData.product_images : []
       );

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import { Box, Center, Text, View, Pressable } from "native-base";
+import {  Center, Text, View, Pressable } from "native-base";
 import { Button } from "../../components/Button";
 import { Input } from "../../components/Input";
 import SvgLogo from "../../components/SvgLogo";
@@ -7,11 +7,11 @@ import { AuthNavigatorRouteProps } from "../../routes/auth.routes";
 import { AntDesign } from "@expo/vector-icons";
 import { AuthContext } from "../../contexts/AuthContext";
 import { useContext, useState } from "react";
-import { userLogin } from "../../services/user/userLogin";
+
 import * as Yup from "yup";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { background } from "native-base/lib/typescript/theme/styled-system";
+
 
 interface FormDataProps {
   email: string;

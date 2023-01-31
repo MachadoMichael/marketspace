@@ -1,12 +1,10 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import {
-  Box,
   Center,
   HStack,
   ScrollView,
   Text,
   View,
-  VStack,
 } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
@@ -17,8 +15,7 @@ import { AdvertDTO } from "../../dtos/AdvertDTO";
 import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
 import { addAdvert } from "../../services/product/addAdvert";
-import { useMutation, useQueryClient } from "react-query";
-import { SafeAreaView } from "react-native";
+import { useQueryClient } from "react-query";
 
 type RouteParamsProps = {
   productData: AdvertDTO;

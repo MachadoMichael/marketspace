@@ -4,7 +4,6 @@ import { api } from "../api";
 
 export const addImages = async (product_id: string, images: PhotoFileDTO[]) => {
   try {
-    console.log("images", images);
     const imagesForm = new FormData();
     images.forEach((image) => imagesForm.append("images", image as any));
     imagesForm.append("product_id", product_id);
@@ -15,7 +14,6 @@ export const addImages = async (product_id: string, images: PhotoFileDTO[]) => {
       },
     });
 
-    console.log("Response addProductPhoto", response);
     if (response) return true;
   } catch (error) {
     if (axios.isAxiosError(error))

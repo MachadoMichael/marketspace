@@ -1,4 +1,3 @@
-import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { api } from "../api";
 
 export const removeImage = async (images: any) => {

@@ -8,7 +8,7 @@ import { Feather } from "@expo/vector-icons";
 import { TopSection } from "../../components/TopSection";
 import { TouchableOpacity } from "@gorhom/bottom-sheet";
 import { HStack, ScrollView, Text, VStack } from "native-base";
-import { Alert, Dimensions } from "react-native";
+import { Dimensions } from "react-native";
 
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 
@@ -51,10 +51,11 @@ export const AdvertDetails = () => {
   const { data } = useQuery("product-details", () => getProduct(advertID));
   const advertData: AdvertDetailsResponse = data?.data;
 
-  const { isLoading, mutate } = useMutation(() => deleteProduct(advertID), {
+  const isOwner = advertData?.user_id === user?.user.id ? true : false;
+
+  const { mutate } = useMutation(() => deleteProduct(advertID), {
     onSuccess: async () => {
       await removeImage(advertData.product_images);
-
       queryClient.invalidateQueries("user-products");
       navigate("tabroutes");
     },
@@ -79,7 +80,7 @@ export const AdvertDetails = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView h={height - 100} bgColor="gray.600">
+      <ScrollView h={isOwner ? height / 1.3 : height / 1.18}>
         <VStack mb={12}>
           <TopSection
             leftElement={
@@ -88,9 +89,13 @@ export const AdvertDetails = () => {
               </TouchableOpacity>
             }
             rightElement={
-              <TouchableOpacity onPress={handleEditAdvert}>
-                <AntDesign name="edit" size={24} color="black" />
-              </TouchableOpacity>
+              isOwner ? (
+                <TouchableOpacity onPress={handleEditAdvert}>
+                  <AntDesign name="edit" size={24} color="black" />
+                </TouchableOpacity>
+              ) : (
+                <></>
+              )
             }
           />
 
@@ -108,14 +113,12 @@ export const AdvertDetails = () => {
         </VStack>
       </ScrollView>
 
-      {advertData?.user_id === user?.user.id ? (
+      {isOwner ? (
         <VStack
-          bgColor="gray.600"
           w="full"
           h={32}
           justifyContent="space-around"
           alignItems="center"
-          bottom={24}
           p={4}
         >
           <Button
@@ -140,19 +143,17 @@ export const AdvertDetails = () => {
         </VStack>
       ) : (
         <HStack
-          bgColor="gray.600"
           w="full"
-          h={32}
+          h={16}
           justifyContent="space-evenly"
           alignItems="center"
-          bottom={24}
           p={4}
         >
           <HStack>
             <Text color="blue.basic" fontFamily={"heading"}>
               R$
             </Text>
-            <Text color="blue.basic" fontFamily={"heading"} fontSize={24}>
+            <Text color="blue.basic" fontFamily={"heading"} fontSize={26}>
               {advertData?.price / 100}
             </Text>
           </HStack>

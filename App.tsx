@@ -1,5 +1,5 @@
 import React from "react";
-import { NativeBaseProvider, Center, StatusBar } from "native-base";
+import { NativeBaseProvider, StatusBar } from "native-base";
 import { theme } from "./src/theme";
 import {
   useFonts,
