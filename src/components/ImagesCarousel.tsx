@@ -32,7 +32,8 @@ export const ImagesCarousel = ({ images, isActiveAd }: CarouselProps) => {
                 w="full"
                 h="full"
                 position="absolute"
-                opacity={0.9}
+                bgColor={'gray.100'}
+                opacity={0.8}
                 zIndex={1}
                 justifyContent="center"
                 alignItems="center"

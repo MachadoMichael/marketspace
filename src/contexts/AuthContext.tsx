@@ -1,16 +1,22 @@
-import axios from "axios";
+import axios, { AxiosResponse } from "axios";
 import { createContext, ReactNode, useEffect, useState } from "react";
 import { UserDTO } from "../dtos/UserDTO";
 import { api } from "../services/api";
 import { refreshToken } from "../services/token/refreshToken";
 import {
+  getStorageToken,
+  setStorageToken,
+  removeStorageToken,
+} from "../storage/storageToken";
+
+import {
   getStorageUser,
   removeStorageUser,
   setStorageUser,
-} from "../storage/user";
+} from "../storage/storageUser";
 
 export interface AuthContextDataProps {
-  user: UserDTO | undefined;
+  userLogged: UserDTO | undefined;
   signIn: (email: string, password: string) => Promise<void>;
   signOut: () => Promise<void>;
 }
@@ -24,36 +30,37 @@ interface AuthContextProviderProps {
 }
 
 export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
-  const [user, setUser] = useState<UserDTO>();
+  const [userLogged, setUserLogged] = useState<UserDTO>();
 
   const signIn = async (email: string, password: string) => {
     try {
-      const user = await api.post("/sessions", {
+      const response = await api.post("/sessions", {
         email: email.toLowerCase(),
         password,
       });
 
-      if (user) {
-        setUser(user.data as UserDTO);
-        tokenAuthorization(user.data.token);
+      if (response) {
+        settingUserSettings(response.data);
         setStorageUser({ email, password });
-        refreshToken(user.data.token);
+        setStorageToken(response.data.token);
       }
     } catch (error) {
-      if (axios.isAxiosError(error)) console.log(error.response?.data);
-      else console.log(error);
+      throw error;
     }
+  };
+
+  const settingUserSettings = (user: any) => {
+    setUserLogged(user as UserDTO);
+    api.defaults.headers.common["Authorization"] = `Bearer ${user.token}`;
+    refreshToken(user.token);
   };
 
   const signOut = async () => {
     try {
-      setUser(undefined);
+      setUserLogged(undefined);
       removeStorageUser();
+      removeStorageToken();
     } catch (error) {}
-  };
-
-  const tokenAuthorization = (token: string) => {
-    api.defaults.headers.common["Authorization"] = `Bearer ${token}`;
   };
 
   const readingStorage = async () => {
@@ -65,10 +72,15 @@ export const AuthContextProvider = ({ children }: AuthContextProviderProps) => {
     readingStorage();
   }, []);
 
+  useEffect(() => {
+    const subscribe = api.registerInterceptTokenManager(signOut);
+    return () => subscribe();
+  }, []);
+
   return (
     <AuthContext.Provider
       value={{
-        user,
+        userLogged,
         signIn,
         signOut,
       }}

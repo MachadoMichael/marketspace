@@ -1,10 +1,4 @@
-import {
-  Box,
-  HStack,
-  Image,
-  Text,
-  VStack,
-} from "native-base";
+import { Box, HStack, Image, Text, VStack } from "native-base";
 import { PaymentMethodsList } from "./PaymentMethodsList";
 import { Entypo } from "@expo/vector-icons";
 import { Tag } from "../components/Tag";
@@ -27,7 +21,7 @@ interface ProductDetailsProps {
 }
 
 export const ProductDetails = ({ advert }: ProductDetailsProps) => {
-  const { user } = useAuth();
+  const { userLogged } = useAuth();
 
   return (
     <Box>
@@ -45,7 +39,7 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
             alignItems="center"
             rounded={9999}
           >
-            {advert.user?.avatar !== undefined || user?.user.avatar ? (
+            {advert.user?.avatar !== undefined || userLogged?.user.avatar ? (
               <Image
                 w={8}
                 h={8}
@@ -54,7 +48,7 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
                 source={{
                   uri: advert?.user
                     ? `${api.defaults.baseURL}/images/${advert?.user?.avatar}`
-                    : `${api.defaults.baseURL}/images/${user?.user.avatar}`,
+                    : `${api.defaults.baseURL}/images/${userLogged?.user.avatar}`,
                 }}
                 alt="userAvatar"
               />
@@ -63,7 +57,7 @@ export const ProductDetails = ({ advert }: ProductDetailsProps) => {
             )}
           </Box>
           <Text ml={12}>
-            {advert.user?.name ? advert.user.name : user?.user.name}
+            {advert.user?.name ? advert.user.name : userLogged?.user.name}
           </Text>
         </HStack>
 

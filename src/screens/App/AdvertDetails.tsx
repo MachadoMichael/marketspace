@@ -41,7 +41,7 @@ interface AdvertDetailsResponse extends ProductResponseDTO {
 
 export const AdvertDetails = () => {
   const route = useRoute();
-  const { user } = useAuth();
+  const { userLogged } = useAuth();
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
   const queryClient = useQueryClient();
@@ -51,7 +51,7 @@ export const AdvertDetails = () => {
   const { data } = useQuery("product-details", () => getProduct(advertID));
   const advertData: AdvertDetailsResponse = data?.data;
 
-  const isOwner = advertData?.user_id === user?.user.id ? true : false;
+  const isOwner = advertData?.user_id === userLogged?.user.id ? true : false;
 
   const { mutate } = useMutation(() => deleteProduct(advertID), {
     onSuccess: async () => {

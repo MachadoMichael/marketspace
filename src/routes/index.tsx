@@ -6,12 +6,12 @@ import { AppRoutes } from "./app.routes";
 import { useAuth } from "../hooks/useAuth";
 
 export function Routes() {
-  const { user } = useAuth();
+  const { userLogged } = useAuth();
 
   return (
     <Box flex={1} bg="blue.basic">
       <NavigationContainer>
-        {user ? <AppRoutes /> : <AuthRoutes />}
+        {userLogged ? <AppRoutes /> : <AuthRoutes />}
       </NavigationContainer>
     </Box>
   );

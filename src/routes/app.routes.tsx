@@ -33,7 +33,7 @@ type AppStackRoutes = {
   tabroutes: undefined;
   advertpreview: {
     productData: AdvertDTO;
-    owner?: boolean;
+    advertID?: string | null;
   };
 };
 

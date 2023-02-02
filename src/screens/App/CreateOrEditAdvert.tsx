@@ -38,6 +38,7 @@ import { useQuery } from "react-query";
 import { getProduct } from "../../services/product/getProduct";
 import { ProductResponseDTO } from "../../dtos/ProductResponseDTO";
 import { api } from "../../services/api";
+import { removeImage } from "../../services/product/removeImage";
 
 interface RouteParamsProps {
   advertID: string | null;
@@ -60,9 +61,20 @@ const NewAdvertSchema = Yup.object({
 export const CreateOrEditAdvert = () => {
   const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
   const { height } = Dimensions.get("window");
-  const { user } = useAuth();
+  const { userLogged } = useAuth();
   const route = useRoute();
   const { advertID } = route.params as RouteParamsProps;
+
+  const [isNew, setIsNew] = useState("true");
+  const [acceptTrade, setAccepetTrade] = useState<boolean | undefined>(
+    undefined
+  );
+  const [advertImages, setAdvertImages] = useState<PhotoFileDTO[]>(
+    [] as PhotoFileDTO[]
+  );
+  const [paymentMethods, setPaymentMethods] = useState<string[]>(
+    [] as string[]
+  );
 
   const { data } = useQuery(
     "product-details",
@@ -74,7 +86,22 @@ export const CreateOrEditAdvert = () => {
     }
   );
 
-  const advertForEditData: ProductResponseDTO = data?.data;
+  const selectedAdvert: ProductResponseDTO = data?.data;
+
+  const setAdvertDataFields = () => {
+    if (selectedAdvert) {
+      setAdvertImages(
+        selectedAdvert.product_images ? selectedAdvert.product_images : []
+      );
+      setIsNew(selectedAdvert.is_new ? "true" : "false");
+      setAccepetTrade(selectedAdvert.accept_trade);
+      setPaymentMethods(
+        selectedAdvert.payment_methods.map((payment) =>
+          typeof payment === "string" ? payment : payment.key
+        )
+      );
+    }
+  };
 
   const {
     control,
@@ -89,38 +116,12 @@ export const CreateOrEditAdvert = () => {
             price: "",
           }
         : {
-            name: advertForEditData.name,
-            description: advertForEditData.description,
-            price: (advertForEditData.price / 100).toString(),
+            name: selectedAdvert.name,
+            description: selectedAdvert.description,
+            price: (selectedAdvert.price / 100).toString(),
           },
     resolver: yupResolver(NewAdvertSchema),
   });
-
-  const [isNew, setIsNew] = useState("true");
-  const [acceptTrade, setAccepetTrade] = useState<boolean | undefined>(
-    undefined
-  );
-  const [advertImages, setAdvertImages] = useState<PhotoFileDTO[]>(
-    [] as PhotoFileDTO[]
-  );
-  const [paymentMethods, setPaymentMethods] = useState<string[]>(
-    [] as string[]
-  );
-
-  const setAdvertDataFields = () => {
-    if (advertForEditData) {
-      setAdvertImages(
-        advertForEditData.product_images ? advertForEditData.product_images : []
-      );
-      setIsNew(advertForEditData.is_new ? "true" : "false");
-      setAccepetTrade(advertForEditData.accept_trade);
-      setPaymentMethods(
-        advertForEditData.payment_methods.map((payment) =>
-          typeof payment === "string" ? payment : payment.name
-        )
-      );
-    }
-  };
 
   const handleProductPhotoSelect = async () => {
     const advertPhoto: PhotoFileDTO = await AddPhoto();
@@ -128,7 +129,7 @@ export const CreateOrEditAdvert = () => {
     if (advertPhoto !== undefined) {
       setAdvertImages((prev) => [
         {
-          name: `${user?.user.name}.${advertPhoto.extension}`,
+          name: `${userLogged?.user.name}.${advertPhoto.extension}`,
           uri: advertPhoto.uri,
           type: advertPhoto.type,
         },
@@ -143,6 +144,8 @@ export const CreateOrEditAdvert = () => {
     price,
   }) => {
     if (advertHasImage() && advertHasPaymnetMethod()) {
+      console.warn(advertImages, "--------X MY OFAS");
+
       const productData: AdvertDTO = {
         name,
         description,
@@ -155,12 +158,6 @@ export const CreateOrEditAdvert = () => {
 
       sendAdvertPreview(productData);
     }
-  };
-
-  const sendAdvertPreview = (productData: AdvertDTO) => {
-    navigate("advertpreview", {
-      productData,
-    });
   };
 
   const advertHasImage = () => {
@@ -181,11 +178,21 @@ export const CreateOrEditAdvert = () => {
     }
   };
 
-  const removePhoto = (photoIndex: number) => {
-    const newImageList = [...advertImages].filter(
-      (photoURI, index) => index !== photoIndex
-    );
-    setAdvertImages(newImageList);
+  const sendAdvertPreview = (productData: AdvertDTO) => {
+    navigate("advertpreview", {
+      productData,
+      advertID,
+    });
+  };
+
+  const removePhoto = async (photoIndex: number) => {
+    const response = await removeImage([advertImages[photoIndex]]);
+    if (response) {
+      const newImageList = [...advertImages].filter(
+        (photoURI, index) => index !== photoIndex
+      );
+      setAdvertImages(newImageList);
+    }
   };
 
   const handleGoBack = () => {

@@ -46,7 +46,7 @@ export const SectionUserAdverts = () => {
         </HStack>
 
         <HStack>
-          <Text fontSize="xs" fontFamily="heading" color="blue.basic">
+          <Text fontSize="xs" fontFamily="heading" color="blue.basic" mr={1}>
             Meus anúncios
           </Text>
           <AntDesign name="arrowright" size={18} color="black" />

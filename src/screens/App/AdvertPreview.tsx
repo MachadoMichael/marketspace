@@ -1,43 +1,49 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
-import {
-  Center,
-  HStack,
-  ScrollView,
-  Text,
-  View,
-} from "native-base";
+import { Center, HStack, ScrollView, Text, useToast, View } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 import { Button } from "../../components/Button";
 import { ImagesCarousel } from "../../components/ImagesCarousel";
 import { ProductDetails } from "../../components/ProductDetails";
 import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { AdvertDTO } from "../../dtos/AdvertDTO";
-import { AppStackNavigatorRouteProps } from "../../routes/app.routes";
+import {
+  AppStackNavigatorRouteProps,
+  AppTabNavigatorRouteProps,
+} from "../../routes/app.routes";
 import { addImages } from "../../services/product/addImages";
 import { addAdvert } from "../../services/product/addAdvert";
 import { useQueryClient } from "react-query";
+import { putProduct } from "../../services/product/putProduct";
+import { removeImage } from "../../services/product/removeImage";
 
 type RouteParamsProps = {
   productData: AdvertDTO;
   advertImages: PhotoFileDTO[];
-  owner?: boolean;
+  advertID: string | null;
 };
 
 export const AdvertPreview = () => {
-  const { goBack, navigate } = useNavigation<AppStackNavigatorRouteProps>();
+  const { goBack, navigate } = useNavigation<AppTabNavigatorRouteProps>();
   const route = useRoute();
-  const { productData, owner } = route.params as RouteParamsProps;
+  const { productData, advertID } = route.params as RouteParamsProps;
   const queryClient = useQueryClient();
+  const toast = useToast();
 
   const handleGoBack = () => {
     goBack();
   };
 
-  const handleOnSubmit = async () => {
+  const handleOnSubmit = () => {
+    advertID === null ? createNewAdvert() : editOldAdvert();
+  };
+
+  const createNewAdvert = async () => {
+    let title;
     const response = await addAdvert({
       ...productData,
       is_active: true,
     });
+
     if (response) {
       const advertID = response.data.id;
 
@@ -46,9 +52,49 @@ export const AdvertPreview = () => {
         productData.product_images
       );
 
+      title = "Anúncio criado com sucesso.";
       queryClient.invalidateQueries("user-products");
-      imagesAreAdded ? navigate("tabroutes") : false;
+      imagesAreAdded ? navigate("useradverts") : false;
+    } else {
+      title = "Não foi possível criar o anúncio";
     }
+
+    toast.show({
+      title,
+      placement: "top",
+      bgColor: "green.500",
+    });
+  };
+
+  const editOldAdvert = async () => {
+    let title;
+
+    if (advertID !== null) {
+      const response = await putProduct({
+        id: advertID,
+        name: productData.name,
+        description: productData.description,
+        is_new: productData.is_new,
+        accept_trade: productData.accept_trade,
+        payment_methods: productData.payment_methods as string[],
+        price: productData.price,
+        images: productData.product_images,
+      });
+
+      if (response) {
+        title = "Anúncio editado com sucesso.";
+        queryClient.invalidateQueries("user-products");
+        navigate("useradverts");
+      }
+    } else {
+      title = "Não foi possível editar o anúncio";
+    }
+
+    toast.show({
+      title: title,
+      placement: "top",
+      bgColor: "green.500",
+    });
   };
 
   return (

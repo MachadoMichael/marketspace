@@ -12,7 +12,9 @@ export const setStorageUser = async ({ email, password }: UserStorage) => {
       USER_STORAGE,
       JSON.stringify({ email, password })
     );
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const getStorageUser = async () => {
@@ -22,11 +24,15 @@ export const getStorageUser = async () => {
       const user: UserStorage = JSON.parse(userStringfy);
       return user;
     }
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const removeStorageUser = async () => {
   try {
     await AsyncStorage.removeItem(USER_STORAGE);
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
