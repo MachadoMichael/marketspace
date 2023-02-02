@@ -1,10 +1,14 @@
 import axios from "axios";
+import { PhotoFileDTO } from "../../dtos/PhotoFileDTO";
 import { api } from "../api";
 
-export const removeImage = async (images: any) => {
+export const removeImage = async (image: PhotoFileDTO) => {
+  const productImagesIds = [`${image.id}`];
   try {
-    await api.delete("/products/images", images);
-
+    const response = await api.delete("/products/images", {
+      productImagesIds,
+    } as any);
+    console.log(productImagesIds, "response of remove image");
     return true;
   } catch (error) {
     if (axios.isAxiosError(error))

@@ -83,6 +83,8 @@ export const AdvertPreview = () => {
 
       if (response) {
         title = "Anúncio editado com sucesso.";
+
+        await addImages(advertID, productData.product_images);
         queryClient.invalidateQueries("user-products");
         navigate("useradverts");
       }

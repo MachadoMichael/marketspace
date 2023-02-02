@@ -144,8 +144,6 @@ export const CreateOrEditAdvert = () => {
     price,
   }) => {
     if (advertHasImage() && advertHasPaymnetMethod()) {
-      console.warn(advertImages, "--------X MY OFAS");
-
       const productData: AdvertDTO = {
         name,
         description,
@@ -185,11 +183,11 @@ export const CreateOrEditAdvert = () => {
     });
   };
 
-  const removePhoto = async (photoIndex: number) => {
-    const response = await removeImage([advertImages[photoIndex]]);
+  const handleRemovePhoto = async (photoFile: PhotoFileDTO) => {
+    const response = await removeImage(photoFile);
     if (response) {
       const newImageList = [...advertImages].filter(
-        (photoURI, index) => index !== photoIndex
+        (photoURI) => photoURI !== photoFile
       );
       setAdvertImages(newImageList);
     }
@@ -244,7 +242,7 @@ export const CreateOrEditAdvert = () => {
                     h={4}
                     justifyContent="center"
                     alignItems="center"
-                    onPress={() => removePhoto(index)}
+                    onPress={() => handleRemovePhoto(photoFile)}
                   >
                     <Text color="white" fontSize="xs">
                       X

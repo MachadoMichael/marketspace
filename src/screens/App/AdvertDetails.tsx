@@ -55,7 +55,9 @@ export const AdvertDetails = () => {
 
   const { mutate } = useMutation(() => deleteProduct(advertID), {
     onSuccess: async () => {
-      await removeImage(advertData.product_images);
+      advertData.product_images.forEach(
+        async (image) => await removeImage(image)
+      );
       queryClient.invalidateQueries("user-products");
       navigate("tabroutes");
     },
